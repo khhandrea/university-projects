@@ -1,0 +1,8 @@
+stack { size, top, data }
+
+create_stack(size)   ::= create stack of which size is 'size'
+is_full(s)          ::= TRUE when top == size
+is_empty(s)         ::= TRUE when top == 0
+push(s, item)       ::= add 'item' in 's'
+pop(s)              ::= return and delete the top element
+peek(s)             ::= return the top element without delete

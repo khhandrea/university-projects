@@ -1,0 +1,9 @@
+linearQue { size, max_size, front, rear, data }
+
+create(max_size)    ::= create que of which size is 'max_size'
+init(q)             ::= reset 'q'
+is_empty(q)         ::= TRUE when size == 0
+is_full(q)          ::= TRUE when front % max_size == (rear + 1) % max_size
+enqueue(q, e)       ::= ERROR when is_full, add 'e' in 'q'
+dequeue(q)          ::= ERROR when is_empty, delete and return the rear element
+peek(q)             ::= ERROR when is_empty, return the rear element
