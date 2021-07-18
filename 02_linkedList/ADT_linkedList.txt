@@ -1,0 +1,10 @@
+Node {data, next}
+
+insert(list, pos, item)
+delete(list, pos)
+clear(list)
+get_entry(list, pos)
+get_length(list)
+is_empty(list)
+is_full(list)
+print_list(list)
