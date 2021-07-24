@@ -1,24 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef int DATA;
-typedef struct NODE {
-    DATA data;
-    struct NODE *link;
-} NODE;
+typedef int Data;
+typedef struct Node {
+    Data data;
+    struct Node *link;
+} Node;
 
-NODE *insert_first(NODE *head, DATA data);
-NODE *insert(NODE *head, NODE *pre, DATA data);
-NODE *delete_first(NODE *head);
-NODE *delete(NODE *head, NODE *pre);
-void print_list(NODE *head);
-NODE *search_list(NODE *head, DATA data);
-// NODE *concat_list(NODE *head1, NODE *head2);
-// NODE *reverse_list(NODE *head);
+Node *insert_first(Node *head, Data data);
+Node *insert(Node *head, Node *pre, Data data);
+Node *delete_first(Node *head);
+Node *delete(Node *head, Node *pre);
+void print_list(Node *head);
+Node *search_list(Node *head, Data data);
+// Node *concat_list(Node *head1, Node *head2);
+// Node *reverse_list(Node *head);
 
 int main(void)
 {
-    NODE *head = NULL;
+    Node *head = NULL;
     int i;
 
     head = insert_first(head, 1); print_list(head);
@@ -33,26 +33,26 @@ int main(void)
     return 0;
 }
 
-NODE *insert_first(NODE *head, DATA data)
+Node *insert_first(Node *head, Data data)
 {
-    NODE *node = (NODE *)malloc(sizeof(NODE));
+    Node *node = (Node *)malloc(sizeof(Node));
     node->data = data;
     node->link = head;
     return head = node;
 }
 
-NODE *insert(NODE *head, NODE *pre, DATA data)
+Node *insert(Node *head, Node *pre, Data data)
 {
-    NODE *node = (NODE *)malloc(sizeof(NODE));
+    Node *node = (Node *)malloc(sizeof(Node));
     node->data = data;
     node->link = pre->link;
     pre->link = node;
     return head;
 }
 
-NODE *delete_first(NODE *head)
+Node *delete_first(Node *head)
 {
-    NODE *removed;
+    Node *removed;
     if (head == NULL) return NULL;
     removed = head;
     head = removed->link;
@@ -60,26 +60,26 @@ NODE *delete_first(NODE *head)
     return head;
 }
 
-NODE *delete(NODE *head, NODE *pre)
+Node *delete(Node *head, Node *pre)
 {
-    NODE *removed;
+    Node *removed;
     removed = pre->link;
     pre->link = removed->link;
     free(removed);
     return head;
 }
 
-void print_list(NODE *head)
+void print_list(Node *head)
 {
-    NODE *p;
+    Node *p;
     for(p = head; p != NULL; p = p->link)
         printf("%d->", p->data);
     printf("NULL \n");
 }
 
-NODE* search_list(NODE *head, DATA data)
+Node* search_list(Node *head, Data data)
 {
-    NODE *p;
+    Node *p;
     for(p = head; p != NULL; p = p->link)
         if (p->data == data)
             return p;
