@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #define MAX_QUEUE_SIZE 5
 
-typedef int Element;
+typedef int Data;
 typedef struct {
     int front;
     int rear;
-    Element data[MAX_QUEUE_SIZE];
+    Data data[MAX_QUEUE_SIZE];
 } QueueType;
 
 void error(char* msg);
@@ -14,12 +14,12 @@ void init_queue(QueueType* queue);
 void queue_print(QueueType* queue);
 char is_full(QueueType* queue);
 char is_empty(QueueType* queue);
-void enqueue(QueueType* queue, Element item);
-Element dequeue(QueueType* queue);
+void enqueue(QueueType* queue, Data data);
+Data dequeue(QueueType* queue);
 
 int main(void)
 {
-    int item = 0;
+    int data = 0;
     QueueType queue;
 
     init_queue(&queue);
@@ -27,9 +27,9 @@ int main(void)
     enqueue(&queue, 20); queue_print(&queue);
     enqueue(&queue, 30); queue_print(&queue);
 
-    item = dequeue(&queue); queue_print(&queue);
-    item = dequeue(&queue); queue_print(&queue);
-    item = dequeue(&queue); queue_print(&queue);
+    data = dequeue(&queue); queue_print(&queue);
+    data = dequeue(&queue); queue_print(&queue);
+    data = dequeue(&queue); queue_print(&queue);
     
     return 0;
 }
@@ -63,18 +63,18 @@ char is_empty(QueueType* queue)
     return (queue->front == queue->rear);
 }
 
-void enqueue(QueueType* queue, Element item)
+void enqueue(QueueType* queue, Data data)
 {
     if(is_full(queue))
     {
         print_error("The queue is full");
         return;
     }
-    queue->data[++(queue->rear)] = item;
+    queue->data[++(queue->rear)] = data;
     return;
 }
 
-Element dequeue(QueueType* queue)
+Data dequeue(QueueType* queue)
 {
     if(is_empty(queue))
     {

@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #define MAX_QUEUE_SIZE 5
 
-typedef int Element;
+typedef int Data;
 typedef struct {
-    Element data[MAX_QUEUE_SIZE];
+    Data data[MAX_QUEUE_SIZE];
     int front, rear;
 } QueueType;
 
@@ -13,8 +13,8 @@ void init_queue(QueueType* queue);
 char is_empty(QueueType* queue);
 char is_full(QueueType* queue);
 void print_queue(QueueType* queue);
-void enqueue(QueueType* queue, Element item);
-Element dequeue(QueueType* queue);
+void enqueue(QueueType* queue, Data data);
+Data dequeue(QueueType* queue);
 
 int main(void)
 {
@@ -82,14 +82,14 @@ void print_queue(QueueType* queue)
     }
 }
 
-void enqueue(QueueType* queue, Element item)
+void enqueue(QueueType* queue, Data data)
 {
     if(is_full(queue)) print_error("The queue is full");
     queue->rear = (queue->rear+1) % MAX_QUEUE_SIZE;
-    queue->data[queue->rear] = item;
+    queue->data[queue->rear] = data;
 }
 
-Element dequeue(QueueType* queue)
+Data dequeue(QueueType* queue)
 {
     if(is_empty(queue)) print_error("The queue is empty");
     queue->front = (queue->front + 1) % MAX_QUEUE_SIZE;

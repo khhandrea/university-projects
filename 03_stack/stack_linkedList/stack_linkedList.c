@@ -3,10 +3,10 @@
 
 #define STACK_MAX_SIZE 100
 
-typedef int Data;
+typedef int StackData;
 
 typedef struct StackNode {
-    Data data;
+    StackData data;
     struct StackNode *link;
 } StackNode;
 
@@ -17,9 +17,9 @@ typedef struct Stack {
 void init_stack(Stack *stack);
 char is_empty(Stack *stack);
 char is_full(Stack *stack);
-void push(Stack *stack, Data data);
-Data pop(Stack *stack);
-Data peek(Stack *stack);
+void push(Stack *stack, StackData data);
+StackData pop(Stack *stack);
+StackData peek(Stack *stack);
 
 int main(void)
 {
@@ -55,7 +55,7 @@ char is_full(Stack *stack)
     return 0;
 }
 
-void push(Stack *stack, Data data)
+void push(Stack *stack, StackData data)
 {
     StackNode *temp = (StackNode *)malloc(sizeof(StackNode));
     temp->data = data;
@@ -63,17 +63,17 @@ void push(Stack *stack, Data data)
     stack->top = temp;
 }
 
-Data pop(Stack *stack)
+StackData pop(Stack *stack)
 {
     if (is_empty(stack)) print_error("pop empty stack");
     StackNode *temp = stack->top;
-    Data data = temp->data;
+    StackData data = temp->data;
     stack->top = stack->top->link;
     free(temp);
     return data;
 }
 
-Data peek(Stack *stack)
+StackData peek(Stack *stack)
 {
     return stack->top->data;
 }

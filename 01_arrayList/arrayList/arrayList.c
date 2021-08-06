@@ -3,23 +3,23 @@
 
 #define LIST_MAX_SIZE 100
 typedef int Data;
-typedef struct ArrayListType {
+typedef struct ArrayList {
     Data array[LIST_MAX_SIZE];
     int size;
-} ArrayListType;
+} ArrayList;
 
 void print_error(char *msg);
-void list_init(ArrayListType *L);
-char is_empty(ArrayListType *L);
-char is_full(ArrayListType *L);
-Data get_entry(ArrayListType *L, int pos);
-void print_list(ArrayListType *L);
-void insert(ArrayListType *L, int pos, Data data);
-Data delete(ArrayListType *L, int pos);
+void list_init(ArrayList *L);
+char is_empty(ArrayList *L);
+char is_full(ArrayList *L);
+Data get_entry(ArrayList *L, int pos);
+void print_list(ArrayList *L);
+void insert(ArrayList *L, int pos, Data data);
+Data delete(ArrayList *L, int pos);
 
 int main(void)
 {
-    ArrayListType *head;
+    ArrayList *head;
     list_init(head);
 
     insert(head, 0, 10); print_list(head);
@@ -36,28 +36,28 @@ void print_error(char *msg)
     exit(1);
 }
 
-void list_init(ArrayListType *L)
+void list_init(ArrayList *L)
 {
     L->size = 0;
 }
 
-char is_empty(ArrayListType *L)
+char is_empty(ArrayList *L)
 {
     return L->size == 0;
 }
 
-char is_full(ArrayListType *L)
+char is_full(ArrayList *L)
 {
     return L->size == LIST_MAX_SIZE;
 }
 
-Data get_entry(ArrayListType *L, int pos)
+Data get_entry(ArrayList *L, int pos)
 {
     if (pos < 0 || pos >= LIST_MAX_SIZE) print_error("position error");
     return L->array[pos];
 }
 
-void print_list(ArrayListType *L)
+void print_list(ArrayList *L)
 {
     int i;
     for(i=0; i<L->size; i++)
@@ -65,7 +65,7 @@ void print_list(ArrayListType *L)
     printf("\n");
 }
 
-void insert(ArrayListType *L, int pos, Data data)
+void insert(ArrayList *L, int pos, Data data)
 {
     int i;
     if (is_full(L))
@@ -78,7 +78,7 @@ void insert(ArrayListType *L, int pos, Data data)
     L->size++;
 }
 
-Data delete(ArrayListType *L, int pos)
+Data delete(ArrayList *L, int pos)
 {
     Data data;
     int i;

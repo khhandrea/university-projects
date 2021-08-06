@@ -13,8 +13,8 @@ Node *delete_first(Node *head);
 Node *delete(Node *head, Node *pre);
 void print_list(Node *head);
 Node *search_list(Node *head, Data data);
-// Node *concat_list(Node *head1, Node *head2);
-// Node *reverse_list(Node *head);
+Node *concat_list(Node *head1, Node *head2);
+Node *reverse_list(Node **head);
 
 int main(void)
 {
@@ -25,7 +25,8 @@ int main(void)
     head = insert_first(head, 2); print_list(head);
     head = insert_first(head, 3); print_list(head);
     head = insert_first(head, 4); print_list(head);
-    printf("%d\n", search_list(head, 3) == NULL);
+    head = reverse_list(&head); print_list(head);
+    // printf("%d\n", search_list(head, 6) != NULL);
     head = delete_first(head); print_list(head);
     head = delete_first(head); print_list(head);
     head = delete_first(head); print_list(head);
@@ -84,4 +85,28 @@ Node* search_list(Node *head, Data data)
         if (p->data == data)
             return p;
     return NULL;
+}
+
+Node *concat_list(Node *head1, Node *head2)
+{
+    Node *p;
+    for(p = head1; p->link != NULL; p = p->link);
+    p->link = head2;
+}
+
+Node *reverse_list(Node **head)
+{
+    Node *p, *q, *r;
+    p = NULL;
+    q = *head;
+    r = (*head)->link;
+    for(; r != NULL; r = r->link)
+    {
+        q->link = p;
+        p = q;
+        q = r;        
+    }
+    q->link = p;
+    *head = q;
+    return *head;
 }
