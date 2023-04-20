@@ -1,8 +1,5 @@
 import numpy as np
 
-def hi():
-    print('hello')
-
 def convolution(image, mask):
     image_h, image_w = image.shape
     mask_h, mask_w = mask.shape
@@ -17,3 +14,9 @@ def convolution(image, mask):
                     result[j][i] += mask[v][u] * image[j - v][i - u]
     
     return result
+
+def noise_salt_pepper():
+    pass
+
+def noise_gaussian():
+    pass
