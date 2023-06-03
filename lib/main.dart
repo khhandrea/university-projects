@@ -1,7 +1,7 @@
-
 import 'package:daily_diet_date/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'sign_up.dart';
+import 'reward.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,11 +16,10 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: SafeArea(
-            // child: SignUp()
-          child: SignIn(),
-        )
-      ),
+          body: SafeArea(
+              // child: SignUp()
+              // child: SignIn(),
+              child: Reward())),
     );
   }
 }
