@@ -11,7 +11,7 @@ String user_name = "David Kim";
 
 class MilestonePage extends StatefulWidget {
   const MilestonePage({super.key});
-
+  static const routeName = '/milestone';
   @override
   State<MilestonePage> createState() => Milestone();
 }

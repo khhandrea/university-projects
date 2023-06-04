@@ -18,7 +18,7 @@ import 'package:flutter/services.dart';
 
 class Reward extends StatelessWidget {
   const Reward({super.key});
-
+  static const routeName = '/reward';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

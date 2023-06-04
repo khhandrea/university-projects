@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
+  static const routeName = '/sign_in';
 
   @override
   Widget build(BuildContext context) {

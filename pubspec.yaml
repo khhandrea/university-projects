@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  intl: ^0.17.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -52,7 +52,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -60,6 +59,18 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/robot-lookDown.png
+    -  assets/avatar1.png
+    -  assets/Icon awesome.png
+    - assets/phone.png
+    - assets/mail.png
+    - assets/instagram.png
+    - assets/cake.png
+    - assets/back_btn.png
+    - assets/robot.png
+    - assets/welcome.png
+    - assets/signup.png
+    - assets/login.png
     - assets/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
