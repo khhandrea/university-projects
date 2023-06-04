@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math';
-import 'package:intl/intl.dart';
 
 class View_ProfilePage extends StatelessWidget {
   final List<String> userInputList;
 
-  View_ProfilePage({required this.userInputList});
+  const View_ProfilePage({super.key, required this.userInputList});
   static const routeName = '/view_profile';
   @override
   Widget build(BuildContext context) {
@@ -21,7 +19,7 @@ class View_ProfilePage extends StatelessWidget {
               flex: 1,
               child: Column(
                 children: [
-                  Expanded(
+                  const Expanded(
                     flex: 5,
                     child: CircleAvatar(
                       backgroundImage: AssetImage('assets/avatar1.png'),
@@ -131,28 +129,28 @@ class View_ProfilePage extends StatelessWidget {
 
   Widget _personalDetailInfo(String value, String imagePath) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10), // Add margin of 8 pixels at the bottom
+      margin: const EdgeInsets.only(bottom: 10), // Add margin of 8 pixels at the bottom
       child: Row(
         children: [
-          Container(
+          SizedBox(
             width: 24,
             height: 24,
             child : Image.asset(imagePath), // Image widget
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Expanded(
             child : TextFormField(// Add a space between the image and the TextFormField
               readOnly: true,
               initialValue: value,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                enabledBorder: const OutlineInputBorder(
+                enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       width: 1, color: Colors.lightGreen,
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(5))
                 ),
-                focusedBorder: const OutlineInputBorder(
+                focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       width: 1, color: Colors.green,
                     ),
