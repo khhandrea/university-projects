@@ -3,8 +3,9 @@ import 'package:flutter/gestures.dart';
 import 'dart:ui';
 
 class Scene extends StatelessWidget {
+  static const routeName = '/social_system';
+
   @override
-  static const routeName = '/social_system.dart';
   Widget build(BuildContext context) {
     double baseWidth = 390;
     double fem = MediaQuery.of(context).size.width / baseWidth;

@@ -52,7 +52,7 @@ class SignUp extends StatelessWidget {
                 _personalDetailInfo("Password"),
                 _personalDetailInfo("Age"),
                 _personalDetailInfo("Email"),
-                _personalDataInfoButton(),
+                _personalDataInfoButton(context),
               ],
             ),
           )
@@ -142,13 +142,7 @@ class SignUp extends StatelessWidget {
         elevation: const MaterialStatePropertyAll(3)
       ),
       onPressed: () {
-        // Navigate to another page when the button is pressed
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Home()
-          ),
-        );
+        
       },
       child: const Text(
         "Sign Up",
