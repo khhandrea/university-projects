@@ -1,3 +1,4 @@
+import 'package:daily_diet_date/profile.dart';
 import 'package:daily_diet_date/sign_up.dart';
 import 'package:daily_diet_date/view_profile.dart';
 import 'package:flutter/material.dart';
@@ -176,7 +177,8 @@ class SignIn extends StatelessWidget {
           fixedSize: const MaterialStatePropertyAll(Size(210, 50)),
           elevation: const MaterialStatePropertyAll(3)
       ),
-      onPressed: null,
+      onPressed: () {
+      },
       child: const Text(
         "Login",
         style: TextStyle(

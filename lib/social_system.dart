@@ -4,8 +4,9 @@ import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 
 class Scene extends StatelessWidget {
+  static const routeName = '/social_system';
+
   @override
-  static const routeName = '/social_system.dart';
   Widget build(BuildContext context) {
     double baseWidth = 390;
     double fem = MediaQuery.of(context).size.width / baseWidth;
