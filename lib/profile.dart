@@ -221,34 +221,4 @@ class Edit_profile extends StatelessWidget {
       ),
     );
   }
-
-  void _saveUserInput(BuildContext context) {
-    // Perform any validation or additional processing here before saving the input
-
-    // Display the user inputs in a dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('User Inputs'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-              userInputList.length,
-                  (index) => Text('${index + 1}. ${userInputList[index]}'),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
