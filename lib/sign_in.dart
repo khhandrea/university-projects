@@ -1,4 +1,6 @@
+import 'package:daily_diet_date/profile.dart';
 import 'package:daily_diet_date/sign_up.dart';
+import 'package:daily_diet_date/view_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -167,7 +169,7 @@ class SignIn extends StatelessWidget {
     );
   }
 
-  ElevatedButton _loginButton() {
+  ElevatedButton _loginButton(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
           foregroundColor: const MaterialStatePropertyAll(Colors.white),
@@ -175,7 +177,15 @@ class SignIn extends StatelessWidget {
           fixedSize: const MaterialStatePropertyAll(Size(210, 50)),
           elevation: const MaterialStatePropertyAll(3)
       ),
-      onPressed: null, // TODO have to be implemented 'onPressed'
+      onPressed: () {
+        // Navigate to another page when the button is pressed
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Home()
+          ),
+        );
+      },
       child: const Text(
         "Login",
         style: TextStyle(

@@ -133,7 +133,7 @@ class SignUp extends StatelessWidget {
     );
   }
 
-  ElevatedButton _personalDataInfoButton() {
+  ElevatedButton _personalDataInfoButton(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
         foregroundColor: const MaterialStatePropertyAll(Colors.white),
@@ -141,7 +141,15 @@ class SignUp extends StatelessWidget {
         fixedSize: const MaterialStatePropertyAll(Size(160, 50)),
         elevation: const MaterialStatePropertyAll(3)
       ),
-      onPressed: null, // TODO have to be implemented 'onPressed'
+      onPressed: () {
+        // Navigate to another page when the button is pressed
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Home()
+          ),
+        );
+      },
       child: const Text(
         "Sign Up",
         style: TextStyle(

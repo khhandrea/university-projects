@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:daily_diet_date/social_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
@@ -67,7 +70,8 @@ class MyApp extends StatelessWidget {
         SignUp.routeName: (context) => SignUp(),
         View_ProfilePage.routeName: (context) => View_ProfilePage(userInputList: [],),
         Reward.routeName: (context) => Reward(),
-        MilestonePage.routeName: (context) => MilestonePage()
+        MilestonePage.routeName: (context) => MilestonePage(),
+        Scene.routeName : (context) => Scene()
       },
     );
   }
@@ -109,7 +113,7 @@ class MainPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MilestonePage(),
+                            builder: (context) => SignIn(),
                           ),
                         );
                       },
