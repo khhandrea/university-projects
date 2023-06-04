@@ -50,29 +50,29 @@ class Reward extends StatelessWidget {
       ),
       body: Container(
         color: Color.fromRGBO(248, 250, 255, 1),
-        padding: EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1.0,
+            Expanded(
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  color: Color.fromRGBO(255, 255, 255, 1),
                 ),
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.check),
-                  SizedBox(width: 8),
-                  Text(
-                    '★ 300 points till next reward',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
+                child: Row(
+                  children: [
+                    Icon(Icons.check),
+                    SizedBox(width: 8),
+                    Text(
+                      '★ 300 points till next reward',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 16),
@@ -85,6 +85,7 @@ class Reward extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Expanded(
+              flex: 4,
               child: Container(
                 color: Color.fromRGBO(255, 255, 255, 1),
                 child: ListView(
@@ -144,8 +145,8 @@ class RewardBox extends StatelessWidget {
         child: ListTile(
           leading: Image.asset(
             image,
-            width: 24,
-            height: 24,
+            width: 64,
+            height: 64,
           ),
           title: Text(
             text,
