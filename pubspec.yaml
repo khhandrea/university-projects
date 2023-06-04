@@ -30,8 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.17.0
-
+  intl: ^0.18.0
+  google_fonts: ^5.0.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -47,7 +47,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   cupertino_icons: ^1.0.2
-  google_fonts: ^2.1.0 
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -62,8 +62,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/robot-lookDown.png
-    -  assets/avatar1.png
-    -  assets/Icon awesome.png
+    - assets/avatar1.png
+    - assets/Icon awesome.png
     - assets/phone.png
     - assets/mail.png
     - assets/instagram.png

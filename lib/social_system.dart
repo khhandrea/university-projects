@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:ui';
+import 'package:google_fonts/google_fonts.dart';
 
 class Scene extends StatelessWidget {
   @override
@@ -9,7 +10,9 @@ class Scene extends StatelessWidget {
     double baseWidth = 390;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return Scaffold(
+      body: SingleChildScrollView(
+      child: Container(
       width: double.infinity,
       child: Container(
         // iphone141HHg (4:6)
@@ -37,7 +40,7 @@ class Scene extends StatelessWidget {
                         width: 355*fem,
                         height: 575*fem,
                         child: Image.asset(
-                          'assets/page-1/images/mask-group.png',
+                          'assets/mask-group.png',
                           width: 355*fem,
                           height: 575*fem,
                         ),
@@ -77,7 +80,7 @@ class Scene extends StatelessWidget {
                         width: 27*fem,
                         height: 27*fem,
                         child: Image.asset(
-                          'assets/page-1/images/vector.png',
+                          'assets/vector.png',
                           width: 27*fem,
                           height: 27*fem,
                         ),
@@ -129,7 +132,7 @@ class Scene extends StatelessWidget {
                           width: 20*fem,
                           height: 16*fem,
                           child: Image.asset(
-                            'assets/page-1/images/icarrowback24px.png',
+                            'assets/icarrowback24px.png',
                             width: 20*fem,
                             height: 16*fem,
                           ),
@@ -147,6 +150,12 @@ class Scene extends StatelessWidget {
                         height: 30*fem,
                         child: Text(
                           'Social',
+                          style: GoogleFonts.poppins(
+                            fontSize: 20 * ffem,
+                            fontWeight: FontWeight.w500,
+                            height: 1.5 * ffem / fem,
+                            color: Color(0xffffffff),
+                          ),
                         ),
                       ),
                     ),
@@ -160,7 +169,7 @@ class Scene extends StatelessWidget {
                         width: 47*fem,
                         height: 47*fem,
                         child: Image.asset(
-                          'assets/page-1/images/avatar.png',
+                          'assets/avatar.png',
                           width: 47*fem,
                           height: 47*fem,
                         ),
@@ -195,7 +204,7 @@ class Scene extends StatelessWidget {
                     width: 21*fem,
                     height: 31*fem,
                     child: Image.asset(
-                      'assets/page-1/images/image-221-D6v.png',
+                      'assets/image-221-D6v.png',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -203,14 +212,22 @@ class Scene extends StatelessWidget {
                     // taptoconnectapplewatchQH4 (1:16)
                     margin: EdgeInsets.fromLTRB(0*fem, 1*fem, 0*fem, 0*fem),
                     child: Text(
-                      'Tap to connect Apple Watch',
+                      'Social',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12*ffem,
+                        fontWeight: FontWeight.w400,
+                        height: 1.5*ffem/fem,
+                        color: Color(0xffcacaca),
+                      ),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    ),
       ),
           );
   }

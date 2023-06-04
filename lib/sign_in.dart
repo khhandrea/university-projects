@@ -1,4 +1,3 @@
-import 'package:daily_diet_date/profile.dart';
 import 'package:daily_diet_date/sign_up.dart';
 import 'package:daily_diet_date/view_profile.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +58,7 @@ class SignIn extends StatelessWidget {
               children: [
                 _loginInfo("Use Name"),
                 _loginInfo("Password"),
-                _loginButton(),
+                _loginButton(context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -177,15 +176,7 @@ class SignIn extends StatelessWidget {
           fixedSize: const MaterialStatePropertyAll(Size(210, 50)),
           elevation: const MaterialStatePropertyAll(3)
       ),
-      onPressed: () {
-        // Navigate to another page when the button is pressed
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Home()
-          ),
-        );
-      },
+      onPressed: null,
       child: const Text(
         "Login",
         style: TextStyle(

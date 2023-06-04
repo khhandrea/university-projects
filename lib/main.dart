@@ -113,7 +113,7 @@ class MainPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SignIn(),
+                            builder: (context) => Scene(),
                           ),
                         );
                       },
