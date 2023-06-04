@@ -64,11 +64,6 @@ Challenge getChallengeBasedOnTime(List<Challenge> challenges) {
 }
 
 void main() {
-  final weightLossChallenge = getChallengeBasedOnTime(weightLossChallenges);
-  final healthyEatingChallenge =
-      getChallengeBasedOnTime(healthyEatingChallenges);
-  final healthyLifestyleChallenge =
-      getChallengeBasedOnTime(healthyLifestyleChallenges);
   // Generate challenges based on the current time of the day
   runApp(const MyApp());
 }

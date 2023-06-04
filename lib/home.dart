@@ -4,7 +4,66 @@ import 'package:flutter/material.dart';
 import 'utils.dart';
 import 'milestone.dart';
 
+class Challenge {
+  final String category;
+  final String description;
+
+  Challenge({required this.category, required this.description});
+}
+
+List<Challenge> weightLossChallenges = [
+  Challenge(
+      category: 'Weight Loss',
+      description: 'Take a 30-minute brisk walk today.'),
+  Challenge(
+      category: 'Weight Loss',
+      description: 'Replace sugary drinks with water for the entire day.'),
+  Challenge(
+      category: 'Weight Loss',
+      description: 'Do 10 minutes of high-intensity interval training (HIIT).'),
+  // Add more weight loss challenges
+];
+
+List<Challenge> healthyEatingChallenges = [
+  Challenge(
+      category: 'Healthy Eating',
+      description:
+      'Eat at least five servings of fruits and vegetables today.'),
+  Challenge(
+      category: 'Healthy Eating',
+      description: 'Cook a healthy homemade meal for dinner.'),
+  Challenge(
+      category: 'Healthy Eating',
+      description: 'Choose whole grain options for your breakfast.'),
+  // Add more healthy eating challenges
+];
+
+List<Challenge> healthyLifestyleChallenges = [
+  Challenge(
+      category: 'Healthy Lifestyle',
+      description: 'Practice meditation or deep breathing for 10 minutes.'),
+  Challenge(
+      category: 'Healthy Lifestyle',
+      description: 'Get at least 8 hours of quality sleep tonight.'),
+  Challenge(
+      category: 'Healthy Lifestyle',
+      description:
+      'Take a break from screens and engage in a hobby or physical activity.'),
+  // Add more healthy lifestyle challenges
+];
+
+Challenge getChallengeBasedOnTime(List<Challenge> challenges) {
+  final DateTime now = DateTime.now();
+  final int day = now.day;
+  final Challenge selectedChallenge = challenges[day % challenges.length];
+  return selectedChallenge;
+}
+  final weightLossChallenge = getChallengeBasedOnTime(weightLossChallenges);
+  final healthyEatingChallenge = getChallengeBasedOnTime(healthyEatingChallenges);
+  final healthyLifestyleChallenge = getChallengeBasedOnTime(healthyLifestyleChallenges);
+
 class Scene extends StatelessWidget {
+
   const Scene({super.key});
 
   @override
@@ -99,10 +158,10 @@ class Scene extends StatelessWidget {
                     top: 226 * fem,
                     child: Align(
                       child: SizedBox(
-                        width: 240 * fem,
-                        height: 27 * fem,
+                        width: 300 * fem,
+                        height: 50 * fem,
                         child: Text(
-                          'Run or walk for 30 minutes',
+                          healthyLifestyleChallenge.description,
                           style: SafeGoogleFont(
                             'Poppins',
                             fontSize: 18 * ffem,
@@ -110,6 +169,7 @@ class Scene extends StatelessWidget {
                             height: 1.5 * ffem / fem,
                             color: const Color(0xff88ca5e),
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),

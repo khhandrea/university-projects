@@ -153,7 +153,7 @@ class Social extends StatelessWidget {
                           child: SizedBox(
                             width: 61 * fem,
                             height: 30 * fem,
-                            child: const Text(
+                            child: Text(
                               'Social',
                               style: GoogleFonts.poppins(
                                 fontSize: 20 * ffem,
