@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
+import 'view_profile.dart';
 
-class view_profile extends StatelessWidget {
+class Edit_profile extends StatelessWidget {
   List<String> userInputList = List<String>.filled(5, '');
   static const routeName = '/profile';
   @override

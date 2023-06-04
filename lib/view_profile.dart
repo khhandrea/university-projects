@@ -7,7 +7,7 @@ class View_ProfilePage extends StatelessWidget {
   final List<String> userInputList;
 
   View_ProfilePage({required this.userInputList});
-  static const routeName = '/profile';
+  static const routeName = '/view_profile';
   @override
   Widget build(BuildContext context) {
 
