@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/utils.dart';
 
 class Scene extends StatelessWidget {
   @override
@@ -148,8 +147,8 @@ class Scene extends StatelessWidget {
                         height: 30*fem,
                         child: Text(
                           'Social',
-                          style: SafeGoogleFont (
-                            'Poppins',
+                          style: GoogleFonts.lato (
+                            // 'Poppins',
                             fontSize: 20*ffem,
                             fontWeight: FontWeight.w500,
                             height: 1.5*ffem/fem,
@@ -212,8 +211,8 @@ class Scene extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(0*fem, 1*fem, 0*fem, 0*fem),
                     child: Text(
                       'Tap to connect Apple Watch',
-                      style: SafeGoogleFont (
-                        'Poppins',
+                      style: GoogleFonts.lato (
+                        // 'Poppins',
                         fontSize: 12*ffem,
                         fontWeight: FontWeight.w400,
                         height: 1.5*ffem/fem,
