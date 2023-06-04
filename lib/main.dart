@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: SafeArea(
-        // child: SignUp()
-        child: MilestonePage(),
+        child: SignUp()
+        // child: MilestonePage(),
         // child: Reward(),
       )),
     );
