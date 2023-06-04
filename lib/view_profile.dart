@@ -47,7 +47,7 @@ class View_ProfilePage extends StatelessWidget {
                 child : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _personalDetailInfo( userInputList[0],"assets/Icon awesome.png"),
+                    _personalDetailInfo(userInputList[0],"assets/Icon awesome.png"),
                     _personalDetailInfo(userInputList[1], "assets/cake.png"),
                     _personalDetailInfo(userInputList[2], "assets/phone.png"),
                     _personalDetailInfo(userInputList[3], "assets/instagram.png"),

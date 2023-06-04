@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
+import 'package:daily_diet_date/milestone.dart';
+import 'package:daily_diet_date/sign_in.dart';
+import 'package:flutter/material.dart';
+import 'sign_up.dart';
+import 'reward.dart';
 
 class Challenge {
   final String category;
@@ -587,7 +592,7 @@ class View_ProfilePage extends StatelessWidget {
                 child : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _personalDetailInfo( ,"assets/Icon awesome.png"),
+                    _personalDetailInfo(userInputList[0],"assets/Icon awesome.png"),
                     _personalDetailInfo(userInputList[1], "assets/cake.png"),
                     _personalDetailInfo(userInputList[2], "assets/phone.png"),
                     _personalDetailInfo(userInputList[3], "assets/instagram.png"),
