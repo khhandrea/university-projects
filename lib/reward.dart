@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // class Reward extends StatelessWidget {
 //   const Reward({super.key});
@@ -23,9 +22,9 @@ class Reward extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Rewards'),
+        title: const Text('My Rewards'),
         leading: IconButton(
-          icon: Icon(Icons.account_circle),
+          icon: const Icon(Icons.account_circle),
           onPressed: () {
             // Navigate to profile page
             print('navigate to profile page');
@@ -33,7 +32,7 @@ class Reward extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               // Navigate to profile page
               print('navigate to previous page');
@@ -41,16 +40,16 @@ class Reward extends StatelessWidget {
           ),
         ],
         toolbarHeight: 100,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(20),
           ),
         ),
-        backgroundColor: Color.fromRGBO(145, 209, 104, 1),
+        backgroundColor: const Color.fromRGBO(145, 209, 104, 1),
       ),
       body: Container(
-        color: Color.fromRGBO(248, 250, 255, 1),
-        padding: EdgeInsets.all(18.0),
+        color: const Color.fromRGBO(248, 250, 255, 1),
+        padding: const EdgeInsets.all(18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,12 +57,12 @@ class Reward extends StatelessWidget {
               flex: 1,
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4.0),
-                  color: Color.fromRGBO(255, 255, 255, 1),
+                  color: const Color.fromRGBO(255, 255, 255, 1),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
                     Icon(Icons.check),
                     SizedBox(width: 8),
@@ -75,19 +74,19 @@ class Reward extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Available rewards',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               flex: 4,
               child: Container(
-                color: Color.fromRGBO(255, 255, 255, 1),
+                color: const Color.fromRGBO(255, 255, 255, 1),
                 child: ListView(
                   children: [
                     RewardBox(
@@ -138,10 +137,10 @@ class RewardBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 80,
       child: Card(
-        color: Color.fromRGBO(233, 255, 235, 1),
+        color: const Color.fromRGBO(233, 255, 235, 1),
         child: ListTile(
           leading: Image.asset(
             image,
@@ -150,19 +149,19 @@ class RewardBox extends StatelessWidget {
           ),
           title: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color.fromRGBO(136, 202, 94, 1),
               fontSize: 18,
             ),
           ),
           subtitle: Text(
             "$point Points",
-            style: TextStyle(
+            style: const TextStyle(
               color: Color.fromRGBO(0, 0, 0, 1),
               fontSize: 12,
             ),
           ),
-          trailing: Icon(Icons.check),
+          trailing: const Icon(Icons.check),
           onTap: onPressed,
         ),
       ),

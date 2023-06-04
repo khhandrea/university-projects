@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 List<dynamic> personalGoalsList = ["Run a 5K in under 30 minutes", "Drink 8 glasses of water\neveryday for a week", "Hit normal BMI"];
 
 List<Icon> goalIcons = [
-  Icon(Icons.fitness_center_outlined, size: 50.0, color:Color(0xff156348)), 
-  Icon(Icons.apple, size: 50.0, color: Color(0xff156348)), 
-  Icon(Icons.person, size: 50.0, color: Color(0xff156348))];
+  const Icon(Icons.fitness_center_outlined, size: 50.0, color:Color(0xff156348)), 
+  const Icon(Icons.apple, size: 50.0, color: Color(0xff156348)), 
+  const Icon(Icons.person, size: 50.0, color: Color(0xff156348))];
 List<dynamic> category = ["Fitness", "Dietary", "Personal Goal"];
 String user_name = "David Kim";
 
@@ -53,10 +53,10 @@ class Milestone extends State<MilestonePage> {
                   ),
                 ),
               Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: Text(
                 "Welcome, $user_name", 
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -68,7 +68,7 @@ class Milestone extends State<MilestonePage> {
                   // move to profile edit
 
                 }, 
-                icon: Icon(Icons.more_vert)
+                icon: const Icon(Icons.more_vert)
               )
               ],
             ),
@@ -97,7 +97,7 @@ class Milestone extends State<MilestonePage> {
                       color: Colors.grey[500],
                     ),
                   ),
-                  Text("Run or walk for 30 minutes",
+                  const Text("Run or walk for 30 minutes",
                     style: TextStyle(
                       color: Color(0xff88CA5E), 
                       fontSize: 20, 
@@ -115,7 +115,7 @@ class Milestone extends State<MilestonePage> {
       color: Colors.lightGreenAccent,
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.fitness_center, 
             size: 40,
           ),
@@ -142,8 +142,8 @@ class Milestone extends State<MilestonePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch, 
         children: [
           Container(
-            margin: EdgeInsets.all(10),
-            child: Text(
+            margin: const EdgeInsets.all(10),
+            child: const Text(
               "Try to achieve all of your goals. You've got this!", 
               style: TextStyle(
                 fontSize: 13,
@@ -153,7 +153,7 @@ class Milestone extends State<MilestonePage> {
           ),
           for(num i = 0; i < personalGoalsList.length; i++)
             Card(
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+              margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               elevation: 0,
               color: const Color(0xffE9FFEB),
               child: Row(
@@ -176,7 +176,7 @@ class Milestone extends State<MilestonePage> {
                     children: [
                       Text(
                         category[i.toInt()], 
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20, 
                           color: Color(0xff88CA5E), 
                           height: 1.2
@@ -197,7 +197,7 @@ class Milestone extends State<MilestonePage> {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.green, Colors.white], 
             begin: Alignment.topCenter, 

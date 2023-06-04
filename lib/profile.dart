@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math';
-import 'package:intl/intl.dart';
 import 'view_profile.dart';
 
 class Edit_profile extends StatelessWidget {
   List<String> userInputList = List<String>.filled(5, '');
   static const routeName = '/profile';
+
+  Edit_profile({super.key});
   @override
   Widget build(BuildContext context) {
 
@@ -20,7 +20,7 @@ class Edit_profile extends StatelessWidget {
               flex: 1,
               child: Column(
                 children: [
-                  Expanded(
+                  const Expanded(
                     flex: 5,
                     child: CircleAvatar(
                       backgroundImage: AssetImage('assets/avatar1.png'),
@@ -150,15 +150,15 @@ class Edit_profile extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
-          Container(
+          SizedBox(
             width: 24,
             height: 24,
             child: Image.asset(imagePath),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Expanded(
             child: TextFormField(
               controller: controller,
@@ -167,7 +167,7 @@ class Edit_profile extends StatelessWidget {
               },
               decoration: InputDecoration(
                 contentPadding:
-                EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 1,
@@ -183,7 +183,7 @@ class Edit_profile extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 hintText: shadowText,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: Colors.grey,
                   fontStyle: FontStyle.italic,
                 ),
@@ -198,10 +198,10 @@ class Edit_profile extends StatelessWidget {
   ElevatedButton _personalDataInfoButton(BuildContext context, List<String> userInputList) {
     return ElevatedButton(
       style: ButtonStyle(
-        foregroundColor: MaterialStatePropertyAll(Colors.white),
+        foregroundColor: const MaterialStatePropertyAll(Colors.white),
         backgroundColor: MaterialStatePropertyAll(Colors.green.shade300),
-        fixedSize: MaterialStatePropertyAll(Size(160, 50)),
-        elevation: MaterialStatePropertyAll(3),
+        fixedSize: const MaterialStatePropertyAll(Size(160, 50)),
+        elevation: const MaterialStatePropertyAll(3),
       ),
       onPressed: () {
         // Navigate to another page when the button is pressed
