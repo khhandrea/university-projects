@@ -1,3 +1,4 @@
+import 'package:daily_diet_date/milestone.dart';
 import 'package:daily_diet_date/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'sign_up.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           body: SafeArea(
         // child: SignUp()
-        child: SignIn(),
+        child: MilestonePage(),
         // child: Reward(),
       )),
     );
