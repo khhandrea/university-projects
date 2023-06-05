@@ -1,5 +1,7 @@
 import 'package:daily_diet_date/reward.dart';
 import 'package:daily_diet_date/social_system.dart';
+import 'package:daily_diet_date/history.dart';
+
 import 'package:flutter/material.dart';
 import 'utils.dart';
 import 'milestone.dart';
@@ -362,21 +364,29 @@ class Scene extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              // healthaibyg (586:1708)
-                              margin: EdgeInsets.fromLTRB(
-                                  0 * fem, 0 * fem, 0 * fem, 1.5 * fem),
-                              child: Text(
-                                'Health AI',
-                                style: SafeGoogleFont(
-                                  'Poppins',
-                                  fontSize: 12 * ffem,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.5 * ffem / fem,
-                                  color: const Color(0xff88ca5e),
-                                ),
-                              ),
-                            ),
+                            GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => const History()),
+                                              );
+                                            },
+                                            child: Container(
+                                              // healthaibyg (586:1708)
+                                              margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 1.5 * fem),
+                                              child: Text(
+                                                'History',
+                                                style: SafeGoogleFont(
+                                                  'Poppins',
+                                                  fontSize: 12 * ffem,
+                                                  fontWeight: FontWeight.w500,
+                                                  height: 1.5 * ffem / fem,
+                                                  color: const Color(0xff88ca5e),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+
                           ],
                         ),
                       ),
