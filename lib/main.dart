@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
               userInputList: [],
             ),
         Reward.routeName: (context) => const Reward(),
-        MilestonePage.routeName: (context) => const MilestonePage(),
+        Milestone.routeName: (context) => const Milestone(),
         Social.routeName: (context) => const Social(),
         History.routeName: (context) => const History()
       },

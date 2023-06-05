@@ -321,7 +321,7 @@ class Scene extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const MilestonePage()),
+                                          const Milestone()),
                                 );
                               },
                             ),

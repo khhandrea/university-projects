@@ -9,7 +9,7 @@ class History extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Fitness Journey'),
+        title: const Text('My Daily Fitness Journey'),
         leading: IconButton(
   icon: Image.asset(
     'assets/avatar-8Aa.png',
@@ -57,15 +57,14 @@ class History extends StatelessWidget {
                   color: const Color.fromRGBO(255, 255, 255, 1),
                 ),
                 child: Row(
-  children: [
-    Icon(Icons.check),
-    SizedBox(width: 8),
-    Text('You have collected a total of 100 points!',
-      style: TextStyle(fontSize: 16),
-    )
-  ],
-),
-
+                  children: [
+                    Icon(Icons.check),
+                    SizedBox(width: 8),
+                    Text('You have collected a total of 100 points!',
+                      style: TextStyle(fontSize: 16),
+                    )
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 16),

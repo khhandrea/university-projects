@@ -1,216 +1,147 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
 
-List<dynamic> personalGoalsList = ["Run a 5K in under 30 minutes", "Drink 8 glasses of water\neveryday for a week", "Hit normal BMI"];
-
-List<Icon> goalIcons = [
-  const Icon(Icons.fitness_center_outlined, size: 50.0, color:Color(0xff156348)), 
-  const Icon(Icons.apple, size: 50.0, color: Color(0xff156348)), 
-  const Icon(Icons.person, size: 50.0, color: Color(0xff156348))];
-List<dynamic> category = ["Fitness", "Dietary", "Personal Goal"];
-String user_name = "David Kim";
-
-class MilestonePage extends StatefulWidget {
-  const MilestonePage({super.key});
-  static const routeName = '/milestone';
+class Milestone extends StatelessWidget {
+  const Milestone({super.key});
+  static const routeName = '/history';
   @override
-  State<MilestonePage> createState() => Milestone();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Fitness Journey'),
+        leading: IconButton(
+  icon: Image.asset(
+    'assets/avatar-8Aa.png',
+    width: 150,
+    height: 150,
+  ),
+  onPressed: () {
+    // Navigate to profile page
+  },
+),
+
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              // Navigate to profile page
+              Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Scene()),
+        );
+            },
+          ),
+        ],
+        toolbarHeight: 100,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
+        backgroundColor: const Color.fromRGBO(145, 209, 104, 1),
+      ),
+      body: Container(
+        color: const Color.fromRGBO(248, 250, 255, 1),
+        padding: const EdgeInsets.all(18.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  color: const Color.fromRGBO(255, 255, 255, 1),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.check),
+                    SizedBox(width: 8),
+                    Text('You have received one badge!',
+                      style: TextStyle(fontSize: 16),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Badges Collected',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              flex: 4,
+              child: Container(
+                color: const Color.fromRGBO(255, 255, 255, 1),
+                child: ListView(
+                  children: [
+                    RewardBox(
+                      key: UniqueKey(),
+                      image: 'assets/rookie_badge.png',
+                      text: 'First Step',
+                      description: 'This badge is awarded to those who have successfully registered and embarked on a path to a healthier lifestyle.',
+                      onPressed: () {
+                        // Handle reward button pressed
+                      },
+                    ),
+                    // Add more RewardBox widgets for each reward
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-class Milestone extends State<MilestonePage> {
-  bool _isDone = false;
+class RewardBox extends StatelessWidget {
+  final String image;
+  final String text;
+  final String description;
+  final VoidCallback onPressed;
+
+  const RewardBox({
+    required Key key,
+    required this.image,
+    required this.text,
+    required this.description,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.blue;
-      }
-      return Colors.red;
-    }
-
-    // logged in user info on top
-    Widget getUserInfo = Card(
-      margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-      color: Colors.green,
-      child: Row(
-        children: [
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.grey[200],
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.grey,
-                  ),
-                ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: Text(
-                "Welcome, $user_name", 
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              ), 
-              IconButton(
-                onPressed: () => {
-                  // move to profile edit
-
-                }, 
-                icon: const Icon(Icons.more_vert)
-              )
-              ],
-            ),
-          )
-        ]
-      ),
-    );
-
-    // Daily challenges
-    Widget getDailyChallenge = Card(
-      margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "★ Daily Challenge",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                  const Text("Run or walk for 30 minutes",
-                    style: TextStyle(
-                      color: Color(0xff88CA5E), 
-                      fontSize: 20, 
-                    )
-                  )
-                ],
-              ),
-            ),
-          ]
-        ),
-      );
-
-    Widget personalGoal = Card(
-      elevation: 0,
-      color: Colors.lightGreenAccent,
-      child: Row(
-        children: [
-          const Icon(
-            Icons.fitness_center, 
-            size: 40,
+    return SizedBox(
+      height: 100,
+      child: Card(
+        color: const Color.fromRGBO(233, 255, 235, 1),
+        child: ListTile(
+          leading: Image.asset(
+            image,
+            width: 64,
+            height: 64,
           ),
-          Checkbox(
-            checkColor: Colors.blue,
-            fillColor: MaterialStateProperty.resolveWith(getColor),
-            value: _isDone, 
-            onChanged: (value) {
-              setState(() {
-                _isDone = value!;
-              });
-            }, 
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          ),
-        ],
-      ),
-    );
-
-    // Personal challenges
-    Widget getPersonalChallenge = Card(
-      margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch, 
-        children: [
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: const Text(
-              "Try to achieve all of your goals. You've got this!", 
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold
-              ),
+          title: Text(
+            text,
+            style: const TextStyle(
+              color: Color.fromRGBO(136, 202, 94, 1),
+              fontSize: 18,
             ),
           ),
-          for(num i = 0; i < personalGoalsList.length; i++)
-            Card(
-              margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-              elevation: 0,
-              color: const Color(0xffE9FFEB),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  goalIcons[i.toInt()],
-                  Checkbox(
-                    value: _isDone, 
-                    onChanged: (value) {
-                      
-                    }, 
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        category[i.toInt()], 
-                        style: const TextStyle(
-                          fontSize: 20, 
-                          color: Color(0xff88CA5E), 
-                          height: 1.2
-                        ),
-                      ),
-                      Text(
-                        personalGoalsList[i.toInt()],
-                        softWrap: true,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+          subtitle: Text(
+            "$description ",
+            style: const TextStyle(
+              color: Color.fromRGBO(0, 0, 0, 1),
+              fontSize: 12,
             ),
-        ]
-      ),
-    );
-
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.green, Colors.white], 
-            begin: Alignment.topCenter, 
-            end: Alignment.bottomCenter,  
           ),
-        ),
-        child: Column(
-          children: <Widget>[
-            getUserInfo,
-            getDailyChallenge,
-            getPersonalChallenge, 
-            // navigation bar 
-          ],
         ),
       ),
     );
