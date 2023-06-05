@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
+import 'home.dart';
+
 
 class Social extends StatelessWidget {
   static const routeName = '/social_system';
@@ -132,17 +134,25 @@ class Social extends StatelessWidget {
                             ),
                           ),
                           child: Center(
-                            // icarrowback24pxLDL (1:63)
-                            child: SizedBox(
-                              width: 20 * fem,
-                              height: 16 * fem,
-                              child: Image.asset(
-                                'assets/icarrowback24px.png',
-                                width: 20 * fem,
-                                height: 16 * fem,
-                              ),
-                            ),
-                          ),
+  child: GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const Scene()),
+      );
+    },
+    child: SizedBox(
+      width: 20 * fem,
+      height: 16 * fem,
+      child: Image.asset(
+        'assets/icarrowback24px.png',
+        width: 20 * fem,
+        height: 16 * fem,
+      ),
+    ),
+  ),
+),
+
                         ),
                       ),
                       Positioned(
