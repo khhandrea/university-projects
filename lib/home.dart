@@ -3,6 +3,7 @@ import 'package:daily_diet_date/social_system.dart';
 import 'package:flutter/material.dart';
 import 'utils.dart';
 import 'milestone.dart';
+import 'profile.dart';
 
 class Challenge {
   final String category;
@@ -234,14 +235,22 @@ class Scene extends StatelessWidget {
                         // group1490s6e (586:1712)
                         left: 371 * fem,
                         top: 110 * fem,
-                        child: Align(
-                          child: SizedBox(
-                            width: 16 * fem,
-                            height: 29 * fem,
-                            child: Image.asset(
-                              'assets/group-1490-tHU.png',
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Edit_profile()));
+                          },
+                          child: Align(
+                            child: SizedBox(
                               width: 16 * fem,
                               height: 29 * fem,
+                              child: Image.asset(
+                                'assets/group-1490-tHU.png',
+                                width: 16 * fem,
+                                height: 29 * fem,
+                              ),
                             ),
                           ),
                         ),
