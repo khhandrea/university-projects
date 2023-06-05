@@ -11,12 +11,16 @@ class History extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Fitness Journey'),
         leading: IconButton(
-          icon: const Icon(Icons.account_circle),
-          onPressed: () {
-            // Navigate to profile page
-            print('navigate to profile page');
-          },
-        ),
+  icon: Image.asset(
+    'assets/avatar-8Aa.png',
+    width: 150,
+    height: 150,
+  ),
+  onPressed: () {
+    // Navigate to profile page
+  },
+),
+
         actions: [
           IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -56,7 +60,7 @@ class History extends StatelessWidget {
   children: [
     Icon(Icons.check),
     SizedBox(width: 8),
-    Text(' ${DateFormat('yyyy-MM-dd').format(DateTime.now())} - Daily Challenge',
+    Text('You have collected a total of 100 points!',
       style: TextStyle(fontSize: 16),
     )
   ],

@@ -10,7 +10,11 @@ class Reward extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Rewards'),
         leading: IconButton(
-          icon: const Icon(Icons.account_circle),
+          icon: Image.asset(
+    'assets/avatar-8Aa.png',
+    width: 150,
+    height: 150,
+  ),
           onPressed: () {
             // Navigate to profile page
             print('navigate to profile page');
