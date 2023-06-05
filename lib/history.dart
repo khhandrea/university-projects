@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'home.dart';
 
-class Reward extends StatelessWidget {
-  const Reward({super.key});
-  static const routeName = '/reward';
+class History extends StatelessWidget {
+  const History({super.key});
+  static const routeName = '/history';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Rewards'),
+        title: const Text('My Fitness Journey'),
         leading: IconButton(
           icon: const Icon(Icons.account_circle),
           onPressed: () {
@@ -51,21 +52,21 @@ class Reward extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4.0),
                   color: const Color.fromRGBO(255, 255, 255, 1),
                 ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.check),
-                    SizedBox(width: 8),
-                    Text(
-                      '★ 300 points till next reward',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
+                child: Row(
+  children: [
+    Icon(Icons.check),
+    SizedBox(width: 8),
+    Text(' ${DateFormat('yyyy-MM-dd').format(DateTime.now())} - Daily Challenge',
+      style: TextStyle(fontSize: 16),
+    )
+  ],
+),
+
               ),
             ),
             const SizedBox(height: 16),
             const Text(
-              'Available rewards',
+              'Daily log',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -80,22 +81,20 @@ class Reward extends StatelessWidget {
                   children: [
                     RewardBox(
                       key: UniqueKey(),
-                      image: 'assets/starbucks-logo.png',
-                      text: 'Starbucks Coupon',
-                      point: 500,
+                      image: 'assets/running_icon.jpg',
+                      text: 'Daily Challenge 1',
+                      point: 50,
                       onPressed: () {
                         // Handle reward button pressed
-                        print('Got Starbucks coupon!');
                       },
                     ),
                     RewardBox(
                       key: UniqueKey(),
-                      image: 'assets/starbucks-logo.png',
-                      text: 'Olive Young Voucher',
-                      point: 1000,
+                      image: 'assets/planking_icon.png',
+                      text: 'Daily Challenge 2',
+                      point: 50,
                       onPressed: () {
                         // Handle reward button pressed
-                        print('Got Olive Young voucher!');
                       },
                     ),
                     // Add more RewardBox widgets for each reward

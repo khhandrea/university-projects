@@ -1,3 +1,4 @@
+import 'package:daily_diet_date/history.dart';
 import 'package:daily_diet_date/social_system.dart';
 import 'package:flutter/material.dart';
 import 'milestone.dart';
@@ -88,7 +89,8 @@ class MyApp extends StatelessWidget {
             ),
         Reward.routeName: (context) => const Reward(),
         MilestonePage.routeName: (context) => const MilestonePage(),
-        Social.routeName: (context) => const Social()
+        Social.routeName: (context) => const Social(),
+        History.routeName: (context) => const History()
       },
     );
   }
