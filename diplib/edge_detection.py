@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def prewitt_operator(self, image, threshold, background, color_type=None):
+def prewitt_operator(image, threshold, background, color_type=None):
     size = 3
     radius = 1
     prewitt_hor = np.array([[-1, 0, 1],
@@ -56,7 +56,7 @@ def prewitt_operator(self, image, threshold, background, color_type=None):
         return np.array(result, dtype='uint8')
     
 #Sobel Operator
-def sobel_operator(self, image, threshold, background, color_type=None):
+def sobel_operator(image, threshold, background, color_type=None):
     size = 3
     radius = 1
     sobel_hor = np.array([[-1, 0, 1],
@@ -111,7 +111,7 @@ def sobel_operator(self, image, threshold, background, color_type=None):
         return np.array(result, dtype='uint8')
 
 #LoG Operator
-def LoG_operator(self, image, size, sigma, color_type=None):
+def LoG_operator(image, size, sigma, color_type=None):
     if(len(image.shape)==3 and color_type=="HSI"):
         blur = cv2.GaussianBlur(image[:,:,2], (size, size), sigma)
         result = cv2.Laplacian(blur, cv2.CV_8U, ksize=size)
@@ -121,7 +121,7 @@ def LoG_operator(self, image, size, sigma, color_type=None):
     return result
     
 #Canny Operator
-def canny_operator(self, image, min_threshold, max_threshold, color_type=None):
+def canny_operator(image, min_threshold, max_threshold, color_type=None):
     if(len(image.shape)==3 and color_type=="HSI"):
         result = cv2.Canny(image[:,:,2], min_threshold, max_threshold)
     else:
