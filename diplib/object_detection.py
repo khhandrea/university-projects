@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-from frame_processing import frames_hsv_to_rgb
-from frame_processing import frames_rgb_to_hsv
+from diplib.frame_processing import frames_hsv_to_rgb
+from diplib.frame_processing import frames_rgb_to_hsv
 
 def delete_background(frames):
     avg = np.zeros_like(frames[0], dtype='uint64')
