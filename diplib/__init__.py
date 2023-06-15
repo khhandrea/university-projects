@@ -1,7 +1,8 @@
-from diplib.load_source import get_gray_image
-from diplib.load_source import get_color_image_hsi
-from diplib.load_source import get_color_image_rgb
-from diplib.load_source import get_video_frames
+from diplib.handle_source import get_gray_image
+from diplib.handle_source import get_color_image_hsi
+from diplib.handle_source import get_color_image_rgb
+from diplib.handle_source import get_video_frames
+from diplib.handle_source import export_video
 
 from diplib.point_processing import negative_transformation
 from diplib.point_processing import power_law_transformation
