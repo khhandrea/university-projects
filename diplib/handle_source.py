@@ -40,7 +40,7 @@ def export_video(
     fourcc = cv2.VideoWriter_fourcc(*codec)
     out = cv2.VideoWriter(filename, fourcc, fps, (frame_width, frame_height))
 
-    for idx,frame in enumerate(frames):
+    for idx,frame in enumerate(frames, 1):
         out.write(frame)
-        print(f'\r{100*(idx + 1) / frame_len:>4.2f}%% ({idx:>4d}/{frame_len:>4d}) frames processing...', end='')
+        print(f'{100 * idx / frame_len:>4.2f}% ({idx:>4d}/{frame_len:>4d}) frames processing...', end='\r')
     out.release()
