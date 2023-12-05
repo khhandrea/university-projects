@@ -1,0 +1,39 @@
+Start testing: Dec 05 06:17 UTC
+----------------------------------------------------------
+1/1 Testing: HelloTest.BasicAssertions
+1/1 Test: HelloTest.BasicAssertions
+Command: "/volume/build/hello_test" "--gtest_filter=HelloTest.BasicAssertions" "--gtest_also_run_disabled_tests"
+Directory: /volume/build
+"HelloTest.BasicAssertions" start time: Dec 05 06:17 UTC
+Output:
+----------------------------------------------------------
+Running main() from /volume/build/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = HelloTest.BasicAssertions
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from HelloTest
+[ RUN      ] HelloTest.BasicAssertions
+/volume/hello_test.cc:8: Failure
+Expected equality of these values:
+  7 * 6
+    Which is: 42
+  43
+[  FAILED  ] HelloTest.BasicAssertions (0 ms)
+[----------] 1 test from HelloTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] HelloTest.BasicAssertions
+
+ 1 FAILED TEST
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Failed.
+"HelloTest.BasicAssertions" end time: Dec 05 06:17 UTC
+"HelloTest.BasicAssertions" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Dec 05 06:17 UTC
