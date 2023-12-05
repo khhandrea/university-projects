@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 typedef struct ObstacleLocation // 장애물 유무 struct
@@ -12,6 +13,14 @@ typedef struct DustExistence // 먼지 유무 sturct
 {
     short Dust;
 } DustExistence;
+
+typedef struct ControllerInput
+{
+    ObstacleLocation obstacleLocation;
+    DustExistence dustExistence;
+    short forwardState;
+    short backwardState;
+} ControllerInput;
 
 typedef struct CleanerCommand // 먼지 유무 & 정지 유무에 struct
 {
@@ -37,7 +46,8 @@ typedef struct MotorInterfaceInput // Controller에서 센서 데이터 취합�
     short turnRight;
 } MotorInterfaceInput;
 
-short frontSendorInterface();
+void controller(ControllerInput);
+short fronSensorInterface();
 short leftSensorInterface();
 short rightSensorInterface();
 short dustSensorInterface();
@@ -53,21 +63,42 @@ void cleanerInterface(CleanerInterfaceInput input);
 
 int main(void)
 {
-    short forwardState = 0;
+    short forwardState = 1;
     short backwardState = 0;
-    CleanerCommand cleanerInput = {0, 0, 0};
+    ObstacleLocation obstacleLocation;
+    DustExistence dustExistence;
+    ControllerInput controllerInput;
 
-    cleanerInput.On = 1;
-    forwardState = 1;
     moveForward(1);
+    CleanerCommand cleanerInput = {1, 0, 0};
     cleanerCommand(cleanerInput);
+    
 
     while (1)
     {
-        ObstacleLocation obstacleLocation = determineObstacleLocation();
-        DustExistence dustExistence = determineDustExistence();
+        obstacleLocation = determineObstacleLocation();
+        dustExistence = determineDustExistence();
 
-        if (forwardState)
+        controllerInput.forwardState = forwardState;
+        controllerInput.backwardState = backwardState;
+        controllerInput.obstacleLocation = obstacleLocation;
+        controllerInput.dustExistence = dustExistence;
+
+        controller(controllerInput);
+
+        sleep(1);
+    }
+}
+
+void controller(ControllerInput controllerInput) {
+    short forwardState = controllerInput.forwardState;
+    short backwardState = controllerInput.backwardState;
+    ObstacleLocation obstacleLocation = controllerInput.obstacleLocation;
+    DustExistence dustExistence = controllerInput.dustExistence;
+
+    CleanerCommand cleanerInput = {0, 0, 0};
+
+    if (forwardState)
         {
             if (dustExistence.Dust)
             {
@@ -156,12 +187,9 @@ int main(void)
                 cleanerInput.On = 0;
             }
         }
-
-        sleep(1);
-    }
 }
 
-short frontSendorInterface()
+short fronSensorInterface()
 {
     return 0;
 }
@@ -184,7 +212,7 @@ short dustSensorInterface()
 ObstacleLocation determineObstacleLocation() // FLR 장애물 struct 받아오고 리턴
 {
     struct ObstacleLocation obstacleLocation;
-    obstacleLocation.F = frontSendorInterface();
+    obstacleLocation.F = fronSensorInterface();
     obstacleLocation.L = leftSensorInterface();
     obstacleLocation.R = rightSensorInterface();
     return obstacleLocation;
@@ -271,49 +299,60 @@ void cleanerCommand(CleanerCommand command)
 
 void motorInterface(MotorInterfaceInput input)
 {
-    short forwardState = 0;
-    short backwardState = 0;
+    short forwardState;
+    short backwardState;
+
+    FILE *logFile = fopen("log.txt", "w");
+    char *log;
 
     if (input.enableMoveForward)
     {
-        printf("청소기가 앞으로 이동합니다.\n");
+        log = "청소기가 앞으로 이동합니다.";
         forwardState = 1;
     }
     else if (input.disableMoveForward)
     {
-        printf("청소기가 앞으로 이동을 정지합니다.\n");
+        log = "청소기가 앞으로 이동을 정지합니다.";
         forwardState = 0;
     }
     else if (input.turnLeft)
     {
-        printf("청소기를 왼쪽으로 회전시킵니다.\n");
+        log = "청소기를 왼쪽으로 회전시킵니다.";
     }
     else if (input.turnRight)
     {
-        printf("청소기를 오른쪽으로 회전시킵니다.\n");
+        log = "청소기를 오른쪽으로 회전시킵니다.";
     }
     else if (input.enableMoveBackward)
     {
-        printf("청소기가 뒤로 이동합니다.\n");
+        log = "청소기가 뒤로 이동합니다.";
+        backwardState = 0;
     }
     else if (input.disableMoveBackward)
     {
-        printf("청소기가 뒤로 이동을 정지합니다.\n");
+        log = "청소기가 뒤로 이동을 정지합니다.";
     }
+    fprintf(logFile, "%s\n", log);
+    fclose(logFile);
 }
 
 void cleanerInterface(CleanerInterfaceInput input)
 {
+    FILE *logFile = fopen("log.txt", "a");
+    char *log;
+
     if (input.On)
     {
-        printf("청소기가 정상 출력입니다.\n");
+        log = "청소기가 정상 출력입니다.";
     }
     else if (input.Off)
     {
-        printf("청소기의 출력이 종료되었습니다.\n");
+        log = "청소기의 출력이 종료되었습니다.";
     }
     else if (input.Up)
     {
-        printf("청소기가 강한 출력입니다.\n");
+        log = "청소기가 강한 출력입니다.";
     }
+    fprintf(logFile, "%s\n", log);
+    fclose(logFile);
 }
