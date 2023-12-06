@@ -61,7 +61,7 @@ void cleanerCommand(CleanerCommand command);
 void motorInterface(MotorInterfaceInput input);
 void cleanerInterface(CleanerInterfaceInput input);
 
-int main(void)
+int main_(void)
 {
     short forwardState = 1;
     short backwardState = 0;
@@ -302,7 +302,7 @@ void motorInterface(MotorInterfaceInput input)
     short forwardState;
     short backwardState;
 
-    FILE *logFile = fopen("log.txt", "w");
+    FILE *logFile = fopen("log.txt", "a");
     char *log;
 
     if (input.enableMoveForward)
