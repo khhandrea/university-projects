@@ -14,13 +14,13 @@ typedef struct DustExistence // 먼지 유무 sturct
     short Dust;
 } DustExistence;
 
-typedef struct ControllerInput
+typedef struct ControllerIO
 {
     ObstacleLocation obstacleLocation;
     DustExistence dustExistence;
     short forwardState;
     short backwardState;
-} ControllerInput;
+} ControllerIO;
 
 typedef struct CleanerCommand // 먼지 유무 & 정지 유무에 struct
 {
@@ -46,7 +46,7 @@ typedef struct MotorInterfaceInput // Controller에서 센서 데이터 취합�
     short turnRight;
 } MotorInterfaceInput;
 
-void controller(ControllerInput);
+ControllerIO controller(ControllerIO);
 short fronSensorInterface();
 short leftSensorInterface();
 short rightSensorInterface();
@@ -61,13 +61,13 @@ void cleanerCommand(CleanerCommand command);
 void motorInterface(MotorInterfaceInput input);
 void cleanerInterface(CleanerInterfaceInput input);
 
-int main_(void)
+void main_(void)
 {
     short forwardState = 1;
     short backwardState = 0;
     ObstacleLocation obstacleLocation;
     DustExistence dustExistence;
-    ControllerInput controllerInput;
+    ControllerIO controllerIO;
 
     moveForward(1);
     CleanerCommand cleanerInput = {1, 0, 0};
@@ -76,25 +76,23 @@ int main_(void)
 
     while (1)
     {
+        controllerIO = controller(controllerIO);
+
         obstacleLocation = determineObstacleLocation();
         dustExistence = determineDustExistence();
 
-        controllerInput.forwardState = forwardState;
-        controllerInput.backwardState = backwardState;
-        controllerInput.obstacleLocation = obstacleLocation;
-        controllerInput.dustExistence = dustExistence;
-
-        controller(controllerInput);
+        controllerIO.obstacleLocation = obstacleLocation;
+        controllerIO.dustExistence = dustExistence;
 
         sleep(1);
     }
 }
 
-void controller(ControllerInput controllerInput) {
-    short forwardState = controllerInput.forwardState;
-    short backwardState = controllerInput.backwardState;
-    ObstacleLocation obstacleLocation = controllerInput.obstacleLocation;
-    DustExistence dustExistence = controllerInput.dustExistence;
+ControllerIO controller(ControllerIO controllerIO) {
+    short forwardState = controllerIO.forwardState;
+    short backwardState = controllerIO.backwardState;
+    ObstacleLocation obstacleLocation = controllerIO.obstacleLocation;
+    DustExistence dustExistence = controllerIO.dustExistence;
 
     CleanerCommand cleanerInput = {0, 0, 0};
 
@@ -187,6 +185,11 @@ void controller(ControllerInput controllerInput) {
                 cleanerInput.On = 0;
             }
         }
+
+    controllerIO.forwardState = forwardState;
+    controllerIO.backwardState = backwardState;
+
+    return controllerIO;
 }
 
 short fronSensorInterface()
@@ -242,9 +245,8 @@ void moveForward(short enable)
 void turnLeft()
 {
     MotorInterfaceInput input = {0, 0, 0, 0, 1, 0};
-    short i;
 
-    for (i = 0; i < 5; i++)
+    for (short i = 0; i < 5; i++)
     {
         motorInterface(input);
         sleep(1);
@@ -254,9 +256,8 @@ void turnLeft()
 void turnRight()
 {
     MotorInterfaceInput input = {0, 0, 0, 0, 0, 1};
-    short i;
 
-    for (i = 0; i < 5; i++)
+    for (short i = 0; i < 5; i++)
     {
         motorInterface(input);
         sleep(1);
@@ -328,7 +329,7 @@ void motorInterface(MotorInterfaceInput input)
         log = "청소기가 뒤로 이동합니다.";
         backwardState = 0;
     }
-    else if (input.disableMoveBackward)
+    else
     {
         log = "청소기가 뒤로 이동을 정지합니다.";
     }
@@ -345,13 +346,13 @@ void cleanerInterface(CleanerInterfaceInput input)
     {
         log = "청소기가 정상 출력입니다.";
     }
-    else if (input.Off)
-    {
-        log = "청소기의 출력이 종료되었습니다.";
-    }
     else if (input.Up)
     {
         log = "청소기가 강한 출력입니다.";
+    }
+    else
+    {
+        log = "청소기의 출력이 종료되었습니다.";
     }
     fprintf(logFile, "%s\n", log);
     fclose(logFile);

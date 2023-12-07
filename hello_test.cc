@@ -18,21 +18,21 @@ TEST(ForwardStateTest, Test0000) {
     
     // Implement
     fileOut.open("log.txt");
-    ControllerInput controllerInput;
+    ControllerIO controllerIO;
 
-    controllerInput.forwardState = 1;
-    controllerInput.backwardState = 0;
-    controllerInput.obstacleLocation = {0, 0, 0};
-    controllerInput.dustExistence = {0};
+    controllerIO.forwardState = 1;
+    controllerIO.backwardState = 0;
+    controllerIO.obstacleLocation = {0, 0, 0};
+    controllerIO.dustExistence = {0};
 
-    controller(controllerInput);
+    controller(controllerIO);
     fileOut.close();
 
     // Test
     fileIn.open("log.txt");
-    for (int i=0; i<targets.size(); i++) {
+    for (string target: targets) {
         getline(fileIn, line);
-        EXPECT_EQ(line.compare(targets[i]), 0);
+        EXPECT_EQ(line.compare(target), 0);
     }
     fileIn.close();
 }
@@ -47,21 +47,21 @@ TEST(ForwardStateTest, Test0010) {
     
     // Implement
     fileOut.open("log.txt");
-    ControllerInput controllerInput;
+    ControllerIO controllerIO;
 
-    controllerInput.forwardState = 1;
-    controllerInput.backwardState = 0;
-    controllerInput.obstacleLocation = {0, 0, 1};
-    controllerInput.dustExistence = {0};
+    controllerIO.forwardState = 1;
+    controllerIO.backwardState = 0;
+    controllerIO.obstacleLocation = {0, 0, 1};
+    controllerIO.dustExistence = {0};
 
-    controller(controllerInput);
+    controller(controllerIO);
     fileOut.close();
 
     // Test
     fileIn.open("log.txt");
-    for (int i=0; i<targets.size(); i++) {
+    for (string target: targets) {
         getline(fileIn, line);
-        EXPECT_EQ(line.compare(targets[i]), 0);
+        EXPECT_EQ(line.compare(target), 0);
     }
     fileIn.close();
 }
@@ -76,21 +76,21 @@ TEST(ForwardStateTest, Test0100) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {0, 1, 0};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {0, 1, 0};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -105,21 +105,21 @@ TEST(ForwardStateTest, Test0110) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 1, 0};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 1, 0};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -143,21 +143,21 @@ TEST(ForwardStateTest, Test1000) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 0, 0};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 0, 0};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -181,21 +181,21 @@ TEST(ForwardStateTest, Test1010) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 0, 1};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 0, 1};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -219,21 +219,21 @@ TEST(ForwardStateTest, Test1100) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 1, 0};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 1, 0};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -251,21 +251,21 @@ TEST(ForwardStateTest, Test1110) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 1, 1};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 1, 1};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -280,21 +280,21 @@ TEST(ForwardStateTest, Test0001) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {0, 0, 0};
-  controllerInput.dustExistence = {1};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {0, 0, 0};
+  controllerIO.dustExistence = {1};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -309,21 +309,21 @@ TEST(ForwardStateTest, Test0011) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {0, 0, 1};
-  controllerInput.dustExistence = {1};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {0, 0, 1};
+  controllerIO.dustExistence = {1};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -338,21 +338,21 @@ TEST(ForwardStateTest, Test0101) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {0, 1, 0};
-  controllerInput.dustExistence = {1};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {0, 1, 0};
+  controllerIO.dustExistence = {1};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -367,21 +367,21 @@ TEST(ForwardStateTest, Test0111) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {0, 1, 1};
-  controllerInput.dustExistence = {1};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {0, 1, 1};
+  controllerIO.dustExistence = {1};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -405,21 +405,21 @@ TEST(ForwardStateTest, Test1001) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 0, 0};
-  controllerInput.dustExistence = {1};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 0, 0};
+  controllerIO.dustExistence = {1};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -443,21 +443,21 @@ TEST(ForwardStateTest, Test1011) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 0, 1};
-  controllerInput.dustExistence = {1};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 0, 1};
+  controllerIO.dustExistence = {1};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -481,21 +481,21 @@ TEST(ForwardStateTest, Test1101) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 1, 0};
-  controllerInput.dustExistence = {1};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 1, 0};
+  controllerIO.dustExistence = {1};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -513,21 +513,21 @@ TEST(ForwardStateTest, Test1111) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 1;
-  controllerInput.backwardState = 0;
-  controllerInput.obstacleLocation = {1, 1, 1};
-  controllerInput.dustExistence = {1};
+  controllerIO.forwardState = 1;
+  controllerIO.backwardState = 0;
+  controllerIO.obstacleLocation = {1, 1, 1};
+  controllerIO.dustExistence = {1};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -542,21 +542,21 @@ TEST(BackwardStateTest, Test0110) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 0;
-  controllerInput.backwardState = 1;
-  controllerInput.obstacleLocation = {0, 1, 1};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 0;
+  controllerIO.backwardState = 1;
+  controllerIO.obstacleLocation = {0, 1, 1};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -578,21 +578,21 @@ TEST(BackwardStateTest, Test0010) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 0;
-  controllerInput.backwardState = 1;
-  controllerInput.obstacleLocation = {0, 0, 1};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 0;
+  controllerIO.backwardState = 1;
+  controllerIO.obstacleLocation = {0, 0, 1};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -614,21 +614,21 @@ TEST(BackwardStateTest, Test0000) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 0;
-  controllerInput.backwardState = 1;
-  controllerInput.obstacleLocation = {0, 0, 0};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 0;
+  controllerIO.backwardState = 1;
+  controllerIO.obstacleLocation = {0, 0, 0};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
@@ -650,21 +650,21 @@ TEST(BackwardStateTest, Test0100) {
   
   // Implement
   fileOut.open("log.txt");
-  ControllerInput controllerInput;
+  ControllerIO controllerIO;
 
-  controllerInput.forwardState = 0;
-  controllerInput.backwardState = 1;
-  controllerInput.obstacleLocation = {0, 1, 0};
-  controllerInput.dustExistence = {0};
+  controllerIO.forwardState = 0;
+  controllerIO.backwardState = 1;
+  controllerIO.obstacleLocation = {0, 1, 0};
+  controllerIO.dustExistence = {0};
 
-  controller(controllerInput);
+  controller(controllerIO);
   fileOut.close();
 
   // Test
   fileIn.open("log.txt");
-  for (int i=0; i<targets.size(); i++) {
+  for (string target: targets) {
       getline(fileIn, line);
-      EXPECT_EQ(line.compare(targets[i]), 0);
+      EXPECT_EQ(line.compare(target), 0);
   }
   fileIn.close();
 }
