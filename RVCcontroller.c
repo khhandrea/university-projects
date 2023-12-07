@@ -306,6 +306,11 @@ void motorInterface(MotorInterfaceInput input)
     FILE *logFile = fopen("log.txt", "a");
     char *log;
 
+    if (logFile == NULL) {
+        printf("log.txt 파일을 찾을 수 없습니다.\n");
+        return;
+    }
+
     if (input.enableMoveForward)
     {
         log = "청소기가 앞으로 이동합니다.";
@@ -341,6 +346,11 @@ void cleanerInterface(CleanerInterfaceInput input)
 {
     FILE *logFile = fopen("log.txt", "a");
     char *log;
+
+    if (logFile == NULL) {
+        printf("log.txt 파일을 찾을 수 없습니다.\n");
+        return;
+    }
 
     if (input.On)
     {
