@@ -2,8 +2,8 @@ import paho.mqtt.client as mqtt
  
 class Publisher:
 
-    def __init__(self, config, queue):
-        self.client = mqtt.Client(userdata=queue)
+    def __init__(self, config):
+        self.client = mqtt.Client()
         self.config = config
 
         self.client.on_connect = self.on_connect

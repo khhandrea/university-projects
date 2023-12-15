@@ -1,5 +1,5 @@
 from interface.LoopColiSensorInterface import LoopCoilSensorInterface
-from LoopCoil import LoopCoil
+from hardware import LoopCoil
 
 class LoopCoilSensor(LoopCoilSensorInterface):
     def __init__(self, pos):
