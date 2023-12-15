@@ -14,7 +14,7 @@ class Subcriber:
         self.client.connect(config["ip"], config["port"])
         
         # config.topics = ["parking/loopcoil"]
-        self.client.subscribe(config["topics"], 1)
+        self.client.subscribe(config["topics"])
 
         self.client.loop_start()
         
@@ -32,7 +32,7 @@ class Subcriber:
         print("subscribed: " + str(mid) + " " + str(granted_qos))
 
     def on_message(self, client, userdata, msg):
-        userdata.put(msg.payload)
+        userdata.put(msg)
 
     
 
