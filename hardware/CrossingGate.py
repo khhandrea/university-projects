@@ -2,8 +2,8 @@ from interface.CrossingGateInterface import CrossingGateInterface
 
 class CrossingGate(CrossingGateInterface):
     def __init__(self, pos):
-        self.pos = pos
-        self.status = '정상'
+        self._pos = pos # posiiton of device
+        self._status = '정상'
 
     def set_status(self, status):
         assert status == '정상' or status == '고장'
@@ -12,8 +12,11 @@ class CrossingGate(CrossingGateInterface):
         self.status = status
         print(f'변경 상태 : {self.status}')
 
+    def get_pos(self):
+        return self._pos
+    
     def get_status(self):
-        return self.status
+        return self._status
     
     def signal(self):
         # TODO: get signal from self.loop_coil

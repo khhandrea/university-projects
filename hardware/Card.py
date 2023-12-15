@@ -4,11 +4,14 @@ class Card(PayMethod):
     def __init__(self, type, number, balance):
         super().__init__(balance)
         self.type = type
-        self.number = number
+        self._number = number
 
     def get_number(self):
-        return self.number
-    
+        return self._number
+     
+    def get_balance(self):
+        return self._balance
+
     def pay(self, cost):
         #TODO: implement pay (calculate balance)
         pass
