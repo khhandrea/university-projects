@@ -11,7 +11,7 @@ class Display(DisplayInterface):
         self.status = status
         print(f'변경 상태 : {self.status}')
 
-    def print(self, cost: int, dis_cost: int, car_num: int, in_time: str, out_time: str):
+    def display_print(self, cost: int, dis_cost: int, car_num: int, in_time: str, out_time: str):
         print(f'차량 번호 : {car_num}')
         print(f'입차 시간 : {in_time}')
         print(f'출차 시간 : {out_time}')
