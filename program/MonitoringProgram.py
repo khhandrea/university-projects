@@ -31,14 +31,14 @@ def callback_example(topic, data, publisher):
 
 
 class MonitoringProgram(Program):
-    def __init__(self, config, topic_dispatcher):
+    def __init__(self, config):
         self.config = config
 
         # TODO 각자에 맞게 고치면 됨
         # topic: handler 순으로 추가하면 된다.
         # 원하는 topic에 해당하는 반응을 구현하면 됨
         topic_dispatcher = {
-            "monitoring/#": self.handle_parkingDB,
+            "monitoring/#": self.handle_monitoring,
         }
         self.topic_dispatcher = topic_dispatcher
 
@@ -63,8 +63,6 @@ class MonitoringProgram(Program):
     
     # TODO 각자에 맞게 추가하면 됨
     def handle_monitoring(self, topic, data, publisher):
-        data = data.decode()
-
         if "paymodule" in topic:
             self.monitoring_state["pay_module"] = json.loads(data)
 
@@ -80,6 +78,7 @@ class MonitoringProgram(Program):
         elif "loop_coil" in topic:
             self.monitoring_state["loop_coil_server"] = json.loads(data)
 
+        # monitoring이 다 모였으면 출력
         if {} not in self.monitoring_state.values():
             prnt(self.monitoring_state)
 
@@ -107,7 +106,7 @@ if __name__ == '__main__':
             ],
         }
 
-    ex = MonitoringProgram(config=config)
-    ex.start()
+    monitoring_program = MonitoringProgram(config=config)
+    monitoring_program.start()
     
 

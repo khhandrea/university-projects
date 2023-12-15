@@ -30,7 +30,7 @@ def callback_example(topic, data, publisher):
 
 
 class CrossingGateRemoteControlProgram(Program):
-    def __init__(self, config, topic_dispatcher):
+    def __init__(self, config):
         self.config = config
 
         # TODO 각자에 맞게 고치면 됨
@@ -123,7 +123,7 @@ class CrossingGateRemoteControlProgram(Program):
     # TODO 각자에 맞게 추가하면 됨
     def handle_parkingDB(self, topic, data, publisher):
         # data = 
-        self.queue.put(data.decode())
+        self.queue.put(data)
 
 if __name__ == '__main__':
 

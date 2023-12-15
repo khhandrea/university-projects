@@ -26,7 +26,7 @@ class Program:
             message = self.queue.get()  
             if message:
                 callback = self.topic_dispatcher.get(message.topic, self.handle_unknown_topic)
-                callback(message.topic, message.payload, self.publisher)
+                callback(message.topic, message.payload.decode(), self.publisher)
 
     def handle_unknown_topic(self, topic, data, publisher):
         # 알 수 없는 토픽 처리 로직
