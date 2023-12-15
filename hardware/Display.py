@@ -1,15 +1,21 @@
 from interface.DisplayInterface import DisplayInterface
 class Display(DisplayInterface):
     def __init__(self, pos):
-            self.pos = pos
-            self.status = '정상'
+        self._pos = pos
+        self._status = '정상'
+
+    def get_pos(self):
+        return self._pos
+    
+    def get_status(self):
+        return self._status
 
     def set_status(self, status):
         assert status == '정상' or status == '고장'
 
-        print(f'현재 상태 : {self.status}')
-        self.status = status
-        print(f'변경 상태 : {self.status}')
+        print(f'현재 상태 : {self._status}')
+        self._status = status
+        print(f'변경 상태 : {self._status}')
 
     def print(self, cost: int, dis_cost: int, car_num: int, in_time: str, out_time: str):
         print(f'차량 번호 : {car_num}')
