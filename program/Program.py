@@ -15,7 +15,7 @@ class Program:
         self.subscriber = None
         self.publisher = None
         self.subscriber = MQTTclient.Subcriber(config=self.config, queue=self.queue)
-        self.publisher = MQTTclient.Publisher(config=self.config, queue=self.queue)
+        self.publisher = MQTTclient.Publisher(config=self.config)
 
         processor_process = Thread(target=self.message_processor)
         processor_process.start()
@@ -26,7 +26,7 @@ class Program:
             message = self.queue.get()  
             if message:
                 callback = self.topic_dispatcher.get(message.topic, self.handle_unknown_topic)
-                callback(message.topic, message.payload.decode(), self.publisher)
+                callback(message.topic, message.payload.decode('euc-kr'), self.publisher)
 
     def handle_unknown_topic(self, topic, data, publisher):
         # 알 수 없는 토픽 처리 로직
