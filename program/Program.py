@@ -22,7 +22,6 @@ class Program:
 
     def message_processor(self):
         while True:
-            print("hi")
             # Blocking call, no CPU waste here
             message = self.queue.get()  
             if message:
