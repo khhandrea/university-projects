@@ -9,3 +9,4 @@ def make_log_data(message: str):
         }
     }
     data = dumps(data)
+    return data
