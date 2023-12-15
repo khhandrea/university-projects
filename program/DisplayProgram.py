@@ -66,7 +66,11 @@ class DisplayProgram(Program):
     
     # TODO 각자에 맞게 추가하면 됨
     def handle_display(self, topic, data, publisher):
+        print(data)
+        
         data = json.loads(data)
+
+        print(data)
 
         cost: int = data["cost"]
         dis_cost: int = data["dis_cost"]
@@ -78,16 +82,22 @@ class DisplayProgram(Program):
 
 if __name__ == '__main__':
 
+    pos = "정문_입차방향" # TODO argparser로 받아야함
+
+    if "입차" in pos:
+        topic = "hardware/server/display/in/to"
+
+    elif "출차" in pos:
+        topic = "hardware/server/display/out/to"
+    
     # TODO 각자에 맞게 고치면 됨
     config = {
             "ip": "127.0.0.1", 
             "port": 1883, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
-                ("monitoring/#", 0), 
+                (topic, 0), 
             ],
         }
-    
-    pos = "정문_입차방향" # TODO argparser로 받아야함
 
     display_program = DisplayProgram(config=config, pos=pos)
     display_program.start()
