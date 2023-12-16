@@ -224,24 +224,16 @@ class demoProgram(Program):
             elif event == "고쳐짐":
                 self.repair_event()
 
-    
-    # TODO 각자에 맞게 추가하면 됨
-    def handle_parkingDB(self, topic, data, publisher):
-        # data = 
-        self.queue.put(data)
-
 if __name__ == '__main__':
 
     # TODO 각자에 맞게 고치면 됨
     config = {
             "ip": "127.0.0.1", 
-            "port": 1883, 
-            "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
-                ("hardware/server/parkingDB/from", 0), 
-            ],
+            "port": 60506, 
+            "topics": [],
         }
 
-    crossing_gate_remote_control_program = CrossingGateRemoteControlProgram(config=config)
-    crossing_gate_remote_control_program.start()
+    demo_program = demoProgram(config=config)
+    demo_program.start()
     
 
