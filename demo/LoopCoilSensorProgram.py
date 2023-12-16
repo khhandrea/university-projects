@@ -1,0 +1,64 @@
+import sys, os
+ 
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+from program import Program
+from hardware import LoopCoilSensor
+
+
+
+"""
+
+고쳐야할 것:
+  - ProgramExample - start
+  - config
+  - topic_dispathcer
+
+
+def callback_example(topic, data, publisher):
+    print(f"topic: {topic}")
+    print(f"data: {data}")
+
+--> 이런 식으로 (topic, data, publisher)를 무조건 받아야함.
+
+"""
+
+
+class LoopCoilSensorProgram(Program):
+    def __init__(self, loop_coil_sensor: LoopCoilSensor):
+        self.config = {
+            "ip": "127.0.0.1", 
+            "port": 60506, 
+            "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
+                ("demo/hardware/loop_coil_sensor/to/broken", 0), 
+                ("demo/hardware/loop_coil_sensor/to/recognition", 0), 
+            ],
+        }
+
+        # TODO 각자에 맞게 고치면 됨
+        # topic: handler 순으로 추가하면 된다.
+        # 원하는 topic에 해당하는 반응을 구현하면 됨
+        topic_dispatcher = {
+            "demo/hardware/loop_coil_sensor/to/broken": self.handle_broken,
+            "demo/hardware/loop_coil_sensor/to/recognition": self.handle_recognition
+        }
+
+        self.topic_dispatcher = topic_dispatcher
+
+        self.loop_coil_sensor = loop_coil_sensor
+
+        super().__init__(self.config, self.topic_dispatcher)
+
+    
+    def handle_broken(self, topic, data, publisher):
+        if data == '고장':
+            self.loop_coil_sensor.set_status('고장')
+        elif data == '정상':
+            self.loop_coil_sensor.set_status('정상')
+    
+    def handle_recognition(self, topic, data, publisher):
+        if data == 'True':
+            self.loop_coil_sensor.set_detected(True)
+        elif data == 'False':
+            self.loop_coil_sensor.set_detected(False)
+

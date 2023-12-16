@@ -1,10 +1,12 @@
 from interface.LoopColiSensorInterface import LoopCoilSensorInterface
+from demo import LoopCoilSensorProgram
 
 class LoopCoilSensor(LoopCoilSensorInterface):
     def __init__(self, pos):
         self._pos = pos
         self._status = '정상'
         self._detected = False
+        self.demo_program = LoopCoilSensorProgram(self)
 
     def get_pos(self):
         return self._pos
@@ -14,6 +16,10 @@ class LoopCoilSensor(LoopCoilSensorInterface):
     
     def get_detected(self):
         return self._detected
+
+    # for demo
+    def set_detected(self, detected):
+        self._detected = detected
 
     def set_status(self, status):
         assert status == '정상' or status == '고장'

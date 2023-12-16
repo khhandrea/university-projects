@@ -1,9 +1,11 @@
 from interface.CameraInterface import CameraInterface
+from demo import CameraProgram
 
 class Camera(CameraInterface):
     def __init__(self, pos):
         self._pos = pos # posiiton of device
         self._status = '정상'
+        self.demo_program = CameraProgram(self)
 
     def set_status(self, status):
         assert status == '정상' or status == '고장'

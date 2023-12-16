@@ -84,11 +84,11 @@ class CrossingGateRemoteControlProgram(Program):
     # TODO 각자에 맞게 고치면 됨
     def start(self):
         while True:
-            event = input(">>>이벤트 입력: ")
+            event = input(">>이벤트 입력: ")
 
             if event == "원격 차단기 열기":
-                name = input(">>>차단기 이름: ")
-                time = float(input(">>>시간: "))
+                name = input(">>차단기 이름: ")
+                time = float(input(">>시간: "))
 
                 first_coil_topic, second_coil_topic = self.get_topic_from_name(name)
                 ip, port = self.get_ip_port_from_name(name)
