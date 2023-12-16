@@ -1,5 +1,5 @@
 import sys
-from os import dirname, abspath
+from os.path import dirname, abspath
 from json import loads
 from queue import Queue
 
@@ -23,11 +23,13 @@ class SchoolDBHandler(Program, DBHandler):
         while True:
             if not queue.empty():
                 data = queue.get()
-                message = self.handle(data)
+                message = self.handle(data).encode('euc-kr')
+                print(f'send {message} to "hardware/server/schoolDB/from"')
                 self.publisher.publish("hardware/server/schoolDB/from", message)
 
 def handle_schoolDB(topic, data, publisher):
-    data = loads(data.decode('utf-8'))
+    print(f'got message {data} from {topic}')
+    data = loads(data)
     queue.put(data)
 
 if __name__ == '__main__':

@@ -14,7 +14,6 @@ class DBHandler:
             self.cur = self.con.cursor()
 
     def execute(self, command):
-        print(command)
         self.cur.execute(command)
         result = str(self.cur.fetchone())
         return result
