@@ -114,11 +114,20 @@ class demoProgram(Program):
         enter_publisher.publish("demo/hardware/loop_coil_sensor/out/2/to/recognition", 'False')
 
     def car_register_event(self):
-        pass
+        car_num = input(">>차량 번호: ")
+        car_cartegory = input(">>차량 구분: ")
+        id = int(input(">>신원 id: "))
 
-    def pay_event(self, pos):
-        pass
-    
+        config = {
+            "ip": "127.0.0.1", 
+            "port": "60406",
+        }
+
+        data = f"{car_num}/{car_cartegory}/{id}"
+
+        enter_publisher = MQTTclient.Publisher(config=config)
+        enter_publisher.publish("hardware/server/registerCarProgram/to", data) # TODO topic 환희랑 맞춰야함 
+           
     def broken_event(self):
         pos = input(">>객체 이름: ")
 
