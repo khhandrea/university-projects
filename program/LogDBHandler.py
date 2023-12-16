@@ -1,6 +1,6 @@
 from datetime import datetime
 import sys
-from os import dirname, abspath
+from os.path import dirname, abspath
 from json import loads
 from queue import Queue
 
