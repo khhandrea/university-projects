@@ -20,7 +20,5 @@ class Camera(CameraInterface):
 
     def capture(self):
         # TODO implement image
-        image = []
+        image = ['12가1235']
         return image
-    
-    
