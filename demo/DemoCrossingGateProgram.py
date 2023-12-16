@@ -3,7 +3,7 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from program import Program
-from hardware import PayModule
+from hardware import CrossingGate
 
 
 
@@ -24,13 +24,19 @@ def callback_example(topic, data, publisher):
 """
 
 
-class PayModuleProgram(Program):
-    def __init__(self, pay_module: PayModule):
+class CrossingGateProgram(Program):
+    def __init__(self, crossing_gate: CrossingGate):
+        self.crossing_gate = crossing_gate
+
+        self.pos = self.crossing_gate.get_pos()
+        self.door, self.direction = self.pos.split("_")
+
+        self.direction = "in" if self.direction == "입차방향" else "out"
         self.config = {
             "ip": "127.0.0.1", 
             "port": 60506, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
-                ("demo/hardware/pay_module/to/broken", 0), 
+                (f"demo/hardware/crossing_gate/{self.direction}/to/broken", 0), 
             ],
         }
 
@@ -38,20 +44,18 @@ class PayModuleProgram(Program):
         # topic: handler 순으로 추가하면 된다.
         # 원하는 topic에 해당하는 반응을 구현하면 됨
         topic_dispatcher = {
-            "demo/hardware/pay_module/to/broken": self.handle_broken,
+            f"demo/hardware/crossing_gate/{self.direction}/to/broken": self.handle_broken,
         }
 
         self.topic_dispatcher = topic_dispatcher
-
-        self.pay_module = pay_module
 
         super().__init__(self.config, self.topic_dispatcher)
 
     
     def handle_broken(self, topic, data, publisher):
         if data == '고장':
-            self.pay_module.set_status('고장')
+            self.crossing_gate.set_status('고장')
         elif data == '정상':
-            self.pay_module.set_status('정상')
+            self.crossing_gate.set_status('정상')
     
 

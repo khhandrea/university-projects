@@ -1,12 +1,12 @@
 from interface.CrossingGateInterface import CrossingGateInterface
-from demo import CrossingGateProgram
+from demo import DemoCrossingGateProgram
 
 class CrossingGate(CrossingGateInterface):
     def __init__(self, pos):
         self._pos = pos # posiiton of device
         self._status = '정상'
         self._opened = '닫힘'
-        self.demo_program = CrossingGateProgram(self)
+        self.demo_program = DemoCrossingGateProgram(self)
 
     def set_status(self, status):
         assert status == '정상' or status == '고장'

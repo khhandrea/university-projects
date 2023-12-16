@@ -26,12 +26,21 @@ def callback_example(topic, data, publisher):
 
 class LoopCoilSensorProgram(Program):
     def __init__(self, loop_coil_sensor: LoopCoilSensor):
+
+        self.loop_coil_sensor = loop_coil_sensor
+
+        self.pos = self.loop_coil_sensor.get_pos()
+        self.door, self.direction, self.num = self.pos.split("_")
+
+        self.direction = "in" if self.direction == "입차방향" else "out"
+        
+
         self.config = {
             "ip": "127.0.0.1", 
             "port": 60506, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
-                ("demo/hardware/loop_coil_sensor/to/broken", 0), 
-                ("demo/hardware/loop_coil_sensor/to/recognition", 0), 
+                (f"demo/hardware/loop_coil_sensor/{self.direction}/{self.num}/to/broken", 0), 
+                (f"demo/hardware/loop_coil_sensor/{self.direction}/{self.num}/to/recognition", 0), 
             ],
         }
 
@@ -39,13 +48,13 @@ class LoopCoilSensorProgram(Program):
         # topic: handler 순으로 추가하면 된다.
         # 원하는 topic에 해당하는 반응을 구현하면 됨
         topic_dispatcher = {
-            "demo/hardware/loop_coil_sensor/to/broken": self.handle_broken,
-            "demo/hardware/loop_coil_sensor/to/recognition": self.handle_recognition
+            f"demo/hardware/loop_coil_sensor/{self.direction}/{self.num}/to/broken": self.handle_broken,
+            f"demo/hardware/loop_coil_sensor/{self.direction}/{self.num}/to/recognition": self.handle_recognition
         }
 
         self.topic_dispatcher = topic_dispatcher
 
-        self.loop_coil_sensor = loop_coil_sensor
+        
 
         super().__init__(self.config, self.topic_dispatcher)
 
