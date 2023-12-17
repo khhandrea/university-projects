@@ -5,10 +5,8 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import MQTTclient
 
 from queue import Queue
-from threading import Thread
 from program import Program
-import time, json
-import datetime
+import time, datetime, re
 
 
 
@@ -71,7 +69,14 @@ class demoProgram(Program):
     def car_enter_event(self):
         car_num = input(">>차량 번호: ")
         door_location = input(">>문 위치: ")
-        duration = float(input(">>머무르는 시간: "))
+        assert door_location in self.MQTT_server_info, 'Invalid door location. Door location should be one of "등록", "상허문", "일감문" ,"건국문".'
+
+        duration = input(">>머무르는 시간: ")
+        assert duration.replace('.','',1).isdigit(), 'Duration should be shape of float.'
+        duration = float(duration)
+
+
+        
 
         config = {
             "ip": "127.0.0.1", 
@@ -94,7 +99,11 @@ class demoProgram(Program):
     def car_exit_event(self):
         car_num = input(">>차량 번호: ")
         door_location = input(">>문 위치: ")
-        duration = float(input(">>머무르는 시간: "))
+        assert door_location in self.MQTT_server_info, 'Invalid door location. Door location should be one of "등록", "상허문", "일감문" ,"건국문".'
+
+        duration = input(">>머무르는 시간: ")
+        assert duration.replace('.','',1).isdigit(), 'Duration should be the shape of float.'
+        duration = float(duration)
 
         config = {
             "ip": "127.0.0.1", 
@@ -115,8 +124,14 @@ class demoProgram(Program):
 
     def car_register_event(self):
         car_num = input(">>차량 번호: ")
+
+        # TODO Add assert
         car_cartegory = input(">>차량 구분: ")
-        id = int(input(">>신원 id: "))
+    
+
+        id = input(">>신원 id: ")
+        assert id.isdigit(), 'Id should be the shape of integer.'
+        id = float(id)
 
         config = {
             "ip": "127.0.0.1", 
@@ -130,6 +145,7 @@ class demoProgram(Program):
            
     def broken_event(self):
         pos = input(">>객체 이름: ")
+        assert re.fullmatch(r'(\w+_\w+)|(\w+_\w+_\w+)|(\w+_\w+_\w+_\d+)', pos), 'Position does not match the required pattern. Position should be "str_str", "str_str_str", or "str_str_str_int".'
 
         if "등록" in pos:
             hardware_name, location = pos.split("_")
@@ -173,6 +189,7 @@ class demoProgram(Program):
 
     def repair_event(self):
         pos = input(">>객체 이름: ")
+        assert re.fullmatch(r'(\w+_\w+)|(\w+_\w+_\w+)|(\w+_\w+_\w+_\d+)', pos), 'Position does not match the required pattern. Position should be "str_str", "str_str_str", or "str_str_str_int".'
 
         if "등록" in pos:
             hardware_name, location = pos.split("_")

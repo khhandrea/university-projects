@@ -54,6 +54,8 @@ class CameraProgram(Program):
 
     
     def handle_broken(self, topic, data, publisher):
+        assert data in ['고장', '정상'], f'Data should be "True" or "False". Topic from "{topic}"'
+        
         if data == '고장':
             self.camera.set_status('고장')
         elif data == '정상':

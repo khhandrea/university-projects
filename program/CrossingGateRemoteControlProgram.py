@@ -5,10 +5,8 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import MQTTclient
 
 from queue import Queue
-from threading import Thread
 from program import Program
-import time, json
-import datetime
+import re, datetime
 
 
 
@@ -88,6 +86,8 @@ class CrossingGateRemoteControlProgram(Program):
 
             if event == "원격 차단기 열기":
                 name = input(">>차단기 이름: ")
+                assert re.fullmatch(r'(\w+_\w+_\w+)', name), 'Position does not match the required pattern. Position should be "str_str_str".'
+
                 time = float(input(">>시간: "))
 
                 first_coil_topic, second_coil_topic = self.get_topic_from_name(name)
@@ -99,7 +99,6 @@ class CrossingGateRemoteControlProgram(Program):
                     config = {
                         "ip": f"{ip}", 
                         "port": port, 
-                        "topics": [],
                     }
 
                     remote_publisher = MQTTclient.Publisher(config=config)

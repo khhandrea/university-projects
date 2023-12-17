@@ -60,12 +60,16 @@ class LoopCoilSensorProgram(Program):
 
     
     def handle_broken(self, topic, data, publisher):
+        assert data in ['고장', '정상'], f'Data should be "True" or "False". Topic from "{topic}"'
+
         if data == '고장':
             self.loop_coil_sensor.set_status('고장')
         elif data == '정상':
             self.loop_coil_sensor.set_status('정상')
     
     def handle_recognition(self, topic, data, publisher):
+        assert data in ['True', 'False'], f'Data should be "True" or "False". Topic from "{topic}"'
+
         if data == 'True':
             self.loop_coil_sensor.set_detected(True)
         elif data == 'False':

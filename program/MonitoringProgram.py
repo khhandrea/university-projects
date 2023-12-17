@@ -82,18 +82,6 @@ class MonitoringProgram(Program):
         if {} not in self.monitoring_state.values():
             prnt(self.monitoring_state)
 
-    # # topics에 ("monitoring", 0) 추가
-    # # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가
-    # def handle_monitoring(self, topic, data, publisher):
-    #     state = {
-    #         "cpu" : 0.7,
-    #         "ram" : 0.5,
-    #         "temperature" : 30,
-    #         "state" : 사용하는 하드웨어에 state 존재하면 넣기 (예. 루프코일 감지 됐는지 안됐는지, 차단기 열렸는지 안열렸는지),
-    #         "available" : 사용하는 하드웨어들 고장났는지 안났는지,
-    #     }
-    #     state_message = json.dumps(state)
-    #     self.publisher.publish("monitoring/하드웨어 이름", state_message)
 
 if __name__ == '__main__':
 
