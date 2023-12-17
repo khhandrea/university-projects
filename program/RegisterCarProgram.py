@@ -20,6 +20,17 @@ class RegisterCarProgram(Program):
         self.register_car_server = RegisterCarServer(config=config)
         self.register_fee = 90000
 
+        config_output = {
+            "ip": "127.0.0.1", 
+            "port": 60507, 
+            "topics": [
+                ("hardware/server/registerCarProgram/to", 0),
+                ("hardware/server/parkingDB/from", 0),
+                ("hardware/server/schoolDB/from", 0)
+            ],
+        }
+
+        self.publisher_output = MQTTclient.Publisher(config=config_output)
         super().__init__(self.config, self.topic_dispatcher)
 
     def start(self):
@@ -29,7 +40,7 @@ class RegisterCarProgram(Program):
                 message = self.register_car(car_number, car_type, identification)
                 message = message.encode('euc-kr')
                 print('message:', message)
-                self.publisher.publish("hardware/server/registerCarProgram/from", message)
+                self.publisher_output.publish("hardware/server/registerCarProgram/from", message)
 
     def register_car(self, car_number: str, car_type: str, identification: int):
 

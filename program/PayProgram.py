@@ -1,47 +1,67 @@
 import sys
 from os.path import dirname, abspath
+from json import dumps
 from queue import Queue
  
 sys.path.append(dirname(abspath(dirname(__file__))))
 import argparse
 from program import Program
 from program import make_log_data
+from MQTTclient import LogPublisher
 
 queue = Queue()
 
 class PayProgram(Program):
-    def __init__(self, config, topic_dispatcher):
+    def __init__(self, config, topic_dispatcher, pos):
         self.config = config
         self.topic_dispatcher = topic_dispatcher
+        self.log_publisher = LogPublisher()
 
         super().__init__(self.config, self.topic_dispatcher)
 
-    def pay(self, price: int, pay_method: str, card_num: int, cash_billed: int):
+    def pay(self, price: int):
         complete = False
         change = 0
 
+        print(f'결제 {price}원 내야 합니다.')
+        pay_method = input('결제 수단: ')
+
         if pay_method == 'card':
+            pay_info = int(input('카드 번호: '))
+            pay_info_name = '카드 번호'
             complete = True
         else: # cash
-            if cash_billed >= price:
+            pay_info = int(input('금액: '))
+            pay_info_name = '현금'
+            if pay_info >= price:
                 complete = True
-            change = cash_billed - price
+            change = pay_info - price
 
-        log = f"결제 이벤트 발생 (가격: {price}, 방법: {pay_method}, 카드번호: {card_num}, 현금: {cash_billed})"
+        log = f"[결제모듈_{pos}] 결제 이벤트 발생 (가격: {price}, 방법: {pay_method}, {pay_info_name}: {pay_info}"
         message = '/'.join((str(complete), str(change)))
         return message, log
 
     def start(self):
         while True:
             if not queue.empty():
-                price, pay_method, card_num, cash_billed = queue.get()
-                message, log = self.pay(price, pay_method, card_num, cash_billed)
+                pos, price = queue.get()
+                message, log = self.pay(price)
+                data = {
+                    'type': 'insert',
+                    'target': 'log',
+                    'item': {
+                        'message': log
+                    }
+                }
+                data = dumps(data)
+                data = data.encode('euc-kr')
 
-                self.publisher.publish("hardware/server/logDB/to", make_log_data(log))
-                self.publisher.publish("hardware/server/paymodule/from", message)
+                self.log_publisher.log(data)
+                self.publisher.publish(f"hardware/server/paymodule/{pos}/from", message)
 
 def handle_payment(topic, data, publisher):
-    data = data.decode('utf-8').split('/')
+    data = data.split('/')
+    data[1] = int(data[1])
     queue.put(data)
 
 if __name__ == '__main__':
@@ -73,7 +93,7 @@ if __name__ == '__main__':
         "hardware/server/paymodule/to": handle_payment,
     }
 
-    pay_program = PayProgram(config=config, topic_dispatcher=topic_dispatcher)
+    pay_program = PayProgram(config=config, topic_dispatcher=topic_dispatcher, pos=pos)
     pay_program.start()
     
 

@@ -1,4 +1,5 @@
 import sqlite3
+from typing import Tuple
 
 def get_first(target: dict):
     key = list(target.keys())[0]
@@ -12,11 +13,6 @@ class DBHandler:
         if location != None:
             self.con = sqlite3.connect(location, isolation_level=None)
             self.cur = self.con.cursor()
-
-    def execute(self, command):
-        self.cur.execute(command)
-        result = str(self.cur.fetchone())
-        return result
     
     def handle(self, data: dict):
         type = data['type']
@@ -29,25 +25,31 @@ class DBHandler:
             result = self._get(target, pk)
         elif type == 'insert':
             item = data['item']
-            self._insert(target, item)
+            result = self._insert(target, item)
         elif type == 'update':
             pk = data['pk']
-            item = data['item']
+            result = item = data['item']
             self._update(target, pk, item)
         elif type == 'delete':
             pk = data['pk']
-            self._delete(target, pk)
+            result = self._delete(target, pk)
         
         return result
-
-    def _get(self, target: str, pk: dict):
-        pk_key, pk_value = get_first(pk)
-
-        command = f'SELECT * FROM {target} WHERE {pk_key} = {pk_value}'
-        result = self.execute(command)
+    
+    def execute(self, commands: list) -> str:
+        for command in commands:
+            self.cur.execute(command)
+        result = str(self.cur.fetchone())
         return result
 
-    def _insert(self, target: str, item: dict):
+    def _get(self, target: str, pk: dict) -> str:
+        pk_key, pk_value = get_first(pk)
+
+        self.cur.execute(f'SELECT * FROM {target} WHERE {pk_key} = {pk_value}')
+        result = str(self.cur.fetchone())
+        return result
+
+    def _insert(self, target: str, item: dict) -> str:
         values = []
         for value in item.values():
             if isinstance(value, str):
@@ -57,19 +59,42 @@ class DBHandler:
             values.append(value)
         values = '(' + ', '.join(values) + ')'
 
-        command = f'INSERT INTO {target} VALUES{values}'
-        self.execute(command)
+        condition = []
+        
+        for key in item:
+            if isinstance(item[key], str):
+                condition.append(f"{key} = '{item[key]}'")
+            else:
+                condition.append(f"{key} = {item[key]}")
+        condition = ' AND '.join(condition)
+        self.cur.execute(f'INSERt INTO {target} VALUES{values}')
+        self.cur.execute('SELECT * FROM {target} WHERE {condition}')
+        result = str(self.cur.fetchone())
+        
+        return result
 
-    def _update(self, target: str, pk: dict, item: dict):
+
+    def _update(self, target: str, pk: dict, item: dict) -> str:
         pk_key, pk_value = get_first(pk)
         key, value = get_first(item)
 
-        command = f'UPDATE {target} SET {key} = {value} WHERE {pk_key} = {pk_value}'
-        result = self.execute(command)
+        if isinstance(pk_value, str):
+            pk_value = f"'{pk_value}'"
+
+        self.cur.execute(f'UPDATE {target} SET {key} = {value} WHERE {pk_key} = {pk_value}')
+        self.cur.execute(f'SELECT * FROM {target} WHERE {pk_key} = {pk_value}')
+        result = str(self.cur.fetchone())
+
         return result
 
-    def _delete(self, target: str, pk: dict):
+    def _delete(self, target: str, pk: dict) -> str:
         pk_key, pk_value = get_first(pk)
 
-        command = f'DELETE FROM {target} WHERE {pk_key} = {pk_value}'
-        self.execute(command)
+        if isinstance(pk_value, str):
+            pk_value = f"'{pk_value}'"
+
+        self.cur.execute(f'SELECT * FROM {target} WHERE {pk_key} = {pk_value}')
+        result = str(self.cur.fetchone())
+        self.cur.execute(f'DELETE FROM {target} WHERE {pk_key} = {pk_value}')
+
+        return result

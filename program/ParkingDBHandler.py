@@ -23,9 +23,13 @@ class ParkingDBHandler(Program, DBHandler):
         while True:
             if not queue.empty():
                 data = queue.get()
+                pos = data['pos']
+
                 message = self.handle(data).encode('euc-kr')
-                print(f'send {message} to "hardware/server/parkingDB/from"')
-                self.publisher.publish("hardware/server/parkingDB/from", message)
+
+                topic = f"hardware/server/parkingDB/{pos}/from"
+                print(f'send {message} to {topic}')
+                self.publisher.publish(topic, message)
 
 def handle_parkingDB(topic, data, publisher):
     print(f'got message {data} from {topic}')

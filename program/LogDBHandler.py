@@ -41,7 +41,8 @@ class LogDBHandler(Program, DBHandler):
         
 
 def handle_log(topic, data, publisher):
-    data = loads(data.decode('utf-8'))
+    print(f'got {data}')
+    data = loads(data)
     queue.put(data)
 
 if __name__ == '__main__':
