@@ -3,6 +3,7 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 import MQTTclient
+from log_utility import make_log_data
 
 from queue import Queue
 from program import Program
@@ -53,7 +54,7 @@ class CrossingGateRemoteControlProgram(Program):
     def get_ip_port_from_name(self, name):
         message = {
             "type": "get", 
-            "target": "remote", 
+            "target": "mqtt_server", 
             "pk": {"crossing_gate_name": f"{name}"}, 
             "item": {}
             }
@@ -62,9 +63,10 @@ class CrossingGateRemoteControlProgram(Program):
 
         data = self.queue.get()
 
-        if data != "{}":
-            ip = data["ip"]
-            port = int(data["port"])
+        if data != None:
+            _, ip, port = data
+
+            port = int(port)
 
             return ip, port
 
@@ -78,6 +80,12 @@ class CrossingGateRemoteControlProgram(Program):
             return "hardware/server/loop_coil/out/1/to", "hardware/server/loop_coil/out/2/to"
         else:
             return -1
+        
+    def send_log_message(self, location):
+        message = f"[원격 차단기 프로그램] 원격 열림 이벤트 발생 ({location})"
+        message_log = make_log_data(message)
+        self.publisher.publish("hardware/server/logDB/to", message_log)
+
 
     # TODO 각자에 맞게 고치면 됨
     def start(self):
@@ -89,6 +97,8 @@ class CrossingGateRemoteControlProgram(Program):
                 assert re.fullmatch(r'(\w+_\w+_\w+)', name), 'Position does not match the required pattern. Position should be "str_str_str".'
 
                 time = float(input(">>시간: "))
+
+                self.send_log_message(name)
 
                 first_coil_topic, second_coil_topic = self.get_topic_from_name(name)
                 ip, port = self.get_ip_port_from_name(name)
