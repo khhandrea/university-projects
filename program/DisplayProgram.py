@@ -40,11 +40,13 @@ class DisplayProgram(Program):
             # 입차의 경우 in topic을 subscribe
             topic_dispatcher = {
                 "hardware/server/display/in/to": self.handle_display,
+                "monitoring" : self.handle_monitoring,
             }
         elif "출차" in self.pos:
             # 출차의 경우 out topic을 subscribe
             topic_dispatcher = {
                 "hardware/server/display/out/to": self.handle_display,
+                "monitoring" : self.handle_monitoring,
             }
 
         self.topic_dispatcher = topic_dispatcher
@@ -79,6 +81,19 @@ class DisplayProgram(Program):
         out_time: str = data["out_time"]
 
         self.display.display_print(cost=cost, dis_cost=dis_cost, car_num=car_num, in_time=in_time, out_time=out_time)
+
+    # topics에 ("monitoring", 0) 추가
+    # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가
+    def handle_monitoring(self, topic, data, publisher):
+        state = {
+            "cpu" : 0.7,
+            "ram" : 0.5,
+            "temperature" : 30,
+            "state" : "None",
+            "available" : self.display.get_status()
+        }
+        state_message = json.dumps(state)
+        self.publisher.publish("monitoring/display", state_message)
 
 if __name__ == '__main__':
 
