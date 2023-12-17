@@ -23,5 +23,9 @@ class Publisher:
     def publish(self, topic, message):
         self.client.publish(topic, message)
 
+    def demo_print(self, message):
+        print(f"publish {message} to demo cli")
+        self.publish("demo/print", message)
+
     
 
