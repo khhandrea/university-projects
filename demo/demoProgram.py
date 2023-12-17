@@ -158,7 +158,7 @@ class demoProgram(Program):
             }
             topic_location = "register"
 
-            topic = f"demo/hardware/{hardware_name}/{topic_location}/to"
+            topic = f"demo/hardware/{hardware_name}/{topic_location}/to/broken"
 
         elif "바닥센서" in pos:
             hardware_name, location, direction, num = pos.split("_")
@@ -170,7 +170,7 @@ class demoProgram(Program):
             }
             topic_direction = "in" if direction == "입차방향" else "out"
 
-            topic = f"demo/hardware/{hardware_name}/{topic_direction}/{num}/to"
+            topic = f"demo/hardware/{hardware_name}/{topic_direction}/{num}/to/broken"
 
         else:
             hardware_name, location, direction = pos.split("_")
@@ -182,10 +182,12 @@ class demoProgram(Program):
             }
             topic_direction = "in" if direction == "입차방향" else "out"
 
-            topic = f"demo/hardware/{hardware_name}/{topic_direction}/to"
+            topic = f"demo/hardware/{hardware_name}/{topic_direction}/to/broken"
 
+        print(topic)
+        print(config)
         broken_publisher = MQTTclient.Publisher(config=config)
-        broken_publisher.publish(topic, 'True')
+        broken_publisher.publish(topic, '고장')
 
 
     def repair_event(self):
@@ -202,7 +204,7 @@ class demoProgram(Program):
             }
             topic_location = "register"
 
-            topic = f"demo/hardware/{hardware_name}/{topic_location}/to"
+            topic = f"demo/hardware/{hardware_name}/{topic_location}/to/broken"
 
         elif "바닥센서" in pos:
             hardware_name, location, direction, num = pos.split("_")
@@ -214,7 +216,7 @@ class demoProgram(Program):
             }
             topic_direction = "in" if direction == "입차방향" else "out"
 
-            topic = f"demo/hardware/{hardware_name}/{topic_direction}/{num}/to"
+            topic = f"demo/hardware/{hardware_name}/{topic_direction}/{num}/to/broken"
 
         else:
             hardware_name, location, direction = pos.split("_")
@@ -226,10 +228,10 @@ class demoProgram(Program):
             }
             topic_direction = "in" if direction == "입차방향" else "out"
 
-            topic = f"demo/hardware/{hardware_name}/{topic_direction}/to"
+            topic = f"demo/hardware/{hardware_name}/{topic_direction}/to/broken"
 
         repair_publisher = MQTTclient.Publisher(config=config)
-        repair_publisher.publish(topic, 'False')
+        repair_publisher.publish(topic, '정상')
 
     # TODO 각자에 맞게 고치면 됨
     def start(self):
