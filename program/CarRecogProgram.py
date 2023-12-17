@@ -46,28 +46,35 @@ class CarRecogProgram(Program):
             }
 
         self.camera = Camera(pos)
+        self.log_publisher = MQTTclient.LogPublisher()
+        self.demo_publisher = MQTTclient.DemoPublisher()
 
         super().__init__(self.config, self.topic_dispatcher)
 
     def start(self):
         pass
 
-
     def handle_capture_in(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
         img = self.camera.capture()
         car_num = self.img_to_carnum(img)
-        now = datetime.now()
-        publisher.publish('hardware/server/car_recog/in/from', f'{now.strftime("%Y%m%d_%H%M%S")}/{car_num}')
+        now = datetime.now().strftime("%Y%m%d_%H%M%S")
+        publisher.publish('hardware/server/car_recog/in/from', f'{now}/{car_num}')
+        log = f"[{self.pos}_카메라] (차량번호: {car_num})"
+        self.log_publisher.log(log)
+        self.demo_publisher.demo_print(log)
 
     def handle_capture_out(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
         img = self.camera.capture()
         car_num = self.img_to_carnum(img)
-        now = datetime.now()
-        publisher.publish('hardware/server/car_recog/out/from', f'{now.strftime("%Y%m%d_%H%M%S")}/{car_num}')
+        now = datetime.now().strftime("%Y%m%d_%H%M%S")
+        publisher.publish('hardware/server/car_recog/out/from', f'{now}/{car_num}')
+        log = f"[{self.pos}_카메라] (차량번호: {car_num})"
+        self.log_publisher.log(log)
+        self.demo_publisher.demo_print(log)
 
     def handle_monitoring(self, topic, data, publisher):
         state = {
@@ -84,7 +91,6 @@ class CarRecogProgram(Program):
         return img[0]
 
         
-
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('-pos', '--position', type=str, default="")
@@ -109,8 +115,5 @@ if __name__ == '__main__':
             ],
         }
     
-    # TODO argparser로 방향 입력
     ex = CarRecogProgram(config=config, pos=pos)
     ex.start()
-    
-

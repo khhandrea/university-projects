@@ -36,6 +36,8 @@ class LoopCoilSensorServer(Program):
         }
         self.loop_coil_sensor_1 = LoopCoilSensor(pos+'_1')
         self.loop_coil_sensor_2 = LoopCoilSensor(pos+'_2')
+        self.log_publisher = MQTTclient.LogPublisher()
+        self.demo_publisher = MQTTclient.DemoPublisher()
 
         super().__init__(self.config, self.topic_dispatcher)
 
@@ -55,6 +57,9 @@ class LoopCoilSensorServer(Program):
                 now = datetime.now()
                 self.publisher.publish(f'hardware/server/loop_coil/{pos}/1/from', f'{now.strftime("%Y%m%d_%H%M%S")}/True') # 게이트로 들어옴 신호
                 cur_status = 1
+                log = f"[{self.pos}_루프코일센서_1] (인식: True)"
+                self.log_publisher.log(log)
+                self.demo_publisher.demo_print(log)
     
             coil_2_detected = self.loop_coil_sensor_2.get_detected()
             # 차량이 통과할 때까지 확인 / 대기
@@ -62,6 +67,9 @@ class LoopCoilSensorServer(Program):
                 now = datetime.now()
                 self.publisher.publish(f'hardware/server/loop_coil/{pos}/2/from', f'{now.strftime("%Y%m%d_%H%M%S")}/True') # 게이트에서 나감 신호
                 cur_status = 0
+                log = f"[{self.pos}_루프코일센서_2] (인식: True)"
+                self.log_publisher.log(log)
+                self.demo_publisher.demo_print(log)
             time.sleep(1)
 
     # topics에 ("monitoring", 0) 추가

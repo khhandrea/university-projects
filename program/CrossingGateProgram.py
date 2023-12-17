@@ -30,6 +30,7 @@ def callback_example(topic, data, publisher):
 class CrossingGateProgram(Program):
     def __init__(self, config, pos):
         self.config = config
+        self.pos = pos
 
         if "입차" in self.pos:
             # 입차의 경우 in topic을 subscribe
@@ -45,6 +46,8 @@ class CrossingGateProgram(Program):
             }
 
         self.crossing_gate = CrossingGate(pos)
+        self.log_publisher = MQTTclient.LogPublisher()
+        self.demo_publisher = MQTTclient.DemoPublisher()
 
         super().__init__(self.config, self.topic_dispatcher)
 
@@ -65,6 +68,9 @@ class CrossingGateProgram(Program):
         else:  
             # in / close
             self.crossing_gate.close()
+        log = f"[차단기_{self.pos}] (상태: {self.crossing_gate.get_opened()})"
+        self.log_publisher.log(log)
+        self.demo_publisher.demo_print(log)
 
 
     def handle_out(self, topic, data, publisher):
@@ -76,6 +82,9 @@ class CrossingGateProgram(Program):
         else: 
             # out / close
             self.crossing_gate.close()
+        log = f"[차단기_{self.pos}] (상태: {self.crossing_gate.get_opened()})"
+        self.log_publisher.log(log)
+        self.demo_publisher.demo_print(log)
 
     # topics에 ("monitoring", 0) 추가
     # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가

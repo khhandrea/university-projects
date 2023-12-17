@@ -1,15 +1,14 @@
 import sys, os
 from json import dumps
-from typing import Tuple
+
+import MQTTclient
  
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-import MQTTclient
-
 from queue import Queue
-from threading import Thread
 from program import Program
 from datetime import datetime
+import program.DBRepository import DBRepository
 
 from program import make_log_data
 
@@ -44,60 +43,15 @@ class ParkingManagerProgram(Program):
             'hardware/server/loop_coil/out/2/from': self.handle_loop_coil_out_2,
             'hardware/server/car_recog/in/from': self.handle_car_recog_in,
             'hardware/server/car_recog/out/from': self.handle_car_recog_out,
-            'hardware/server/paymodule/out/from': self.handle_paymodule, 
-            'hardware/server/parkingDB/from': self.handle_parkingDB
+            'hardware/server/paymodule/out/from': self.handle_paymodule
         }
+
+        self.parking_db = DBRepository(pos=self.pos, db_name="parkingDB")
 
         super().__init__(self.config, self.topic_dispatcher)
 
     def start(self):
         pass
-
-    def request_register_info(self, car_num) -> Tuple:
-        data = {
-            'type': 'get',
-            'target': 'register',
-            'pk': {
-                'car_num': car_num
-            }
-        }
-        data = dumps(data).encode('euc-kr')
-        self.publisher.publish("hardware/server/parkingDB/to", data)
-
-        while queue_from_parking_db.empty():
-            pass
-
-        return queue_from_parking_db.get()
-    
-    def request_recognition_info(self, car_num) -> Tuple:
-        data = {
-            'type': 'get',
-            'target': 'recognition',
-            'pk': {
-                'car_num': car_num
-            }
-        }
-        data = dumps(data).encode('euc-kr')
-        self.publisher.publish("hardware/server/parkingDB/to", data)
-
-        while queue_from_parking_db.empty():
-            pass
-
-        return queue_from_parking_db.get()
-    
-    def insert_recognition_info(self, car_number: str) -> str:
-        now = datetime.now()
-        data = {
-            'type': 'insert',
-            'target': 'recognition',
-            'item': {
-                'car_num': car_number,
-                'time': now.strftime("%Y%m%d_%H%M%S")
-            }
-        }
-        data = dumps(data).encode('euc-kr')
-        self.publisher.publish("hardware/server/parkingDB/to", data)
-
 
     def handle_parkingDB(topic, data, publisher):
         print(f'got {data} to parkingDB')
@@ -108,13 +62,11 @@ class ParkingManagerProgram(Program):
         print(f"topic: {topic}")
         print(f"data: {data}")
         publisher.publish('hardware/server/car_recog/in/to', 'capture')
-        publisher.publish('hardware/server/crossing_gate/in/to', 'open')
-    
+        
     def handle_loop_coil_in_2(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
         publisher.publish('hardware/server/crossing_gate/in/to', 'close')
-        # DB에서 제거 TODO
 
     def handle_loop_coil_out_1(self, topic, data, publisher):
         print(f"topic: {topic}")
@@ -125,17 +77,23 @@ class ParkingManagerProgram(Program):
         print(f"topic: {topic}")
         print(f"data: {data}")
         publisher.publish('hardware/server/crossing_gate/out/to', 'close')
-        # log = f"[{self.pos}_차량인식서버_출차방향] 차랑 번호 인식 이벤트 발생 (차량 번호: {self.car_num})"
-        # self.publisher.publish("hardware/server/logDB/to", make_log_data(log))
-
+        
     def handle_car_recog_in(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
-        # log = f"[{self.pos}_차량인식서버_입차방향] 차랑 번호 인식 이벤트 발생 (차량 번호: {self.car_num})"
-        # self.publisher.publish("hardware/server/logDB/to", make_log_data(log))
-
+        
         # recognition DB에 추가
-        self.insert_recognition_info(data['car_num'])
+        message = {
+            'type': 'insert',
+            'pos': self.pos,
+            'target': 'recognition',
+            'item': {
+                'car_num': data.split('/')[1],
+                'time': data.split('/')[0]
+            }
+        }
+        message = dumps(message).encode('euc-kr')
+        self.parking_db.insert(message)
 
     def handle_car_recog_out(self, topic, data, publisher):
         print(f"topic: {topic}")
@@ -172,7 +130,15 @@ class ParkingManagerProgram(Program):
                 cost -= dis_cost
 
         # 등록 여부 확인 (정기권 차량)
-        register_info = self.request_register_info(self.car_num)
+        query = {
+            'type': 'get',
+            'target': 'register',
+            'pk': {
+                'car_num': self.car_num
+            }
+        }
+        query = dumps(query).encode('euc-kr')
+        register_info = self.parking_db.get(query)
         if register_info != None:
             dis_cost = cost
             cost -= dis_cost
@@ -199,10 +165,17 @@ class ParkingManagerProgram(Program):
             # 결제 모듈 (요청)
             publisher.publish('hardware/server/paymodule/out/to', f"{cost}/{bill_method}/{card_number}/{cash_billed}")
 
-        # DB에 로그 저장
-        log = f"[{self.pos}] 출차 이벤트 발생 (차량 번호: {self.car_num}, 출차 시간: {self.out_time})"
-        self.publisher.publish("hardware/server/logDB/to", make_log_data(log))
-
+        # DB에서 제거
+        message = {
+            'type': 'delete',
+            'pos': self.pos,
+            'target': 'recognition',
+            'pk':{
+                'car_num': self.car_num
+            }
+        }
+        message = dumps(message).encode('euc-kr')
+        self.parking_db.delete(message)
     
     def handle_paymodule(self, topic, data, publisher):
         print(f"topic: {topic}")
