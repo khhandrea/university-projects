@@ -85,7 +85,8 @@ class CrossingGateProgram(Program):
             "ram" : 0.5,
             "temperature" : 30,
             "state" : self.crossing_gate.get_opened(),
-            "available" : self.crossing_gate.get_status()
+            "available" : self.crossing_gate.get_status(),
+            "direction" : self.pos,
         }
         state_message = json.dumps(state)
         self.publisher.publish("monitoring/crossing_gate", state_message)

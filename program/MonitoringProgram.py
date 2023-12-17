@@ -85,11 +85,11 @@ if __name__ == '__main__':
     args = argparser.parse_args()
 
     pos = args.position
-    if pos == '상허문_입차방향' or pos == '상허문_출차방향':
+    if pos == '상허문':
         port = 60606
-    elif pos == '일감문_입차방향' or pos == '일감문_출차방향':
+    elif pos == '일감문':
         port = 60706
-    elif pos == '건국문_입차방향' or pos == '건국문_출차방향':
+    elif pos == '건국문':
         port = 60806
     else:
         raise ValueError("Wrong position")
