@@ -24,7 +24,7 @@ class LogPublisher:
         self.client.publish(topic, message)
 
     def log(self, message):
-        print(f"pubish {message} to logDB")
+        print(f"publish {message} to logDB")
         self.publish("hardware/server/logDB/to", message)
 
     

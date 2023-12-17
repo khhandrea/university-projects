@@ -1,0 +1,1 @@
+python ../program/PayProgram.py --position=차량등록서버

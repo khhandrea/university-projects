@@ -8,3 +8,5 @@ mosquitto -v -p 60606 & # 상허문
 mosquitto -v -p 60706 & # 일감문
 mosquitto -v -p 60806 & # 건국문
 mosquitto -v -p 60906   # DB용
+
+echo "hi"

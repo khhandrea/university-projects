@@ -1,0 +1,1 @@
+python ../program/PayProgram.py --position=상허문

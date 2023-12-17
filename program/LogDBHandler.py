@@ -32,7 +32,7 @@ class LogDBHandler(Program, DBHandler):
 
     # override
     def _insert(self, target: str, item: dict):
-        with open('database/log.db', 'a') as file:
+        with open('../database/log.db', 'a') as file:
             message = item['message']
             time = datetime.now().strftime('%Y%m%d_%H%M%S')
             log = f"({time}){message}\n"
@@ -47,7 +47,7 @@ def handle_log(topic, data, publisher):
 if __name__ == '__main__':
     config = {
             "ip": "127.0.0.1", 
-            "port": 1883, 
+            "port": 60906, 
             "topics": [
                 ("hardware/server/logDB/to", 0)
             ],
