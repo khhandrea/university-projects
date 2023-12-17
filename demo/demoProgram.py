@@ -35,7 +35,7 @@ class demoProgram(Program):
         # topic: handler 순으로 추가하면 된다.
         # 원하는 topic에 해당하는 반응을 구현하면 됨
         topic_dispatcher = {
-            "hardware/server/parkingDB/from": self.handle_parkingDB,
+            
         }
         self.topic_dispatcher = topic_dispatcher
 
@@ -80,8 +80,9 @@ class demoProgram(Program):
 
         config = {
             "ip": "127.0.0.1", 
-            "port": f"{self.MQTT_server_info[door_location]}", 
+            "port": self.MQTT_server_info[door_location], 
         }
+        print("port:", self.MQTT_server_info[door_location])
 
         enter_publisher = MQTTclient.Publisher(config=config)
         enter_publisher.publish("demo/hardware/loop_coil_sensor/in/1/to/recognition", 'True')
@@ -107,7 +108,7 @@ class demoProgram(Program):
 
         config = {
             "ip": "127.0.0.1", 
-            "port": f"{self.MQTT_server_info[door_location]}", 
+            "port": self.MQTT_server_info[door_location], 
         }
 
         enter_publisher = MQTTclient.Publisher(config=config)
@@ -153,7 +154,7 @@ class demoProgram(Program):
             hardware_name = self.MQTT_hardware_topic[hardware_name]
             config = {
                 "ip": "127.0.0.1", 
-                "port": f"{self.MQTT_server_info[location]}", 
+                "port": self.MQTT_server_info[location], 
             }
             topic_location = "register"
 
@@ -165,7 +166,7 @@ class demoProgram(Program):
             hardware_name = self.MQTT_hardware_topic[hardware_name]
             config = {
                 "ip": "127.0.0.1", 
-                "port": f"{self.MQTT_server_info[location]}", 
+                "port": self.MQTT_server_info[location], 
             }
             topic_direction = "in" if direction == "입차방향" else "out"
 
@@ -177,7 +178,7 @@ class demoProgram(Program):
             hardware_name = self.MQTT_hardware_topic[hardware_name]
             config = {
                 "ip": "127.0.0.1", 
-                "port": f"{self.MQTT_server_info[location]}", 
+                "port": self.MQTT_server_info[location], 
             }
             topic_direction = "in" if direction == "입차방향" else "out"
 
@@ -197,7 +198,7 @@ class demoProgram(Program):
             hardware_name = self.MQTT_hardware_topic[hardware_name]
             config = {
                 "ip": "127.0.0.1", 
-                "port": f"{self.MQTT_server_info[location]}", 
+                "port": self.MQTT_server_info[location], 
             }
             topic_location = "register"
 
@@ -209,7 +210,7 @@ class demoProgram(Program):
             hardware_name = self.MQTT_hardware_topic[hardware_name]
             config = {
                 "ip": "127.0.0.1", 
-                "port": f"{self.MQTT_server_info[location]}", 
+                "port": self.MQTT_server_info[location], 
             }
             topic_direction = "in" if direction == "입차방향" else "out"
 
@@ -221,7 +222,7 @@ class demoProgram(Program):
             hardware_name = self.MQTT_hardware_topic[hardware_name]
             config = {
                 "ip": "127.0.0.1", 
-                "port": f"{self.MQTT_server_info[location]}", 
+                "port": self.MQTT_server_info[location], 
             }
             topic_direction = "in" if direction == "입차방향" else "out"
 

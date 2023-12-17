@@ -2,5 +2,5 @@ from abc import ABC, abstractmethod
 
 class LoopCoilSensorInterface(ABC):
     @abstractmethod
-    def signal(self, car_pass: bool):
+    def set_detected(self, detected : bool):
         pass

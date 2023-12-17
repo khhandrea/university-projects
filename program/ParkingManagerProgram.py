@@ -1,14 +1,14 @@
 import sys, os
 from json import dumps
 
-import MQTTclient
- 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
+import MQTTclient
+ 
 from queue import Queue
 from program import Program
 from datetime import datetime
-import program.DBRepository import DBRepository
+from program import DBRepository
 
 from program import make_log_data
 

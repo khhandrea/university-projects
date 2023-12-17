@@ -24,7 +24,7 @@ def callback_example(topic, data, publisher):
 """
 
 
-class demoProgram(Program):
+class demoPrinter(Program):
     def __init__(self, config):
         self.config = config
 
@@ -42,7 +42,7 @@ class demoProgram(Program):
     # TODO 각자에 맞게 고치면 됨
     def start(self):
         while True:
-            print(self.pueue.get())
+            print(self.queue.get())
 
     def handle_print(self, topic, data, publisher):
         self.queue.put(data)
@@ -56,7 +56,6 @@ if __name__ == '__main__':
             "topics": [("demo/print", 0)],
         }
 
-    demo_program = demoProgram(config=config)
+    demo_program = demoPrinter(config=config)
     demo_program.start()
     
-

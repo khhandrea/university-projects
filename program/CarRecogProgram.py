@@ -32,6 +32,7 @@ def callback_example(topic, data, publisher):
 class CarRecogProgram(Program):
     def __init__(self, config, pos):
         self.config = config
+        self.pos = pos
         if "입차" in self.pos:
             # 입차의 경우 in topic을 subscribe
             self.topic_dispatcher = {

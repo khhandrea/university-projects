@@ -44,7 +44,7 @@ class DBRepository(Program):
         self.queue = Queue()
 
         self.topic_dispatcher = {
-            self.topic: self.handle_get,
+            self.topic_from: self.handle_get,
         }
 
         super().__init__(self.config, self.topic_dispatcher)
