@@ -14,7 +14,7 @@ class Program:
 
         self.subscriber = None
         self.publisher = None
-        self.subscriber = MQTTclient.Subcriber(config=self.config, queue=self.queue)
+        self.subscriber = MQTTclient.Subscriber(config=self.config, queue=self.queue)
         self.publisher = MQTTclient.Publisher(config=self.config)
 
         processor_process = Thread(target=self.message_processor)
