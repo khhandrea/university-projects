@@ -40,6 +40,8 @@ class CrossingGateRemoteControlProgram(Program):
         }
         self.topic_dispatcher = topic_dispatcher
 
+        self.log_publisher = MQTTclient.LogPublisher()
+
         self.queue = Queue()
 
         super().__init__(self.config, self.topic_dispatcher)
@@ -84,8 +86,7 @@ class CrossingGateRemoteControlProgram(Program):
     def send_log_message(self, location):
         message = f"[원격 차단기 프로그램] 원격 열림 이벤트 발생 ({location})"
         message_log = make_log_data(message)
-        self.publisher.publish("hardware/server/logDB/to", message_log)
-
+        self.log_publisher.publish("hardware/server/logDB/to", message_log)
 
     # TODO 각자에 맞게 고치면 됨
     def start(self):
