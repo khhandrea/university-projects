@@ -5,9 +5,8 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import MQTTclient
 from log_utility import make_log_data
 
-from queue import Queue
-from program import Program
-import re, datetime
+from program import Program, DBRepository
+import re, datetime, json
 
 
 
@@ -41,8 +40,8 @@ class CrossingGateRemoteControlProgram(Program):
         self.topic_dispatcher = topic_dispatcher
 
         self.log_publisher = MQTTclient.LogPublisher()
-
-        self.queue = Queue()
+        self.demo_publisher = MQTTclient.DemoPublisher()
+        self.parking_db = DBRepository(pos="remote", db_name="mqtt_server")
 
         super().__init__(self.config, self.topic_dispatcher)
 
@@ -54,16 +53,15 @@ class CrossingGateRemoteControlProgram(Program):
 
 
     def get_ip_port_from_name(self, name):
-        message = {
+        query = {
             "type": "get", 
             "target": "mqtt_server", 
-            "pk": {"crossing_gate_name": f"{name}"}, 
+            "pk": {"name": f"{name}"}, 
             "item": {}
             }
         
-        self.publisher.publish("hardware/server/parkingDB/to", message)
-
-        data = self.queue.get()
+        query = json.dumps(query)
+        data = self.parking_db.get(query)
 
         if data != None:
             _, ip, port = data
@@ -86,7 +84,9 @@ class CrossingGateRemoteControlProgram(Program):
     def send_log_message(self, location):
         message = f"[원격 차단기 프로그램] 원격 열림 이벤트 발생 ({location})"
         message_log = make_log_data(message)
-        self.log_publisher.publish("hardware/server/logDB/to", message_log)
+        self.log_publisher.log(message_log)
+
+        self.demo_publisher.demo_print(f"[원격 차단기 프로그램] 원격 열림 이벤트 발생 ({location})")
 
     # TODO 각자에 맞게 고치면 됨
     def start(self):
@@ -129,11 +129,6 @@ class CrossingGateRemoteControlProgram(Program):
                     time_stamp = self.get_time_stamp()
                     remote_publisher.publish(second_coil_topic, f"{time_stamp}/False")
 
-    
-    # TODO 각자에 맞게 추가하면 됨
-    def handle_parkingDB(self, topic, data, publisher):
-        # data = 
-        self.queue.put(data)
 
 if __name__ == '__main__':
 

@@ -2,6 +2,7 @@ import sys, os
  
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
+import MQTTclient
 from program import Program
 from hardware import PayModule
 
@@ -29,7 +30,10 @@ class PayModuleProgram(Program):
         self.pay_module = pay_module
 
         self.pos = self.pay_module.get_pos()
+        self.name = "결제모듈_" + self.pos
         self.door, self.direction = self.pos.split("_")
+
+        self.demo_publisher = MQTTclient.DemoPublisher()
 
         self.direction = "in" if self.direction == "입차방향" else "out"
         self.config = {
@@ -56,8 +60,12 @@ class PayModuleProgram(Program):
         assert data in ['고장', '정상'], f'Data should be "True" or "False". Topic from "{topic}"'
         
         if data == '고장':
+            self.demo_publisher.demo_print(f"[{self.name}] 현재 상태 : {self.pay_module.get_status()}")
             self.pay_module.set_status('고장')
+            self.demo_publisher.demo_print(f"[{self.name}] {self.pay_module.get_status()}으로 변경되었습니다.")
         elif data == '정상':
+            self.demo_publisher.demo_print(f"[{self.name}] 현재 상태 : {self.pay_module.get_status()}")
             self.pay_module.set_status('정상')
+            self.demo_publisher.demo_print(f"[{self.name}] {self.pay_module.get_status()}으로 변경되었습니다.")
     
 

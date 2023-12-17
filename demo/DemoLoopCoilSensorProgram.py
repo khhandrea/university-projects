@@ -2,6 +2,7 @@ import sys, os
  
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
+import MQTTclient
 from program import Program
 from hardware import LoopCoilSensor
 
@@ -30,7 +31,10 @@ class LoopCoilSensorProgram(Program):
         self.loop_coil_sensor = loop_coil_sensor
 
         self.pos = self.loop_coil_sensor.get_pos()
+        self.name = "바닥센서_" + self.pos
         self.door, self.direction, self.num = self.pos.split("_")
+
+        self.demo_publisher = MQTTclient.DemoPublisher()
 
         self.direction = "in" if self.direction == "입차방향" else "out"
         
@@ -63,15 +67,21 @@ class LoopCoilSensorProgram(Program):
         assert data in ['고장', '정상'], f'Data should be "True" or "False". Topic from "{topic}"'
 
         if data == '고장':
+            self.demo_publisher.demo_print(f"[{self.name}] 현재 상태 : {self.loop_coil_sensor.get_status()}")
             self.loop_coil_sensor.set_status('고장')
+            self.demo_publisher.demo_print(f"[{self.name}] {self.loop_coil_sensor.get_status()}으로 변경되었습니다.")
         elif data == '정상':
+            self.demo_publisher.demo_print(f"[{self.name}] 현재 상태 : {self.loop_coil_sensor.get_status()}")
             self.loop_coil_sensor.set_status('정상')
+            self.demo_publisher.demo_print(f"[{self.name}] {self.loop_coil_sensor.get_status()}으로 변경되었습니다.")
     
     def handle_recognition(self, topic, data, publisher):
         assert data in ['True', 'False'], f'Data should be "True" or "False". Topic from "{topic}"'
 
         if data == 'True':
+            self.demo_publisher.demo_print(f"[{self.name}] 코일이 감지되었습니다.")
             self.loop_coil_sensor.set_detected(True)
         elif data == 'False':
+            self.demo_publisher.demo_print(f"[{self.name}] 코일 감지가 해제되었습니다.")
             self.loop_coil_sensor.set_detected(False)
 
