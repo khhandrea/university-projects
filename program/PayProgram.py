@@ -54,7 +54,7 @@ if __name__ == '__main__':
     if pos == '상허문':
         port = 60606
     elif pos == '일감문':
-        port = 1883
+        port = 60706
     elif pos == '건국문':
         port = 60806
     else:
