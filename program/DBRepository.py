@@ -28,45 +28,62 @@ def callback_example(topic, data, publisher):
 """
 
 class DBRepository(Program):
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, pos, db_name):
+        self.pos = pos
+        self.topic_to = f"hardware/server/{db_name}{self.pos}/to"
+        self.topic_from = f"hardware/server/{db_name}{self.pos}/from"
 
+
+        self.config = {
+            "ip": "127.0.0.1", 
+            "port": 60906, 
+            "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
+                (self.topic_from, 0), 
+            ],
+        }
+        self.queue = Queue()
 
         self.topic_dispatcher = {
-            "hardware/server/parkingDB/to": self.handle_in,
+            self.topic: self.handle_get,
         }
 
         super().__init__(self.config, self.topic_dispatcher)
 
-    def start(self):
-        pass
+    def get(self, query):
+        self.publisher.publish(self.topic_to, query)
+        
+        # queue.get() wait for data
+        data = self.queue.get()
 
-    def get(self, qeury):
-        pass
+        if data:
+            return data
 
     def insert(self, query):
-        pass
+        self.publisher.publish(self.topic_to, query)
+        
+        # queue.get() wait for data
+        data = self.queue.get()
+
+        if data:
+            return data
 
     def update(self, query):
-        pass
+        self.publisher.publish(self.topic_to, query)
+        
+        # queue.get() wait for data
+        data = self.queue.get()
+
+        if data:
+            return data
 
     def delete(self, query):
-        pass
-
-
+        self.publisher.publish(self.topic_to, query)
         
+        # queue.get() wait for data
+        data = self.queue.get()
 
-if __name__ == '__main__':
-    # TODO 각자에 맞게 고치면 됨
-    config = {
-            "ip": "127.0.0.1", 
-            "port": 60906, 
-            "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
-                ("hardware/server/parkingDB/from", 0), 
-            ],
-        }
+        if data:
+            return data
 
-    ex = DBRepository(config=config)
-    ex.start()
-    
-
+    def handle_get(self, topic, data, publisher):
+        self.queue.put(data)
