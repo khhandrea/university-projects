@@ -1,4 +1,4 @@
 from Subscriber import Subcriber
 from Publisher import Publisher
-from DBPublisher import DBPublisher
+from DemoPublisher import DemoPublisher
 from LogPublisher import LogPublisher

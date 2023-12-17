@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
  
-class Publisher:
+class LogPublisher:
 
     def __init__(self):
         self.client = mqtt.Client()
