@@ -40,6 +40,7 @@ class LogDBHandler(Program, DBHandler):
             file.write(log)
         
 def handle_log(topic, data, publisher):
+    print(f'got {data}')
     data = loads(data)
     queue.put(data)
 

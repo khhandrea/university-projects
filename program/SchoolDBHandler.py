@@ -23,9 +23,11 @@ class SchoolDBHandler(Program, DBHandler):
         while True:
             if not queue.empty():
                 data = queue.get()
+                pos = data['pos']
                 message = self.handle(data).encode('euc-kr')
-                print(f'send {message} to "hardware/server/schoolDB/from"')
-                self.publisher.publish("hardware/server/schoolDB/from", message)
+                topic = f"hardware/server/schoolDB/{pos}/from"
+                print(f'send {message} to topic')
+                self.publisher.publish(topic, message)
 
 def handle_schoolDB(topic, data, publisher):
     print(f'got message {data} from {topic}')
