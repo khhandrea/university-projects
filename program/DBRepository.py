@@ -53,7 +53,7 @@ class DBRepository(Program):
         self.publisher.publish(self.topic_to, query)
         
         # queue.get() wait for data
-        data = self.queue_msg.get()
+        data = self.queue_msg.get(timeout=3)
 
         if data:
             return data
@@ -62,28 +62,28 @@ class DBRepository(Program):
         self.publisher.publish(self.topic_to, query)
         
         # queue.get() wait for data
-        data = self.queue_msg.get()
+        # data = self.queue_msg.get()
 
-        if data:
-            return data
+        # if data:
+        #     return data
 
     def update(self, query):
         self.publisher.publish(self.topic_to, query)
         
         # queue.get() wait for data
-        data = self.queue_msg.get()
+        # data = self.queue_msg.get()
 
-        if data:
-            return data
+        # if data:
+        #     return data
 
     def delete(self, query):
         self.publisher.publish(self.topic_to, query)
         
         # queue.get() wait for data
-        data = self.queue_msg.get()
+        # data = self.queue_msg.get()
 
-        if data:
-            return data
+        # if data:
+        #     return data
 
     def handle_get(self, topic, data, publisher):
         self.queue_msg.put(data)

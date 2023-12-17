@@ -119,6 +119,7 @@ if __name__ == '__main__':
             "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 (topic, 0), 
+                ("monitoring", 0),
             ],
         }
 

@@ -113,7 +113,8 @@ if __name__ == '__main__':
             "port": port,
             "topics": [
                 ("hardware/server/car_recog/in/to", 0), 
-                ("hardware/server/car_recog/out/to", 0)
+                ("hardware/server/car_recog/out/to", 0),
+                ("monitoring", 0),
             ],
         }
     
