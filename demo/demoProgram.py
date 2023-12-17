@@ -55,7 +55,7 @@ class demoProgram(Program):
         }
 
 
-        self.queue = Queue()
+        self.queue_msg = Queue()
 
         super().__init__(self.config, self.topic_dispatcher)
 

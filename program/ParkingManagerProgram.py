@@ -61,7 +61,7 @@ class ParkingManagerProgram(Program):
     def handle_loop_coil_in_1(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
-        publisher.publish('hardware/server/car_recog/in/to', 'capture')
+        self.publisher.publish('hardware/server/car_recog/in/to', 'capture')
         
     def handle_loop_coil_in_2(self, topic, data, publisher):
         print(f"topic: {topic}")
@@ -92,7 +92,7 @@ class ParkingManagerProgram(Program):
                 'time': data.split('/')[0]
             }
         }
-        message = dumps(message).encode('euc-kr')
+        message = dumps(message)
         self.parking_db.insert(message)
 
     def handle_car_recog_out(self, topic, data, publisher):

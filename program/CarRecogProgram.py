@@ -65,6 +65,7 @@ class CarRecogProgram(Program):
         log = f"[{self.pos}_카메라] (차량번호: {car_num})"
         self.log_publisher.log(log)
         self.demo_publisher.demo_print(log)
+        print("hihi")
 
     def handle_capture_out(self, topic, data, publisher):
         print(f"topic: {topic}")

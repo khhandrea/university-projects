@@ -41,7 +41,7 @@ class DBRepository(Program):
                 (self.topic_from, 0), 
             ],
         }
-        self.queue = Queue()
+        self.queue_msg = Queue()
 
         self.topic_dispatcher = {
             self.topic_from: self.handle_get,
@@ -53,7 +53,7 @@ class DBRepository(Program):
         self.publisher.publish(self.topic_to, query)
         
         # queue.get() wait for data
-        data = self.queue.get()
+        data = self.queue_msg.get()
 
         if data:
             return data
@@ -62,7 +62,7 @@ class DBRepository(Program):
         self.publisher.publish(self.topic_to, query)
         
         # queue.get() wait for data
-        data = self.queue.get()
+        data = self.queue_msg.get()
 
         if data:
             return data
@@ -71,7 +71,7 @@ class DBRepository(Program):
         self.publisher.publish(self.topic_to, query)
         
         # queue.get() wait for data
-        data = self.queue.get()
+        data = self.queue_msg.get()
 
         if data:
             return data
@@ -80,10 +80,10 @@ class DBRepository(Program):
         self.publisher.publish(self.topic_to, query)
         
         # queue.get() wait for data
-        data = self.queue.get()
+        data = self.queue_msg.get()
 
         if data:
             return data
 
     def handle_get(self, topic, data, publisher):
-        self.queue.put(data)
+        self.queue_msg.put(data)
