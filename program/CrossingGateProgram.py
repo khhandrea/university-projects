@@ -58,7 +58,6 @@ class CrossingGateProgram(Program):
         #     time.sleep(1)
         pass
 
-
     def handle_in(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")

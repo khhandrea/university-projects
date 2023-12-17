@@ -32,16 +32,15 @@ class LogDBHandler(Program, DBHandler):
 
     # override
     def _insert(self, target: str, item: dict):
-        with open('../database/log.db', 'a') as file:
+        with open('../database/log.db', 'a', newline='\n') as file:
             message = item['message']
             time = datetime.now().strftime('%Y%m%d_%H%M%S')
             log = f"({time}){message}\n"
             print(log, end='')
             file.write(log)
         
-
 def handle_log(topic, data, publisher):
-    data = loads(data.decode('utf-8'))
+    data = loads(data)
     queue.put(data)
 
 if __name__ == '__main__':
