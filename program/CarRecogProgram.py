@@ -61,10 +61,10 @@ class CarRecogProgram(Program):
         img = self.camera.capture()
         car_num = self.img_to_carnum(img)
         now = datetime.now().strftime("%Y%m%d_%H%M%S")
-        publisher.publish('hardware/server/car_recog/in/from', f'{now}/{car_num}')
         log = f"[{self.pos}_카메라] (차량번호: {car_num})"
         self.log_publisher.log(log)
         self.demo_publisher.demo_print(log)
+        publisher.publish('hardware/server/car_recog/in/from', f'{now}/{car_num}')
 
     def handle_capture_out(self, topic, data, publisher):
         print(f"topic: {topic}")
@@ -72,10 +72,11 @@ class CarRecogProgram(Program):
         img = self.camera.capture()
         car_num = self.img_to_carnum(img)
         now = datetime.now().strftime("%Y%m%d_%H%M%S")
-        publisher.publish('hardware/server/car_recog/out/from', f'{now}/{car_num}')
         log = f"[{self.pos}_카메라] (차량번호: {car_num})"
         self.log_publisher.log(log)
         self.demo_publisher.demo_print(log)
+        publisher.publish('hardware/server/car_recog/out/from', f'{now}/{car_num}')
+
 
     def handle_monitoring(self, topic, data, publisher):
         state = {
@@ -111,8 +112,9 @@ if __name__ == '__main__':
             "ip": "127.0.0.1", 
             "port": port,
             "topics": [
-                ("hardware/server/crossing_gate/in/to", 0), 
-                ("hardware/server/crossing_gate/out/to", 0)
+                ("hardware/server/car_recog/in/to", 0), 
+                ("hardware/server/car_recog/out/to", 0),
+                ("monitoring", 0),
             ],
         }
     

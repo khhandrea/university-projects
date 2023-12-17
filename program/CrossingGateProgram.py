@@ -58,7 +58,6 @@ class CrossingGateProgram(Program):
         #     time.sleep(1)
         pass
 
-
     def handle_in(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
@@ -117,14 +116,18 @@ if __name__ == '__main__':
         port = 60806
     else:
         raise ValueError("Wrong position")
+    
+    if "입차" in pos:
+        topic = "hardware/server/crossing_gate/in/to"
+    else:
+        topic = "hardware/server/crossing_gate/out/to"
 
     # TODO 각자에 맞게 고치면 됨
     config = {
             "ip": "127.0.0.1", 
             "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
-                ("hardware/server/crossing_gate/in/to", 0), 
-                ("hardware/server/crossing_gate/out/to", 0),
+                (topic, 0), 
                 ("monitoring", 0)
             ],
         }

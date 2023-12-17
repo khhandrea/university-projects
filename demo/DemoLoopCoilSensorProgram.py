@@ -73,7 +73,7 @@ class DemoLoopCoilSensorProgram(Program):
 
     
     def handle_broken(self, topic, data, publisher):
-        assert data in ['고장', '정상'], f'Data should be "True" or "False". Topic from "{topic}"'
+        assert data in ['고장', '정상'], f'Data should be "고장" or "정상". Topic from "{topic}"'
 
         if data == '고장':
             self.demo_publisher.demo_print(f"[{self.name}] 현재 상태 : {self.loop_coil_sensor.get_status()}")

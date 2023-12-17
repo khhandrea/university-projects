@@ -15,10 +15,11 @@ class CrossingGate(CrossingGateInterface):
         self.status = status
         print(f'변경 상태 : {self.status}')
 
-    def set_opened(self, opened):
-        assert opened == '열림' or opened == '닫힘'
-        
-        self._opened = opened
+    def open(self):
+        self._opened = '열림'
+
+    def close(self):
+        self._opened = '닫힘'
 
     def get_pos(self):
         return self._pos

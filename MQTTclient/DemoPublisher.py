@@ -25,7 +25,7 @@ class DemoPublisher:
 
     def demo_print(self, message):
         print(f"publish {message} to demo cli")
-        self.publish("demo/print", message.encode("euc-kr"))
+        self.publish("demo/print", message.encode("utf8"))
 
     
 

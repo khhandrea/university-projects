@@ -35,17 +35,17 @@ class demoPrinter(Program):
             "demo/print": self.handle_print,
         }
         self.topic_dispatcher = topic_dispatcher
-        self.queue = Queue()
+        self.queue_msg = Queue()
 
         super().__init__(self.config, self.topic_dispatcher)
 
     # TODO 각자에 맞게 고치면 됨
     def start(self):
         while True:
-            print(self.queue.get())
+            print(self.queue_msg.get())
 
     def handle_print(self, topic, data, publisher):
-        self.queue.put(data)
+        self.queue_msg.put(data)
 
 if __name__ == '__main__':
 
