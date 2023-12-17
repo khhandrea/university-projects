@@ -23,7 +23,7 @@ class ParkingDBHandler(Program, DBHandler):
         while True:
             if not queue.empty():
                 data = queue.get()
-                message = self.handle(data).encode('euc-kr')
+                message = self.handle(data).encode('utf8')
                 print(f'send {message} to "hardware/server/parkingDB/from"')
                 self.publisher.publish("hardware/server/parkingDB/from", message)
 

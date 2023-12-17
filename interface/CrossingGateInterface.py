@@ -2,5 +2,9 @@ from abc import ABC, abstractmethod
 
 class CrossingGateInterface(ABC):
     @abstractmethod
-    def set_opened(self):
+    def open(self):
+        pass
+
+    @abstractmethod 
+    def close(self):
         pass

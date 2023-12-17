@@ -41,7 +41,8 @@ class PayProgram(Program):
                 self.publisher.publish("hardware/server/paymodule/from", message)
 
 def handle_payment(topic, data, publisher):
-    data = data.decode('utf-8').split('/')
+    # data = data.decode('utf-8').split('/')
+    data = data.split('/')
     queue.put(data)
 
 if __name__ == '__main__':

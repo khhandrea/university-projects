@@ -74,6 +74,7 @@ class ParkingManagerProgram(Program):
         publisher.publish('hardware/server/car_recog/out/to', 'capture')
 
     def handle_loop_coil_out_2(self, topic, data, publisher):
+        print('받음!')
         print(f"topic: {topic}")
         print(f"data: {data}")
         publisher.publish('hardware/server/crossing_gate/out/to', 'close')
@@ -81,6 +82,8 @@ class ParkingManagerProgram(Program):
     def handle_car_recog_in(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
+
+        publisher.publish('hardware/server/crossing_gate/in/to', 'open')
         
         # recognition DB에 추가
         message = {
@@ -137,7 +140,7 @@ class ParkingManagerProgram(Program):
                 'car_num': self.car_num
             }
         }
-        query = dumps(query).encode('euc-kr')
+        query = dumps(query).encode('utf8')
         register_info = self.parking_db.get(query)
         if register_info != None:
             dis_cost = cost
@@ -174,7 +177,7 @@ class ParkingManagerProgram(Program):
                 'car_num': self.car_num
             }
         }
-        message = dumps(message).encode('euc-kr')
+        message = dumps(message).encode('utf8')
         self.parking_db.delete(message)
     
     def handle_paymodule(self, topic, data, publisher):

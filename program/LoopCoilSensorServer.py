@@ -48,16 +48,14 @@ class LoopCoilSensorServer(Program):
             pos = 'out'
         cur_status = 0
 
-        # coil 1 : T T T F F F F F F F ..
-        # coil 2 : F F F F T T T F F F ..
-        # 둘이 겹쳐서 T가 되는 시간은 없음
         while True:
             coil_1_detected = self.loop_coil_sensor_1.get_detected()
             if cur_status == 0 and coil_1_detected:
                 now = datetime.now()
                 self.publisher.publish(f'hardware/server/loop_coil/{pos}/1/from', f'{now.strftime("%Y%m%d_%H%M%S")}/True') # 게이트로 들어옴 신호
                 cur_status = 1
-                log = f"[{self.pos}_루프코일센서_1] (인식: True)"
+                print('here')
+                log = f"[바닥센서_{self.pos}_1] (인식: True)"
                 self.log_publisher.log(log)
                 self.demo_publisher.demo_print(log)
     
@@ -67,10 +65,10 @@ class LoopCoilSensorServer(Program):
                 now = datetime.now()
                 self.publisher.publish(f'hardware/server/loop_coil/{pos}/2/from', f'{now.strftime("%Y%m%d_%H%M%S")}/True') # 게이트에서 나감 신호
                 cur_status = 0
-                log = f"[{self.pos}_루프코일센서_2] (인식: True)"
+                log = f"[바닥센서_{self.pos}_2] (인식: True)"
                 self.log_publisher.log(log)
                 self.demo_publisher.demo_print(log)
-            time.sleep(1)
+            time.sleep(0.5)
 
     # topics에 ("monitoring", 0) 추가
     # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가

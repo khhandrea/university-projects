@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+from json import dumps
  
 class LogPublisher:
 
@@ -25,7 +26,15 @@ class LogPublisher:
 
     def log(self, message):
         print(f"publish {message} to logDB")
-        self.publish("hardware/server/logDB/to", message)
+        query = {
+            'type': 'insert',
+            'target': 'log',
+            'item': {
+                "message": message
+            }
+        }
+        query = dumps(query).encode('utf8')
+        self.publish("hardware/server/logDB/to", query)
 
     
 
