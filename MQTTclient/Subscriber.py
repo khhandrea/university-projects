@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
  
-class Subcriber:
+class Subscriber:
 
     def __init__(self, config, queue):
         self.client = mqtt.Client(userdata=queue)

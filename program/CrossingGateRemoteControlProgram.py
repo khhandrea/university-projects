@@ -3,12 +3,10 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 import MQTTclient
+from log_utility import make_log_data
 
-from queue import Queue
-from threading import Thread
-from program import Program
-import time, json
-import datetime
+from program import Program, DBRepository
+import re, datetime, json
 
 
 
@@ -41,7 +39,9 @@ class CrossingGateRemoteControlProgram(Program):
         }
         self.topic_dispatcher = topic_dispatcher
 
-        self.queue = Queue()
+        self.log_publisher = MQTTclient.LogPublisher()
+        self.demo_publisher = MQTTclient.DemoPublisher()
+        self.parking_db = DBRepository(pos="remote", db_name="mqtt_server")
 
         super().__init__(self.config, self.topic_dispatcher)
 
@@ -53,20 +53,20 @@ class CrossingGateRemoteControlProgram(Program):
 
 
     def get_ip_port_from_name(self, name):
-        message = {
+        query = {
             "type": "get", 
-            "target": "remote", 
-            "pk": {"crossing_gate_name": f"{name}"}, 
+            "target": "mqtt_server", 
+            "pk": {"name": f"{name}"}, 
             "item": {}
             }
         
-        self.publisher.publish("hardware/server/parkingDB/to", message)
+        query = json.dumps(query)
+        data = self.parking_db.get(query)
 
-        data = self.queue.get()
+        if data != None:
+            _, ip, port = data
 
-        if data != "{}":
-            ip = data["ip"]
-            port = int(data["port"])
+            port = int(port)
 
             return ip, port
 
@@ -80,15 +80,26 @@ class CrossingGateRemoteControlProgram(Program):
             return "hardware/server/loop_coil/out/1/to", "hardware/server/loop_coil/out/2/to"
         else:
             return -1
+        
+    def send_log_message(self, location):
+        message = f"[원격 차단기 프로그램] 원격 열림 이벤트 발생 ({location})"
+        message_log = make_log_data(message)
+        self.log_publisher.log(message_log)
+
+        self.demo_publisher.demo_print(f"[원격 차단기 프로그램] 원격 열림 이벤트 발생 ({location})")
 
     # TODO 각자에 맞게 고치면 됨
     def start(self):
         while True:
-            event = input(">>>이벤트 입력: ")
+            event = input(">>이벤트 입력: ")
 
             if event == "원격 차단기 열기":
-                name = input(">>>차단기 이름: ")
-                time = float(input(">>>시간: "))
+                name = input(">>차단기 이름: ")
+                assert re.fullmatch(r'(\w+_\w+_\w+)', name), 'Position does not match the required pattern. Position should be "str_str_str".'
+
+                time = float(input(">>시간: "))
+
+                self.send_log_message(name)
 
                 first_coil_topic, second_coil_topic = self.get_topic_from_name(name)
                 ip, port = self.get_ip_port_from_name(name)
@@ -99,7 +110,6 @@ class CrossingGateRemoteControlProgram(Program):
                     config = {
                         "ip": f"{ip}", 
                         "port": port, 
-                        "topics": [],
                     }
 
                     remote_publisher = MQTTclient.Publisher(config=config)
@@ -119,18 +129,13 @@ class CrossingGateRemoteControlProgram(Program):
                     time_stamp = self.get_time_stamp()
                     remote_publisher.publish(second_coil_topic, f"{time_stamp}/False")
 
-    
-    # TODO 각자에 맞게 추가하면 됨
-    def handle_parkingDB(self, topic, data, publisher):
-        # data = 
-        self.queue.put(data)
 
 if __name__ == '__main__':
 
     # TODO 각자에 맞게 고치면 됨
     config = {
             "ip": "127.0.0.1", 
-            "port": 1883, 
+            "port": 60106, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 ("hardware/server/parkingDB/from", 0), 
             ],

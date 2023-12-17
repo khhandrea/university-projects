@@ -2,13 +2,10 @@ import sys, os
  
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-import MQTTclient
 import hardware
 
-from queue import Queue
-from threading import Thread
 from program import Program
-import time, json
+import json, argparse
 import datetime
 from pyprnt import prnt
 
@@ -40,11 +37,13 @@ class DisplayProgram(Program):
             # 입차의 경우 in topic을 subscribe
             topic_dispatcher = {
                 "hardware/server/display/in/to": self.handle_display,
+                "monitoring" : self.handle_monitoring,
             }
         elif "출차" in self.pos:
             # 출차의 경우 out topic을 subscribe
             topic_dispatcher = {
                 "hardware/server/display/out/to": self.handle_display,
+                "monitoring" : self.handle_monitoring,
             }
 
         self.topic_dispatcher = topic_dispatcher
@@ -80,9 +79,33 @@ class DisplayProgram(Program):
 
         self.display.display_print(cost=cost, dis_cost=dis_cost, car_num=car_num, in_time=in_time, out_time=out_time)
 
-if __name__ == '__main__':
+    # topics에 ("monitoring", 0) 추가
+    # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가
+    def handle_monitoring(self, topic, data, publisher):
+        state = {
+            "cpu" : 0.7,
+            "ram" : 0.5,
+            "temperature" : 30,
+            "state" : "None",
+            "available" : self.display.get_status()
+        }
+        state_message = json.dumps(state)
+        self.publisher.publish("monitoring/display", state_message)
 
-    pos = "정문_입차방향" # TODO argparser로 받아야함
+if __name__ == '__main__':
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument('-pos', '--position', type=str, default="")
+    args = argparser.parse_args()
+
+    pos = args.position
+    if pos == '상허문_입차방향' or pos == '상허문_출차방향':
+        port = 60606
+    elif pos == '일감문_입차방향' or pos == '일감문_출차방향':
+        port = 60706
+    elif pos == '건국문_입차방향' or pos == '건국문_출차방향':
+        port = 60806
+    else:
+        raise ValueError("Wrong position")
 
     if "입차" in pos:
         topic = "hardware/server/display/in/to"
@@ -93,7 +116,7 @@ if __name__ == '__main__':
     # TODO 각자에 맞게 고치면 됨
     config = {
             "ip": "127.0.0.1", 
-            "port": 1883, 
+            "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 (topic, 0), 
             ],

@@ -2,12 +2,8 @@ import sys, os
  
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-import MQTTclient
-
-from queue import Queue
-from threading import Thread
 from program import Program
-import time, json
+import argparse, json
 import datetime
 from pyprnt import prnt
 
@@ -82,25 +78,26 @@ class MonitoringProgram(Program):
         if {} not in self.monitoring_state.values():
             prnt(self.monitoring_state)
 
-    # # topics에 ("monitoring", 0) 추가
-    # # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가
-    # def handle_monitoring(self, topic, data, publisher):
-    #     state = {
-    #         "cpu" : 0.7,
-    #         "ram" : 0.5,
-    #         "temperature" : 30,
-    #         "state" : 사용하는 하드웨어에 state 존재하면 넣기 (예. 루프코일 감지 됐는지 안됐는지, 차단기 열렸는지 안열렸는지),
-    #         "available" : 사용하는 하드웨어들 고장났는지 안났는지,
-    #     }
-    #     state_message = json.dumps(state)
-    #     self.publisher.publish("monitoring/하드웨어 이름", state_message)
 
 if __name__ == '__main__':
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument('-pos', '--position', type=str, default="")
+    args = argparser.parse_args()
+
+    pos = args.position
+    if pos == '상허문':
+        port = 60606
+    elif pos == '일감문':
+        port = 60706
+    elif pos == '건국문':
+        port = 60806
+    else:
+        raise ValueError("Wrong position")
 
     # TODO 각자에 맞게 고치면 됨
     config = {
             "ip": "127.0.0.1", 
-            "port": 1883, 
+            "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 ("monitoring/#", 0), 
             ],
