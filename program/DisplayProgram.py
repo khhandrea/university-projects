@@ -2,13 +2,10 @@ import sys, os
  
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-import MQTTclient
 import hardware
 
-from queue import Queue
-from threading import Thread
 from program import Program
-import time, json
+import json, argparse
 import datetime
 from pyprnt import prnt
 
@@ -96,8 +93,19 @@ class DisplayProgram(Program):
         self.publisher.publish("monitoring/display", state_message)
 
 if __name__ == '__main__':
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument('-pos', '--position', type=str, default="")
+    args = argparser.parse_args()
 
-    pos = "정문_입차방향" # TODO argparser로 받아야함
+    pos = args.position
+    if pos == '상허문_입차방향' or pos == '상허문_출차방향':
+        port = 60606
+    elif pos == '일감문_입차방향' or pos == '일감문_출차방향':
+        port = 60706
+    elif pos == '건국문_입차방향' or pos == '건국문_출차방향':
+        port = 60806
+    else:
+        raise ValueError("Wrong position")
 
     if "입차" in pos:
         topic = "hardware/server/display/in/to"
@@ -108,7 +116,7 @@ if __name__ == '__main__':
     # TODO 각자에 맞게 고치면 됨
     config = {
             "ip": "127.0.0.1", 
-            "port": 1883, 
+            "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 (topic, 0), 
             ],

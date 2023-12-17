@@ -139,7 +139,7 @@ if __name__ == '__main__':
     # TODO 각자에 맞게 고치면 됨
     config = {
             "ip": "127.0.0.1", 
-            "port": 1883, 
+            "port": 60106, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 ("hardware/server/parkingDB/from", 0), 
             ],
