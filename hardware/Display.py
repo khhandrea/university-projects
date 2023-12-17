@@ -1,11 +1,11 @@
 from interface.DisplayInterface import DisplayInterface
-from demo import DemoDisplayProgram
+import demo
 
 class Display(DisplayInterface):
     def __init__(self, pos):
         self._pos = pos
         self._status = '정상'
-        self.demo_program = DemoDisplayProgram(self)
+        self.demo_program = demo.DemoDisplayProgram(self)
 
     def get_pos(self):
         return self._pos

@@ -1,1 +1,5 @@
-from demo import *
+from demo.DemoCameraProgram import DemoCameraProgram
+from demo.DemoPayModuleProgram import DemoPayModuleProgram
+from demo.DemoDisplayProgram import DemoDisplayProgram
+from demo.DemoLoopCoilSensorProgram import DemoLoopCoilSensorProgram
+from demo.DemoCrossingGateProgram import DemoCrossingGateProgram

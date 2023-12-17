@@ -1,12 +1,12 @@
 from interface.PayModuleInterface import PayModuleInterface
 from hardware.PayMethod import PayMethod
-from demo import DemoPayModuleProgram
+import demo
 
 class PayModule(PayModuleInterface):
     def __init__(self, pos):
         self._pos = pos
         self._status = '정상'
-        self.demo_program = DemoPayModuleProgram(self)
+        self.demo_program = demo.DemoPayModuleProgram(self)
 
     def get_pos(self):
         return self._pos

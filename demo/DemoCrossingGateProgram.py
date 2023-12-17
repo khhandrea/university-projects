@@ -25,7 +25,7 @@ def callback_example(topic, data, publisher):
 """
 
 
-class CrossingGateProgram(Program):
+class DemoCrossingGateProgram(Program):
     def __init__(self, crossing_gate: CrossingGate):
         self.crossing_gate = crossing_gate
 

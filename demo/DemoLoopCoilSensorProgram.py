@@ -25,7 +25,7 @@ def callback_example(topic, data, publisher):
 """
 
 
-class LoopCoilSensorProgram(Program):
+class DemoLoopCoilSensorProgram(Program):
     def __init__(self, loop_coil_sensor: LoopCoilSensor):
 
         self.loop_coil_sensor = loop_coil_sensor

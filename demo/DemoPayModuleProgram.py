@@ -25,7 +25,7 @@ def callback_example(topic, data, publisher):
 """
 
 
-class PayModuleProgram(Program):
+class DemoPayModuleProgram(Program):
     def __init__(self, pay_module: PayModule):
         self.pay_module = pay_module
 

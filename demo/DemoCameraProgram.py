@@ -25,7 +25,7 @@ def callback_example(topic, data, publisher):
 """
 
 
-class CameraProgram(Program):
+class DemoCameraProgram(Program):
     def __init__(self, camera: Camera):
         self.camera = camera
 
