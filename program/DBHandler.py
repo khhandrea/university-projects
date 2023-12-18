@@ -59,8 +59,6 @@ class DBHandler:
             values.append(value)
         values = '(' + ', '.join(values) + ')'
 
-        print(values)
-
         condition = []
         
         for key in item:
@@ -80,9 +78,6 @@ class DBHandler:
         pk_key, pk_value = get_first(pk)
         key, value = get_first(item)
 
-        if isinstance(pk_value, str):
-            pk_value = f"'{pk_value}'"
-
         self.cur.execute(f'UPDATE {target} SET {key} = {value} WHERE {pk_key} = {pk_value}')
         self.cur.execute(f'SELECT * FROM {target} WHERE {pk_key} = {pk_value}')
         result = str(self.cur.fetchone())
@@ -91,9 +86,6 @@ class DBHandler:
 
     def _delete(self, target: str, pk: dict) -> str:
         pk_key, pk_value = get_first(pk)
-
-        if isinstance(pk_value, str):
-            pk_value = f"'{pk_value}'"
 
         self.cur.execute(f'SELECT * FROM {target} WHERE {pk_key} = {pk_value}')
         result = str(self.cur.fetchone())

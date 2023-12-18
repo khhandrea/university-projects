@@ -11,9 +11,9 @@ class CrossingGate(CrossingGateInterface):
     def set_status(self, status):
         assert status == '정상' or status == '고장'
 
-        print(f'현재 상태 : {self.status}')
-        self.status = status
-        print(f'변경 상태 : {self.status}')
+        print(f'현재 상태 : {self._status}')
+        self._status = status
+        print(f'변경 상태 : {self._status}')
 
     def open(self):
         if self._status != "고장":

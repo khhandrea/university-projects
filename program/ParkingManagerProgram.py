@@ -116,7 +116,9 @@ class ParkingManagerProgram(Program):
         }
         query = dumps(query)
         recognition_info = self.parking_db.get(query)
-        if recognition_info == None:
+        print("여기입니다", recognition_info)
+        print("여기입니다", type(recognition_info))
+        if recognition_info == "None":
             in_time = self.out_time
         else:
             _, in_time = recognition_info[1:-1].split(", ")
@@ -153,7 +155,7 @@ class ParkingManagerProgram(Program):
         }
         query = dumps(query)
         register_info = self.parking_db.get(query)
-        if register_info != None:
+        if register_info != "None":
             dis_cost = cost
             cost -= dis_cost
 
@@ -168,20 +170,10 @@ class ParkingManagerProgram(Program):
         message = dumps(message)
         publisher.publish('hardware/server/display/out/to', message)
 
-        # if cost>0:
-        #     # 결제 수단 요청 (입력) # 0원 초과일 경우에만
-        #     # bill_method = input()# TODO
-        #     bill_method = 'card'
-        #     if bill_method == 'card':
-        #         card_number = 1234567890123333
-        #         cash_billed = 0
-        #     elif bill_method == 'cash':
-        #         card_number = None
-        #         cash_billed = 40000
-        #     # 결제 모듈 (요청)
-        #     publisher.publish('hardware/server/paymodule/out/to', f"{cost}/{bill_method}/{card_number}/{cash_billed}")
+        if cost>0:
+            # 결제 수단 요청 (입력) # 0원 초과일 경우에만
+            publisher.publish('hardware/server/paymodule/to', f"{self.pos}/{cost}")
         
-
         # DB에서 제거
         message = {
             'type': 'delete',
