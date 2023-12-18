@@ -84,18 +84,12 @@ class demoProgram(Program):
 
         enter_publisher = MQTTclient.Publisher(config=config)
 
+        # duration, disabled 전송용
+        enter_publisher.publish("demo/in/duration", duration)
+
         enter_publisher.publish("demo/hardware/camera/in/to/recognition", car_num.strip())
 
         enter_publisher.publish("demo/hardware/loop_coil_sensor/in/1/to/recognition", 'True')
-
-        time.sleep(duration)
-
-        enter_publisher.publish("demo/hardware/loop_coil_sensor/in/1/to/recognition", 'False')
-        enter_publisher.publish("demo/hardware/loop_coil_sensor/in/2/to/recognition", 'True')
-
-        time.sleep(0.5)
-
-        enter_publisher.publish("demo/hardware/loop_coil_sensor/in/2/to/recognition", 'False')
 
     # TODO set_car_image
     def car_exit_event(self):
@@ -107,25 +101,23 @@ class demoProgram(Program):
         assert duration.replace('.','',1).isdigit(), 'Duration should be the shape of float.'
         duration = float(duration)
 
+        disabled_bool = input(">>장애인 여부(예, 아니오): ")
+        assert disabled_bool in ["예", "아니오"], 'Ivalid input. disabled_bool must be "예" or "아니오".'
+        
         config = {
             "ip": "127.0.0.1", 
             "port": self.MQTT_server_info[door_location], 
         }
 
         enter_publisher = MQTTclient.Publisher(config=config)
+
+        # duration, disabled 전송용
+        enter_publisher.publish("demo/out/duration", duration)
+        enter_publisher.publish("demo/out/disabled", disabled_bool)
         
         enter_publisher.publish("demo/hardware/camera/out/to/recognition", car_num.strip())
 
         enter_publisher.publish("demo/hardware/loop_coil_sensor/out/1/to/recognition", 'True')
-
-        time.sleep(duration)
-
-        enter_publisher.publish("demo/hardware/loop_coil_sensor/out/1/to/recognition", 'False')
-        enter_publisher.publish("demo/hardware/loop_coil_sensor/out/2/to/recognition", 'True')
-
-        time.sleep(0.5)
-
-        enter_publisher.publish("demo/hardware/loop_coil_sensor/out/2/to/recognition", 'False')
 
     def car_register_event(self):
         car_num = input(">>차량 번호: ")

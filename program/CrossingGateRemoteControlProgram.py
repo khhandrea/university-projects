@@ -72,14 +72,6 @@ class CrossingGateRemoteControlProgram(Program):
 
         else:
             return -1, -1
-    
-    def get_topic_from_name(self, name): # crossing gate에 보내지 않고 car_recog에 보냄
-        if "입차" in name:
-            return "hardware/server/loop_coil/in/1/to", "hardware/server/loop_coil/in/2/to"
-        elif "출차" in name:
-            return "hardware/server/loop_coil/out/1/to", "hardware/server/loop_coil/out/2/to"
-        else:
-            return -1
         
     def send_log_message(self, location):
         message = f"[원격 차단기 프로그램] 원격 열림 이벤트 발생 ({location})"
@@ -97,11 +89,11 @@ class CrossingGateRemoteControlProgram(Program):
                 name = input(">>차단기 이름: ")
                 assert re.fullmatch(r'(\w+_\w+_\w+)', name), 'Position does not match the required pattern. Position should be "str_str_str".'
 
-                time = float(input(">>시간: "))
+                time = float(input(">>머무르는 시간: "))
+                direction = "in" if "입차" in name else "out"
 
                 self.send_log_message(name)
 
-                first_coil_topic, second_coil_topic = self.get_topic_from_name(name)
                 ip, port = self.get_ip_port_from_name(name)
 
                 if ip == -1 and port == -1:
@@ -115,19 +107,7 @@ class CrossingGateRemoteControlProgram(Program):
                     remote_publisher = MQTTclient.Publisher(config=config)
 
                     time_stamp = self.get_time_stamp()
-                    remote_publisher.publish(first_coil_topic, f"{time_stamp}/True")
-
-                    time.sleep(time)
-                    print(f"{time}초 후..")
-
-                    time_stamp = self.get_time_stamp()
-                    remote_publisher.publish(first_coil_topic, f"{time_stamp}/False")
-                    remote_publisher.publish(second_coil_topic, f"{time_stamp}/True")
-
-                    time.sleep(0.5)
-
-                    time_stamp = self.get_time_stamp()
-                    remote_publisher.publish(second_coil_topic, f"{time_stamp}/False")
+                    remote_publisher.publish("remote", f"{time}/{direction}")
 
 
 if __name__ == '__main__':
