@@ -85,12 +85,12 @@ class CrossingGateProgram(Program):
     # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가
     def handle_monitoring(self, topic, data, publisher):
         state = {
+            "pos" : "차단기_" + self.pos,
             "cpu" : 0.7,
             "ram" : 0.5,
             "temperature" : 30,
             "state" : self.crossing_gate.get_opened(),
             "available" : self.crossing_gate.get_status(),
-            "direction" : self.pos,
         }
         state_message = json.dumps(state)
         self.publisher.publish("monitoring/crossing_gate", state_message)

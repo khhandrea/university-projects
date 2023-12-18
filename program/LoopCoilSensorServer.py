@@ -76,6 +76,7 @@ class LoopCoilSensorServer(Program):
     # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가
     def handle_monitoring(self, topic, data, publisher):
         state = {
+            "pos" : "바닥센서_" + self.pos + "_1",
             "cpu" : 0.7,
             "ram" : 0.5,
             "temperature" : 30,
@@ -86,6 +87,7 @@ class LoopCoilSensorServer(Program):
         self.publisher.publish("monitoring/loop_coil_1_sensor", state_message)
 
         state = {
+            "pos" : "바닥센서_" + self.pos + "_2",
             "cpu" : 0.7,
             "ram" : 0.5,
             "temperature" : 30,
