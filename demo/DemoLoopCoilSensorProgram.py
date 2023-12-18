@@ -88,9 +88,11 @@ class DemoLoopCoilSensorProgram(Program):
         assert data in ['True', 'False'], f'Data should be "True" or "False". Topic from "{topic}"'
 
         if data == 'True':
-            self.demo_publisher.demo_print(f"[{self.name}] 코일이 감지되었습니다.")
-            self.loop_coil_sensor.set_detected(True)
+            if self.loop_coil_sensor.get_status() != "고장":
+                self.demo_publisher.demo_print(f"[{self.name}] 코일이 감지되었습니다.")
+                self.loop_coil_sensor.set_detected(True)
         elif data == 'False':
-            self.demo_publisher.demo_print(f"[{self.name}] 코일 감지가 해제되었습니다.")
-            self.loop_coil_sensor.set_detected(False)
+            if self.loop_coil_sensor.get_status() != "고장":
+                self.demo_publisher.demo_print(f"[{self.name}] 코일 감지가 해제되었습니다.")
+                self.loop_coil_sensor.set_detected(False)
 

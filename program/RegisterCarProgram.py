@@ -28,7 +28,7 @@ class RegisterCarProgram(Program):
                 ("hardware/server/schoolDB/from", 0)
             ],
         }
-
+        
         self.publisher_output = MQTTclient.Publisher(config=config_output)
         super().__init__(self.config, self.topic_dispatcher)
 
@@ -99,6 +99,7 @@ class RegisterCarServer(Program):
         self.pos = '차량등록서버'
         self.school_db_publisher = DBRepository(self.pos, 'schoolDB')
         self.parking_db_publisher = DBRepository(self.pos, 'parkingDB')
+        self.demo_publisher = MQTTclient.DemoPublisher()
 
     def request_member_info(self, identification) -> Tuple:
         data = {
@@ -150,6 +151,8 @@ class RegisterCarServer(Program):
         }
         data = dumps(data)
         self.parking_db_publisher.insert(data)
+        
+        self.demo_publisher.demo_print(f"등록 완료 : {identification}, {car_number}")
 
 def handle_register(topic, data, publisher):
     print(f'{data} to register')

@@ -19,7 +19,8 @@ class LoopCoilSensor(LoopCoilSensorInterface):
 
     # for demo
     def set_detected(self, detected):
-        self._detected = detected
+        if self._status != "고장":
+            self._detected = detected
 
     def set_status(self, status):
         assert status == '정상' or status == '고장'

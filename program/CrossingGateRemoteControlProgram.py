@@ -65,7 +65,8 @@ class CrossingGateRemoteControlProgram(Program):
         query = json.dumps(query)
         data = self.parking_db.get(query)
 
-        if data != None:
+        if data != "None":
+            print(data)
             _, ip, port = data[1:-1].split(", ")
 
             ip = ip.replace("'", "")
