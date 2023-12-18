@@ -7,11 +7,10 @@ from queue import Queue
 
 sys.path.append(dirname(abspath(dirname(__file__))))
 import MQTTclient
-from program import Program
+from program import Program, DBRepository
 
 queue_from_user = Queue()
-queue_from_school_db = Queue()
-queue_from_parking_db = Queue()
+queue_from_pay_module = Queue()
 
 class RegisterCarProgram(Program):
     def __init__(self, config, topic_dispatcher):
@@ -76,32 +75,48 @@ class RegisterCarProgram(Program):
 
     def calculate_cost(self, car_info: Tuple) -> int:
         _, sale_amount = car_info
-        result = int(self.register_fee * (int(sale_amount) / 100))
+        result = int(self.register_fee * (1 - int(sale_amount) / 100))
         return result
 
-    def pay(cost):
-        print('pay')
+    def pay(self, cost):
+        message = f"결제모듈_차량등록서버/{cost}"
+        print('send message to paymodule', message)
+        self.publisher.publish('hardware/server/paymodule/to', message)
+
+        while queue_from_pay_module.empty():
+            pass
+
+        data = queue_from_pay_module.get()
+
+        print(data)
+        
+
+
 
 class RegisterCarServer(Program):
     def __init__(self, config):
         self.config = config
-        self.publisher = MQTTclient.Publisher(config=self.config)
+        self.pos = '차량등록서버'
+        self.school_db_publisher = DBRepository(self.pos, 'schoolDB')
+        self.parking_db_publisher = DBRepository(self.pos, 'parkingDB')
 
     def request_member_info(self, identification) -> Tuple:
         data = {
             'type': 'get',
             'target': 'school_member',
+            'pos': self.pos,
             'pk': {
                 'id': identification
             }
         }
         data = dumps(data)
-        self.publisher.publish("hardware/server/schoolDB/to", data)
-
-        while queue_from_school_db.empty():
-            pass
-
-        data = queue_from_school_db.get()
+        
+        data = self.school_db_publisher.get(data)
+        print('got', data, 'from school')
+        if data == 'None':
+            None
+        else:
+            data = data[1:-1].split(', ')
         return data
 
 
@@ -109,50 +124,42 @@ class RegisterCarServer(Program):
         data = {
             'type': 'get',
             'target': 'sale',
+            'pos': self.pos,
             'pk': {
                 'car_type': car_type
             }
         }
         data = dumps(data)
-        self.publisher.publish("hardware/server/parkingDB/to", data)
-
-        while queue_from_parking_db.empty():
-            pass
-
-        return queue_from_parking_db.get()
+        data = self.parking_db_publisher.get(data)
+        print('got', data, 'from ')
+        if data == 'None':
+            None
+        else:
+            data = data[1:-1].split(', ')
+        return data
 
     def register_car(self, identification: int, car_number: str) -> str:
         data = {
             'type': 'insert',
             'target': 'register',
+            'pos': self.pos,
             'item': {
                 'id': identification,
-                'car': car_number
+                'car_number': car_number
             }
         }
         data = dumps(data)
-        self.publisher.publish("hardware/server/parkingDB/to", data)
+        self.parking_db_publisher.insert(data)
 
 def handle_register(topic, data, publisher):
-    print(f'got {data} to register')
+    print(f'{data} to register')
     data = data.split("/")
     queue_from_user.put(data)
 
-def handle_schoolDB(topic, data, publisher):
-    print(f'got {data} from school')
-    if data == 'None':
-        data = None
-    else:
-        data = data[1:-1].split(', ')
-    queue_from_school_db.put(data)
-
-def handle_parkingDB(topic, data, publisher):
-    print(f'got {data} from parking')
-    if data == 'None':
-        data = None
-    else:
-        data = data[1:-1].split(', ')
-    queue_from_parking_db.put(data)
+def handle_pay_module(topic, data, publisher):
+    print(f'{data} to register')
+    data = data.split("/")
+    queue_from_pay_module.put(data)
 
 if __name__ == '__main__':
 
@@ -161,15 +168,13 @@ if __name__ == '__main__':
             "port": 60406, 
             "topics": [
                 ("hardware/server/registerCarProgram/to", 0),
-                ("hardware/server/parkingDB/from", 0),
-                ("hardware/server/schoolDB/from", 0)
+                ("hardware/server/paymodule/from", 0)
             ],
         }
     
     topic_dispatcher = {
         "hardware/server/registerCarProgram/to": handle_register,
-        "hardware/server/schoolDB/from": handle_schoolDB,
-        "hardware/server/parkingDB/from": handle_parkingDB,
+        "hardware/server/paymodule/from": handle_pay_module
     }
 
     register_car_program = RegisterCarProgram(config=config, topic_dispatcher=topic_dispatcher)
