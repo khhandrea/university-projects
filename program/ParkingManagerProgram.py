@@ -109,6 +109,16 @@ class ParkingManagerProgram(Program):
         message = dumps(message)
         self.parking_db.insert(message)
 
+        end_time = time.time()
+        time.sleep(max(0, queue_in_duration.get() - (end_time - start_time)))
+        # loop coil 2 가동
+        self.publisher.publish("demo/hardware/loop_coil_sensor/in/1/to/recognition", 'False')
+        self.publisher.publish("demo/hardware/loop_coil_sensor/in/2/to/recognition", 'True')
+
+        time.sleep(0.5)
+
+        self.publisher.publish("demo/hardware/loop_coil_sensor/in/2/to/recognition", 'False')
+
     def handle_car_recog_out(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
@@ -210,6 +220,7 @@ class ParkingManagerProgram(Program):
         end_time = time.time()
         time.sleep(max(0, queue_out_duration.get() - (end_time - start_time)))
         # loop coil 2 가동
+        self.publisher.publish("demo/hardware/loop_coil_sensor/out/1/to/recognition", 'False')
         self.publisher.publish("demo/hardware/loop_coil_sensor/out/2/to/recognition", 'True')
 
         time.sleep(0.5)
