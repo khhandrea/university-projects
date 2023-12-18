@@ -85,6 +85,7 @@ class DisplayProgram(Program):
     # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가
     def handle_monitoring(self, topic, data, publisher):
         state = {
+            "pos" : "디스플레이_" + self.pos,
             "cpu" : 0.7,
             "ram" : 0.5,
             "temperature" : 30,

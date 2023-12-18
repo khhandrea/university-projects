@@ -80,6 +80,7 @@ class CarRecogProgram(Program):
 
     def handle_monitoring(self, topic, data, publisher):
         state = {
+            "pos" : "카메라_" + self.pos,
             "cpu" : 0.7,
             "ram" : 0.5,
             "temperature" : 30,

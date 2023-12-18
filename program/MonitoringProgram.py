@@ -6,8 +6,10 @@ from program import Program
 import argparse, json
 import datetime
 from pyprnt import prnt
+from queue import Queue
+from threading import Semaphore
 
-
+screen_lock = Semaphore(value=1)
 
 """
 
@@ -25,6 +27,8 @@ def callback_example(topic, data, publisher):
 
 """
 
+monitoring_queue = Queue()
+
 
 class MonitoringProgram(Program):
     def __init__(self, config):
@@ -34,7 +38,11 @@ class MonitoringProgram(Program):
         # topic: handler 순으로 추가하면 된다.
         # 원하는 topic에 해당하는 반응을 구현하면 됨
         topic_dispatcher = {
-            "monitoring/#": self.handle_monitoring,
+            "monitoring/loop_coil_1_sensor" : self.handle_monitoring,
+            "monitoring/loop_coil_2_sensor" : self.handle_monitoring,
+            "monitoring/camera" : self.handle_monitoring,
+            "monitoring/crossing_gate" : self.handle_monitoring,
+            "monitoring/display" : self.handle_monitoring,
         }
         self.topic_dispatcher = topic_dispatcher
 
@@ -55,6 +63,9 @@ class MonitoringProgram(Program):
                 # self.monitoring_state = {"pay_module": {}, "car_recog_server": {}, "crossing_gate_server": {}, "display_server": {}, "loop_coil_server": {}}
 
                 self.publisher.publish("monitoring", "")
+
+                
+
 
     
     # TODO 각자에 맞게 추가하면 됨
@@ -77,7 +88,10 @@ class MonitoringProgram(Program):
         # # monitoring이 다 모였으면 출력
         # if {} not in self.monitoring_state.values():
         monitoring_data = json.loads(data)
+        screen_lock.acquire()
         prnt(monitoring_data)
+        screen_lock.release()
+        # monitoring_queue.put(monitoring_data)
 
 
 if __name__ == '__main__':
@@ -100,7 +114,11 @@ if __name__ == '__main__':
             "ip": "127.0.0.1", 
             "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
-                ("monitoring/#", 0), 
+                ("monitoring/loop_coil_1_sensor", 0), 
+                ("monitoring/loop_coil_2_sensor", 0), 
+                ("monitoring/camera", 0), 
+                ("monitoring/crossing_gate", 0), 
+                ("monitoring/display", 0), 
             ],
         }
 
