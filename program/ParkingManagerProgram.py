@@ -92,7 +92,7 @@ class ParkingManagerProgram(Program):
         print(f"topic: {topic}")
         print(f"data: {data}")
 
-        self.start_time = time.time()
+        start_time = time.time()
 
         publisher.publish('hardware/server/crossing_gate/in/to', 'open')
         
@@ -112,6 +112,9 @@ class ParkingManagerProgram(Program):
     def handle_car_recog_out(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
+
+        start_time = time.time()
+
         # log = f"[{self.pos}_차량인식서버_출차방향] 차랑 번호 인식 이벤트 발생 (차량 번호: {self.car_num})"
         # self.publisher.publish("hardware/server/logDB/to", make_log_data(log))
         self.out_time, self.car_num = data.split('/')
@@ -205,7 +208,7 @@ class ParkingManagerProgram(Program):
         self.parking_db.delete(message)
 
         end_time = time.time()
-        time.sleep(max(end_time-self.start_time, queue_out_duration.get()))
+        time.sleep(max(0, queue_out_duration.get() - (end_time - start_time)))
         # loop coil 2 가동
         self.publisher.publish("demo/hardware/loop_coil_sensor/out/2/to/recognition", 'True')
 
