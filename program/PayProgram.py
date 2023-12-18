@@ -26,7 +26,7 @@ class PayProgram(Program):
         print(f'결제 {price}원 내야 합니다.')
         pay_method = input('결제 수단: ')
 
-        if pay_method == 'card':
+        if pay_method == 'card' or pay_method == '카드':
             pay_info = int(input('카드 번호: '))
             pay_info_name = '카드 번호'
             complete = True
@@ -43,20 +43,19 @@ class PayProgram(Program):
 
     def start(self):
         while True:
-            if not queue.empty():
-                pos, price = queue.get()
-                message, log = self.pay(price)
-                data = {
-                    'type': 'insert',
-                    'target': 'log',
-                    'item': {
-                        'message': log
-                    }
+            pos, price = queue.get()
+            message, log = self.pay(price)
+            data = {
+                'type': 'insert',
+                'target': 'log',
+                'item': {
+                    'message': log
                 }
-                data = dumps(data)
+            }
+            data = dumps(data)
 
-                self.log_publisher.log(data)
-                self.publisher.publish(f"hardware/server/paymodule/{pos}/from", message)
+            self.log_publisher.log(data)
+            self.publisher.publish("hardware/server/paymodule/from", message)
 
 def handle_payment(topic, data, publisher):
     data = data.split('/')
@@ -79,6 +78,8 @@ if __name__ == '__main__':
         port = 60406
     else:
         raise ValueError("Wrong position")
+    
+    print(port)
 
     config = {
             "ip": "127.0.0.1", 

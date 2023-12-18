@@ -69,8 +69,8 @@ class LoopCoilSensorServer(Program):
                 log = f"[바닥센서_{self.pos}_2] (인식: True)"
                 self.log_publisher.log(log)
                 self.demo_publisher.demo_print(log)
-            # print('loop_coil', coil_1_detected, coil_2_detected)
-            # time.sleep(1)
+
+            time.sleep(0.5)
 
     # topics에 ("monitoring", 0) 추가
     # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가

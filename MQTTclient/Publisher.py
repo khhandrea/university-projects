@@ -22,6 +22,8 @@ class Publisher:
         print(str(rc))
 
     def publish(self, topic, message):
+        print("topic", topic)
+        print("message" , message)
         self.client.publish(topic, message.encode('utf8'))
 
     
