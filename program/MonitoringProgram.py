@@ -52,31 +52,32 @@ class MonitoringProgram(Program):
             event = input(">>>이벤트 입력: ")
 
             if event == "모니터링":
-                self.monitoring_state = {"pay_module": {}, "car_recog_server": {}, "crossing_gate_server": {}, "display_server": {}, "loop_coil_server": {}}
+                # self.monitoring_state = {"pay_module": {}, "car_recog_server": {}, "crossing_gate_server": {}, "display_server": {}, "loop_coil_server": {}}
 
                 self.publisher.publish("monitoring", "")
 
     
     # TODO 각자에 맞게 추가하면 됨
     def handle_monitoring(self, topic, data, publisher):
-        if "paymodule" in topic:
-            self.monitoring_state["pay_module"] = json.loads(data)
+        # if "paymodule" in topic:
+        #     self.monitoring_state["pay_module"] = json.loads(data)
 
-        elif "car_recog" in topic:
-            self.monitoring_state["car_recog_server"] = json.loads(data)
+        # elif "car_recog" in topic:
+        #     self.monitoring_state["car_recog_server"] = json.loads(data)
 
-        elif "crossing_gate" in topic:
-            self.monitoring_state["crossing_gate_server"] = json.loads(data)
+        # elif "crossing_gate" in topic:
+        #     self.monitoring_state["crossing_gate_server"] = json.loads(data)
 
-        elif "display" in topic:
-            self.monitoring_state["display_server"] = json.loads(data)
+        # elif "display" in topic:
+        #     self.monitoring_state["display_server"] = json.loads(data)
 
-        elif "loop_coil" in topic:
-            self.monitoring_state["loop_coil_server"] = json.loads(data)
+        # elif "loop_coil" in topic:
+        #     self.monitoring_state["loop_coil_server"] = json.loads(data)
 
-        # monitoring이 다 모였으면 출력
-        if {} not in self.monitoring_state.values():
-            prnt(self.monitoring_state)
+        # # monitoring이 다 모였으면 출력
+        # if {} not in self.monitoring_state.values():
+        monitoring_data = json.loads(data)
+        prnt(monitoring_data)
 
 
 if __name__ == '__main__':
