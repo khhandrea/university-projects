@@ -211,9 +211,7 @@ class ParkingManagerProgram(Program):
             if is_pay_complete:
                 break
         
-          
         publisher.publish('hardware/server/crossing_gate/out/to', 'open')
-        self.out_time, self.car_num = "", ""
 
         # DB에서 제거
         message = {
