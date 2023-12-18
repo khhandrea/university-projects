@@ -22,8 +22,8 @@ class Display(DisplayInterface):
 
     def display_print(self, cost: int, dis_cost: int, car_num: int, in_time: str, out_time: str):
         if self._status != "고장":
-            message = f'[디스플레이_{self.pos}]\n차량 번호 : {car_num}\n입차 시간 : {in_time}\n출차 시간 : {out_time}\n이용 금액 : {cost+dis_cost}원\n할인된 금액 : {dis_cost}원\n결제할 금액 : {cost}원'
+            message = f'[디스플레이_{self._pos}]\n차량 번호 : {car_num}\n입차 시간 : {in_time}\n출차 시간 : {out_time}\n이용 금액 : {cost+dis_cost}원\n할인된 금액 : {dis_cost}원\n결제할 금액 : {cost}원'
             return message
         else:
-            message = f'[디스플레이_{self.pos}]\ndisplay 고장'
+            message = f'[디스플레이_{self._pos}]\ndisplay 고장'
         return message
