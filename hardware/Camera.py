@@ -26,4 +26,6 @@ class Camera(CameraInterface):
         self.image = image
 
     def capture(self):
+        if self._status == '고장':
+            return None
         return self.image

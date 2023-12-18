@@ -61,7 +61,7 @@ class CarRecogProgram(Program):
         img = self.camera.capture()
         car_num = self.img_to_carnum(img)
         now = datetime.now().strftime("%Y%m%d_%H%M%S")
-        log = f"[{self.pos}_카메라] (차량번호: {car_num})"
+        log = f"[카메라_{self.pos}] (차량번호: {car_num})"
         self.log_publisher.log(log)
         self.demo_publisher.demo_print(log)
         publisher.publish('hardware/server/car_recog/in/from', f'{now}/{car_num}')
@@ -72,7 +72,7 @@ class CarRecogProgram(Program):
         img = self.camera.capture()
         car_num = self.img_to_carnum(img)
         now = datetime.now().strftime("%Y%m%d_%H%M%S")
-        log = f"[{self.pos}_카메라] (차량번호: {car_num})"
+        log = f"[카메라_{self.pos}] (차량번호: {car_num})"
         self.log_publisher.log(log)
         self.demo_publisher.demo_print(log)
         publisher.publish('hardware/server/car_recog/out/from', f'{now}/{car_num}')
