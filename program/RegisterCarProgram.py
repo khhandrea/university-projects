@@ -58,7 +58,7 @@ class RegisterCarProgram(Program):
             self.register_car_server.register_car(identification, car_number)
         return 'Registered successfully'
 
-    def check_valid_info(self, certificated: Tuple, identification: Tuple) -> bool:
+    def check_valid_info(self, certificated: Tuple, identification: int) -> bool:
         if certificated == None:
             return False
         else:
