@@ -23,19 +23,23 @@ class PayProgram(Program):
         complete = False
         change = 0
 
-        print(f'결제 {price}원 내야 합니다.')
+        print(f'결제 금액 {price}원을 내야 합니다.')
         pay_method = input('결제 수단: ')
 
         if pay_method == 'card' or pay_method == '카드':
             pay_info = int(input('카드 번호: '))
             pay_info_name = '카드 번호'
             complete = True
+            print(f'[결제모듈_{pos}] {price}원 카드 결제 성공')
         else: # cash
             pay_info = int(input('금액: '))
             pay_info_name = '현금'
+            change = pay_info - price
             if pay_info >= price:
                 complete = True
-            change = pay_info - price
+                print(f'[결제모듈_{pos}] {price}원 현금 결제 성공: 거스름돈 {change}원')
+            else:
+                print(f'[결제모듈_{pos}] {price}원 현금 결제 실패: {-change}원 부족')
 
         log = f"[결제모듈_{pos}] 결제 이벤트 발생 (가격: {price}, 방법: {pay_method}, {pay_info_name}: {pay_info}"
         message = '/'.join((str(complete), str(change)))

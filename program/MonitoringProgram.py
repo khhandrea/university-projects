@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from program import Program
 import argparse, json
-import datetime
+import datetime, time
 from pyprnt import prnt
 from queue import Queue
 from threading import Semaphore
@@ -63,6 +63,7 @@ class MonitoringProgram(Program):
                 # self.monitoring_state = {"pay_module": {}, "car_recog_server": {}, "crossing_gate_server": {}, "display_server": {}, "loop_coil_server": {}}
 
                 self.publisher.publish("monitoring", "")
+            time.sleep(2)
 
                 
 

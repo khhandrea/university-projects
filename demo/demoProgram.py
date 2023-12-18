@@ -56,6 +56,7 @@ class demoProgram(Program):
 
 
         self.queue_msg = Queue()
+        self.demo_publisher = MQTTclient.DemoPublisher()
 
         super().__init__(self.config, self.topic_dispatcher)
 
@@ -65,8 +66,30 @@ class demoProgram(Program):
 
         return current_time
 
+    def help_event(self):
+        self.demo_publisher.demo_print("도움말 이벤트")
+        self.demo_publisher.demo_print(" 이벤트 입력 리스트")
+        self.demo_publisher.demo_print(" - 입차")
+        self.demo_publisher.demo_print(" - 출차")
+        self.demo_publisher.demo_print(" - 차량등록")
+        self.demo_publisher.demo_print(" - 고장남")
+        self.demo_publisher.demo_print(" - 고쳐짐\n")
+        self.demo_publisher.demo_print(" 문 리스트")
+        self.demo_publisher.demo_print(" - 건국문")
+        self.demo_publisher.demo_print(" - 일감문")
+        self.demo_publisher.demo_print(" - 상허문\n")
+        self.demo_publisher.demo_print(" HW 리스트")
+        self.demo_publisher.demo_print(" - 카메라")
+        self.demo_publisher.demo_print(" - 바닥센서_1")
+        self.demo_publisher.demo_print(" - 바닥센서_2")
+        self.demo_publisher.demo_print(" - 차단기")
+        self.demo_publisher.demo_print(" - 디스플레이")
+        self.demo_publisher.demo_print(" - 결제 모듈\n")
+
+
     # TODO set_car_image
     def car_enter_event(self):
+        self.demo_publisher.demo_print("입차 이벤트")
         car_num = input(">>차량 번호: ")
         door_location = input(">>문 위치: ")
         assert door_location in self.MQTT_server_info, 'Invalid door location. Door location should be one of "등록", "상허문", "일감문" ,"건국문".'
@@ -91,6 +114,7 @@ class demoProgram(Program):
         enter_publisher.publish("demo/hardware/loop_coil_sensor/in/1/to/recognition", 'True')
 
     def car_exit_event(self):
+        self.demo_publisher.demo_print("출차 이벤트")
         car_num = input(">>차량 번호: ")
         door_location = input(">>문 위치: ")
         assert door_location in self.MQTT_server_info, 'Invalid door location. Door location should be one of "등록", "상허문", "일감문" ,"건국문".'
@@ -118,6 +142,7 @@ class demoProgram(Program):
         enter_publisher.publish("demo/hardware/loop_coil_sensor/out/1/to/recognition", 'True')
 
     def car_register_event(self):
+        self.demo_publisher.demo_print("차량등록 이벤트")
         car_num = input(">>차량 번호: ")
 
         # TODO Add assert
@@ -139,6 +164,7 @@ class demoProgram(Program):
         enter_publisher.publish("hardware/server/registerCarProgram/to", data) # TODO topic 환희랑 맞춰야함 
            
     def broken_event(self):
+        self.demo_publisher.demo_print("하드웨어 고장 이벤트")
         pos = input(">>객체 이름: ")
         assert re.fullmatch(r'(\w+_\w+)|(\w+_\w+_\w+)|(\w+_\w+_\w+_\d+)', pos), 'Position does not match the required pattern. Position should be "str_str", "str_str_str", or "str_str_str_int".'
 
@@ -183,6 +209,7 @@ class demoProgram(Program):
 
 
     def repair_event(self):
+        self.demo_publisher.demo_print("하드웨어 수리 이벤트")
         pos = input(">>객체 이름: ")
         assert re.fullmatch(r'(\w+_\w+)|(\w+_\w+_\w+)|(\w+_\w+_\w+_\d+)', pos), 'Position does not match the required pattern. Position should be "str_str", "str_str_str", or "str_str_str_int".'
 
@@ -230,7 +257,10 @@ class demoProgram(Program):
         while True:
             event = input(">>이벤트 입력: ")
 
-            if event == "입차":
+            if event == "도움말":
+                self.help_event()
+
+            elif event == "입차":
                 self.car_enter_event()
 
             elif event == "출차":
@@ -244,6 +274,8 @@ class demoProgram(Program):
 
             elif event == "고쳐짐":
                 self.repair_event()
+
+            print()
 
 if __name__ == '__main__':
 
