@@ -35,10 +35,19 @@ class DemoCrossingGateProgram(Program):
         
         self.demo_publisher = MQTTclient.DemoPublisher()
 
+        if '상허문' in self.pos:
+            port = 60606
+        elif '일감문' in self.pos:
+            port = 60706
+        elif '건국문' in self.pos:
+            port = 60806
+        else:
+            raise ValueError("Wrong position")
+
         self.direction = "in" if self.direction == "입차방향" else "out"
         self.config = {
             "ip": "127.0.0.1", 
-            "port": 60506, 
+            "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 (f"demo/hardware/crossing_gate/{self.direction}/to/broken", 0), 
             ],

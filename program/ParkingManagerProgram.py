@@ -43,7 +43,7 @@ class ParkingManagerProgram(Program):
             'hardware/server/loop_coil/out/2/from': self.handle_loop_coil_out_2,
             'hardware/server/car_recog/in/from': self.handle_car_recog_in,
             'hardware/server/car_recog/out/from': self.handle_car_recog_out,
-            'hardware/server/paymodule/out/from': self.handle_paymodule
+            'hardware/server/paymodule/out/from': self.handle_paymodule,
         }
 
         self.parking_db = DBRepository(pos=self.pos, db_name="parkingDB")
@@ -51,7 +51,8 @@ class ParkingManagerProgram(Program):
         super().__init__(self.config, self.topic_dispatcher)
 
     def start(self):
-        pass
+        while True:
+            pass
 
     def handle_parkingDB(topic, data, publisher):
         print(f'got {data} to parkingDB')
@@ -74,7 +75,6 @@ class ParkingManagerProgram(Program):
         publisher.publish('hardware/server/car_recog/out/to', 'capture')
 
     def handle_loop_coil_out_2(self, topic, data, publisher):
-        print('받음!')
         print(f"topic: {topic}")
         print(f"data: {data}")
         publisher.publish('hardware/server/crossing_gate/out/to', 'close')
@@ -91,7 +91,7 @@ class ParkingManagerProgram(Program):
             'pos': self.pos,
             'target': 'recognition',
             'item': {
-                'car_num': data.split('/')[1],
+                'car_number': data.split('/')[1],
                 'time': data.split('/')[0]
             }
         }
@@ -106,7 +106,16 @@ class ParkingManagerProgram(Program):
         self.out_time, self.car_num = data.split('/')
 
         # 로그 불러오기 (입차 시간)
-        recognition_info = self.request_recognition_info(self.car_num)
+        query = {
+            'type': 'get',
+            'pos' : self.pos,
+            'target': 'recognition',
+            'pk': {
+                'car_number': self.car_num
+            }
+        }
+        query = dumps(query)
+        recognition_info = self.parking_db.get(query)
         if recognition_info == None:
             in_time = self.out_time
         else:
@@ -135,12 +144,13 @@ class ParkingManagerProgram(Program):
         # 등록 여부 확인 (정기권 차량)
         query = {
             'type': 'get',
+            'pos' : self.pos,
             'target': 'register',
             'pk': {
-                'car_num': self.car_num
+                'car_number': self.car_num
             }
         }
-        query = dumps(query).encode('utf8')
+        query = dumps(query)
         register_info = self.parking_db.get(query)
         if register_info != None:
             dis_cost = cost
@@ -174,10 +184,10 @@ class ParkingManagerProgram(Program):
             'pos': self.pos,
             'target': 'recognition',
             'pk':{
-                'car_num': self.car_num
+                'car_number': self.car_num
             }
         }
-        message = dumps(message).encode('utf8')
+        message = dumps(message)
         self.parking_db.delete(message)
     
     def handle_paymodule(self, topic, data, publisher):

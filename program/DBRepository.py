@@ -30,7 +30,7 @@ def callback_example(topic, data, publisher):
 class DBRepository(Program):
     def __init__(self, pos, db_name):
         self.pos = pos
-        self.topic_to = f"hardware/server/{db_name}/{self.pos}/to"
+        self.topic_to = f"hardware/server/{db_name}/to"
         self.topic_from = f"hardware/server/{db_name}/{self.pos}/from"
 
 

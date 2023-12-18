@@ -39,11 +39,21 @@ class DemoCameraProgram(Program):
 
         self.direction = "in" if self.direction == "입차방향" else "out"
 
+        if '상허문' in self.pos:
+            port = 60606
+        elif '일감문' in self.pos:
+            port = 60706
+        elif '건국문' in self.pos:
+            port = 60806
+        else:
+            raise ValueError("Wrong position")
+
         self.config = {
             "ip": "127.0.0.1", 
-            "port": 60506, 
+            "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 (f"demo/hardware/camera/{self.direction}/to/broken", 0), 
+                (f"demo/hardware/camera/{self.direction}/to/recognition", 0), 
             ],
         }
 
@@ -52,6 +62,7 @@ class DemoCameraProgram(Program):
         # 원하는 topic에 해당하는 반응을 구현하면 됨
         topic_dispatcher = {
             f"demo/hardware/camera/{self.direction}/to/broken": self.handle_broken,
+            f"demo/hardware/camera/{self.direction}/to/recognition": self.handle_image,
         }
 
         self.topic_dispatcher = topic_dispatcher
@@ -71,4 +82,6 @@ class DemoCameraProgram(Program):
             self.camera.set_status('정상')
             self.demo_publisher.demo_print(f"[{self.name}] {self.camera.get_status()}으로 변경되었습니다.")
     
-
+    def handle_image(self, topic, data, publisher):
+        print(data)
+        self.camera.set_image([data])

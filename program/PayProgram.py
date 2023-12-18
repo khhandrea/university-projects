@@ -54,7 +54,6 @@ class PayProgram(Program):
                     }
                 }
                 data = dumps(data)
-                data = data.encode('euc-kr')
 
                 self.log_publisher.log(data)
                 self.publisher.publish(f"hardware/server/paymodule/{pos}/from", message)

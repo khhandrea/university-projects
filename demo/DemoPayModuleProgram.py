@@ -35,10 +35,21 @@ class DemoPayModuleProgram(Program):
 
         self.demo_publisher = MQTTclient.DemoPublisher()
 
+        if self.pos == '상허문':
+            port = 60606
+        elif self.pos == '일감문':
+            port = 60706
+        elif self.pos == '건국문':
+            port = 60806
+        elif self.pos == '차량등록서버':
+            port = 60406
+        else:
+            raise ValueError("Wrong position")
+
         self.direction = "in" if self.direction == "입차방향" else "out"
         self.config = {
             "ip": "127.0.0.1", 
-            "port": 60506, 
+            "port": port, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
                 (f"demo/hardware/pay_module/{self.direction}/to/broken", 0), 
             ],

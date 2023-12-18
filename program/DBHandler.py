@@ -67,8 +67,8 @@ class DBHandler:
             else:
                 condition.append(f"{key} = {item[key]}")
         condition = ' AND '.join(condition)
-        self.cur.execute(f'INSERt INTO {target} VALUES{values}')
-        self.cur.execute('SELECT * FROM {target} WHERE {condition}')
+        self.cur.execute(f'INSERT INTO {target} VALUES{values}')
+        self.cur.execute(f'SELECT * FROM {target} WHERE {condition}')
         result = str(self.cur.fetchone())
         
         return result
