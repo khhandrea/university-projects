@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, time
 from json import dumps
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -15,6 +15,10 @@ from program import make_log_data
 import argparse
 
 queue_from_parking_db = Queue()
+queue_paymodule = Queue()
+queue_disabled = Queue()
+queue_in_duration = Queue()
+queue_out_duration = Queue()
 
 """
 
@@ -36,6 +40,7 @@ class ParkingManagerProgram(Program):
     def __init__(self, config, pos):
         self.config = config
         self.pos = pos
+        self.start_time = 0
         self.topic_dispatcher = {
             'hardware/server/loop_coil/in/1/from': self.handle_loop_coil_in_1,
             'hardware/server/loop_coil/in/2/from': self.handle_loop_coil_in_2,
@@ -43,7 +48,11 @@ class ParkingManagerProgram(Program):
             'hardware/server/loop_coil/out/2/from': self.handle_loop_coil_out_2,
             'hardware/server/car_recog/in/from': self.handle_car_recog_in,
             'hardware/server/car_recog/out/from': self.handle_car_recog_out,
-            'hardware/server/paymodule/out/from': self.handle_paymodule,
+            'hardware/server/paymodule/from': self.handle_paymodule,
+            'demo/in/duration': self.handle_in_duration,
+            'demo/out/duration': self.handle_out_duration,
+            'demo/out/disabled': self.handle_disabled,
+            'remote': self.handle_remote,
         }
 
         self.parking_db = DBRepository(pos=self.pos, db_name="parkingDB")
@@ -83,6 +92,8 @@ class ParkingManagerProgram(Program):
         print(f"topic: {topic}")
         print(f"data: {data}")
 
+        self.start_time = time.time()
+
         publisher.publish('hardware/server/crossing_gate/in/to', 'open')
         
         # recognition DB에 추가
@@ -116,12 +127,11 @@ class ParkingManagerProgram(Program):
         }
         query = dumps(query)
         recognition_info = self.parking_db.get(query)
-        print("여기입니다", recognition_info)
-        print("여기입니다", type(recognition_info))
         if recognition_info == "None":
             in_time = self.out_time
         else:
             _, in_time = recognition_info[1:-1].split(", ")
+            in_time = in_time[1:-1]
         # 요금 계산
         time_min = (self.str_to_sec(self.out_time) - self.str_to_sec(in_time))//60
         if time_min <= 15:
@@ -138,9 +148,9 @@ class ParkingManagerProgram(Program):
             cost = min(1500 + (time_min - 30)//10 * 500, 30000)
             dis_cost = 0
             # 장애인 차량 여부 확인 (입력)
-            # disabled = input(">>장애인 차량 여부(yes, no) :")
-            disabled = "yes"
-            if disabled == "yes":
+            
+            disabled = queue_disabled.get()
+            if disabled:
                 dis_cost = cost//2
                 cost -= dis_cost
 
@@ -170,10 +180,17 @@ class ParkingManagerProgram(Program):
         message = dumps(message)
         publisher.publish('hardware/server/display/out/to', message)
 
-        if cost>0:
+        while cost>0:
             # 결제 수단 요청 (입력) # 0원 초과일 경우에만
             publisher.publish('hardware/server/paymodule/to', f"{self.pos}/{cost}")
-        
+            is_pay_complete = queue_paymodule.get()
+
+            if is_pay_complete:
+                    break
+          
+        publisher.publish('hardware/server/crossing_gate/out/to', 'open')
+        self.out_time, self.car_num = "", ""
+
         # DB에서 제거
         message = {
             'type': 'delete',
@@ -185,30 +202,61 @@ class ParkingManagerProgram(Program):
         }
         message = dumps(message)
         self.parking_db.delete(message)
+
+        end_time = time.time()
+        time.sleep(max(end_time-self.start_time, queue_out_duration.get()))
+        # loop coil 2 가동
+        self.publisher.publish("demo/hardware/loop_coil_sensor/out/2/to/recognition", 'True')
+
+        time.sleep(0.5)
+
+        self.publisher.publish("demo/hardware/loop_coil_sensor/out/2/to/recognition", 'False')
     
     def handle_paymodule(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
         # 성공했을 시, 문 열기
-        if "True" in data:
-            publisher.publish('hardware/server/crossing_gate/out/to', 'open')
-            self.out_time, self.car_num = "", ""
-        else:
-            publisher.publish('hardware/server/car_recog/out/from', self.out_time+"/"+self.car_num)
+        result = True if "True" in data else False
+        print("here is handle_paymodule")
+        print(result)
+        queue_paymodule.put(result)
+
+    def handle_in_duration(self, topic, data, publisher):
+        print(f"topic: {topic}")
+        print(f"data: {data}")
+        queue_in_duration.put(float(data))
+
+    def handle_out_duration(self, topic, data, publisher):
+        print(f"topic: {topic}")
+        print(f"data: {data}")
+        queue_out_duration.put(float(data))
+
+    def handle_disabled(self, topic, data, publisher):
+        print(f"topic: {topic}")
+        print(f"data: {data}")
+        result = True if "True" in data else False
+        queue_disabled.put(result)
+
+    def handle_remote(self, topic, data, publisher):
+        print(f"topic: {topic}")
+        print(f"data: {data}")
+        duration, direction = data.split('/')
+        # 차단기 열기
+        publisher.publish(f'hardware/server/crossing_gate/{direction}/to', 'open')
+
+        # duration만큼 기다리기
+        time.sleep(duration)
+
+        # loop coil 2 가동
+        self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/2/to/recognition", 'True')
+        time.sleep(0.5)
+        self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/2/to/recognition", 'False')
 
     def str_to_sec(self, t):
-        # month_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        # # YYMMDD_HHmmSS -> min
-        # m = int(t[0:2]) - 1
-        # m = m*365 + month_days[:int(t[2:4])].sum()
-        # m += int(t[4:6]) - 1
-        # m = m * 24 + int(t[7:9])
-        m = int(t[10:12])
-        m = m * 60 + int(t[12:14])
-        m = m * 60 + int(t[14:16])
+        cur_time = datetime.strptime(t, "%Y%m%d_%H%M%S")
+        m = cur_time.hour * 3600 + cur_time.minute * 60 + cur_time.second
         return m
-    
-    
+
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
@@ -235,7 +283,11 @@ if __name__ == '__main__':
                 ('hardware/server/loop_coil/out/2/from', 0),
                 ('hardware/server/car_recog/in/from', 0),
                 ('hardware/server/car_recog/out/from', 0),
-                ('hardware/server/paymodule/out/from', 0)
+                ('hardware/server/paymodule/from', 0),
+                ('demo/in/duration', 0),
+                ('demo/out/duration', 0),
+                ('demo/out/disabled', 0),
+                ('remote', 0)
             ],
         }
     

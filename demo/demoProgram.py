@@ -85,7 +85,7 @@ class demoProgram(Program):
         enter_publisher = MQTTclient.Publisher(config=config)
 
         # duration, disabled 전송용
-        enter_publisher.publish("demo/in/duration", duration)
+        enter_publisher.publish("demo/in/duration", str(duration))
 
         enter_publisher.publish("demo/hardware/camera/in/to/recognition", car_num.strip())
 
@@ -112,7 +112,7 @@ class demoProgram(Program):
         enter_publisher = MQTTclient.Publisher(config=config)
 
         # duration, disabled 전송용
-        enter_publisher.publish("demo/out/duration", duration)
+        enter_publisher.publish("demo/out/duration", str(duration))
         enter_publisher.publish("demo/out/disabled", disabled_bool)
         
         enter_publisher.publish("demo/hardware/camera/out/to/recognition", car_num.strip())
