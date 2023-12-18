@@ -74,8 +74,6 @@ class demoProgram(Program):
         duration = input(">>머무르는 시간: ")
         assert duration.replace('.','',1).isdigit(), 'Duration should be shape of float.'
         duration = float(duration)
-
-
         
 
         config = {
@@ -85,6 +83,9 @@ class demoProgram(Program):
         print("port:", self.MQTT_server_info[door_location])
 
         enter_publisher = MQTTclient.Publisher(config=config)
+
+        enter_publisher.publish("demo/hardware/camera/in/to/recognition", car_num.strip())
+
         enter_publisher.publish("demo/hardware/loop_coil_sensor/in/1/to/recognition", 'True')
 
         time.sleep(duration)
@@ -112,6 +113,9 @@ class demoProgram(Program):
         }
 
         enter_publisher = MQTTclient.Publisher(config=config)
+        
+        enter_publisher.publish("demo/hardware/camera/out/to/recognition", car_num.strip())
+
         enter_publisher.publish("demo/hardware/loop_coil_sensor/out/1/to/recognition", 'True')
 
         time.sleep(duration)

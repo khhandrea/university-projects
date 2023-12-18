@@ -22,7 +22,7 @@ class LogPublisher:
         print(str(rc))
 
     def publish(self, topic, message):
-        self.client.publish(topic, message)
+        self.client.publish(topic, message.encode("utf8"))
 
     def log(self, message):
         print(f"publish {message} to logDB")
@@ -33,7 +33,7 @@ class LogPublisher:
                 "message": message
             }
         }
-        query = dumps(query).encode('utf8')
+        query = dumps(query)
         self.publish("hardware/server/logDB/to", query)
 
     

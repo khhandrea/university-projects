@@ -25,7 +25,7 @@ class ParkingDBHandler(Program, DBHandler):
                 data = queue.get()
                 pos = data['pos']
 
-                message = self.handle(data).encode('euc-kr')
+                message = self.handle(data)
 
                 topic = f"hardware/server/parkingDB/{pos}/from"
                 print(f'send {message} to {topic}')

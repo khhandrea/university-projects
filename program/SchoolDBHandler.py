@@ -24,7 +24,7 @@ class SchoolDBHandler(Program, DBHandler):
             if not queue.empty():
                 data = queue.get()
                 pos = data['pos']
-                message = self.handle(data).encode('euc-kr')
+                message = self.handle(data)
                 topic = f"hardware/server/schoolDB/{pos}/from"
                 print(f'send {message} to topic')
                 self.publisher.publish(topic, message)

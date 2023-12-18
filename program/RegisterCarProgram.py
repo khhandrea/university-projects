@@ -38,7 +38,6 @@ class RegisterCarProgram(Program):
             if not queue_from_user.empty():
                 car_number, car_type, identification = queue_from_user.get()
                 message = self.register_car(car_number, car_type, identification)
-                message = message.encode('euc-kr')
                 print('message:', message)
                 self.publisher_output.publish("hardware/server/registerCarProgram/from", message)
 
@@ -96,7 +95,7 @@ class RegisterCarServer(Program):
                 'id': identification
             }
         }
-        data = dumps(data).encode('euc-kr')
+        data = dumps(data)
         self.publisher.publish("hardware/server/schoolDB/to", data)
 
         while queue_from_school_db.empty():
@@ -114,7 +113,7 @@ class RegisterCarServer(Program):
                 'car_type': car_type
             }
         }
-        data = dumps(data).encode('euc-kr')
+        data = dumps(data)
         self.publisher.publish("hardware/server/parkingDB/to", data)
 
         while queue_from_parking_db.empty():
@@ -131,7 +130,7 @@ class RegisterCarServer(Program):
                 'car': car_number
             }
         }
-        data = dumps(data).encode('euc-kr')
+        data = dumps(data)
         self.publisher.publish("hardware/server/parkingDB/to", data)
 
 def handle_register(topic, data, publisher):

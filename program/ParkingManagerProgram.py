@@ -43,7 +43,7 @@ class ParkingManagerProgram(Program):
             'hardware/server/loop_coil/out/2/from': self.handle_loop_coil_out_2,
             'hardware/server/car_recog/in/from': self.handle_car_recog_in,
             'hardware/server/car_recog/out/from': self.handle_car_recog_out,
-            'hardware/server/paymodule/out/from': self.handle_paymodule
+            'hardware/server/paymodule/out/from': self.handle_paymodule,
         }
 
         self.parking_db = DBRepository(pos=self.pos, db_name="parkingDB")
@@ -51,7 +51,8 @@ class ParkingManagerProgram(Program):
         super().__init__(self.config, self.topic_dispatcher)
 
     def start(self):
-        pass
+        while True:
+            pass
 
     def handle_parkingDB(topic, data, publisher):
         print(f'got {data} to parkingDB')
@@ -74,7 +75,6 @@ class ParkingManagerProgram(Program):
         publisher.publish('hardware/server/car_recog/out/to', 'capture')
 
     def handle_loop_coil_out_2(self, topic, data, publisher):
-        print('받음!')
         print(f"topic: {topic}")
         print(f"data: {data}")
         publisher.publish('hardware/server/crossing_gate/out/to', 'close')
@@ -91,7 +91,7 @@ class ParkingManagerProgram(Program):
             'pos': self.pos,
             'target': 'recognition',
             'item': {
-                'car_num': data.split('/')[1],
+                'car_number': data.split('/')[1],
                 'time': data.split('/')[0]
             }
         }
@@ -106,11 +106,20 @@ class ParkingManagerProgram(Program):
         self.out_time, self.car_num = data.split('/')
 
         # 로그 불러오기 (입차 시간)
-        recognition_info = self.request_recognition_info(self.car_num)
+        query = {
+            'type': 'get',
+            'pos' : self.pos,
+            'target': 'recognition',
+            'pk': {
+                'car_number': self.car_num
+            }
+        }
+        query = dumps(query)
+        recognition_info = self.parking_db.get(query)
         if recognition_info == None:
             in_time = self.out_time
         else:
-            _, in_time = recognition_info
+            _, in_time = recognition_info[1:-1].split(", ")
         # 요금 계산
         time_min = (self.str_to_sec(self.out_time) - self.str_to_sec(in_time))//60
         if time_min <= 15:
@@ -127,7 +136,8 @@ class ParkingManagerProgram(Program):
             cost = min(1500 + (time_min - 30)//10 * 500, 30000)
             dis_cost = 0
             # 장애인 차량 여부 확인 (입력)
-            disabled = input(">>장애인 차량 여부(yes, no) :")
+            # disabled = input(">>장애인 차량 여부(yes, no) :")
+            disabled = "yes"
             if disabled == "yes":
                 dis_cost = cost//2
                 cost -= dis_cost
@@ -135,12 +145,13 @@ class ParkingManagerProgram(Program):
         # 등록 여부 확인 (정기권 차량)
         query = {
             'type': 'get',
+            'pos' : self.pos,
             'target': 'register',
             'pk': {
-                'car_num': self.car_num
+                'car_number': self.car_num
             }
         }
-        query = dumps(query).encode('utf8')
+        query = dumps(query)
         register_info = self.parking_db.get(query)
         if register_info != None:
             dis_cost = cost
@@ -154,11 +165,13 @@ class ParkingManagerProgram(Program):
             'in_time': in_time,
             'out_time': self.out_time
         }
+        message = dumps(message)
         publisher.publish('hardware/server/display/out/to', message)
 
         if cost>0:
             # 결제 수단 요청 (입력) # 0원 초과일 경우에만
-            bill_method = input()# TODO
+            # bill_method = input()# TODO
+            bill_method = 'card'
             if bill_method == 'card':
                 card_number = 1234567890123333
                 cash_billed = 0
@@ -174,10 +187,10 @@ class ParkingManagerProgram(Program):
             'pos': self.pos,
             'target': 'recognition',
             'pk':{
-                'car_num': self.car_num
+                'car_number': self.car_num
             }
         }
-        message = dumps(message).encode('utf8')
+        message = dumps(message)
         self.parking_db.delete(message)
     
     def handle_paymodule(self, topic, data, publisher):
@@ -197,9 +210,9 @@ class ParkingManagerProgram(Program):
         # m = m*365 + month_days[:int(t[2:4])].sum()
         # m += int(t[4:6]) - 1
         # m = m * 24 + int(t[7:9])
-        m = int(t[7:9])
-        m = m * 60 + int(t[9:11])
-        m = m * 60 + int(t[11:13])
+        m = int(t[10:12])
+        m = m * 60 + int(t[12:14])
+        m = m * 60 + int(t[14:16])
         return m
     
     

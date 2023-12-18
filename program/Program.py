@@ -26,6 +26,8 @@ class Program:
             message = self.queue.get()  
             if message:
                 callback = self.topic_dispatcher.get(message.topic, self.handle_unknown_topic)
+                # print(message.payload)
+                # print(message.topic)
                 callback(message.topic, message.payload.decode('utf8'), self.publisher)
 
     def handle_unknown_topic(self, topic, data, publisher):

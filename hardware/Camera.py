@@ -6,6 +6,7 @@ class Camera(CameraInterface):
         self._pos = pos # posiiton of device
         self._status = '정상'
         self.demo_program = demo.DemoCameraProgram(self)
+        self.image = ['12가1235']
 
     def set_status(self, status):
         assert status == '정상' or status == '고장'
@@ -19,8 +20,10 @@ class Camera(CameraInterface):
     
     def get_status(self):
         return self._status
+    
+    def set_image(self, image):
+        print('set image 불림')
+        self.image = image
 
     def capture(self):
-        # TODO implement image
-        image = ['12가1235']
-        return image
+        return self.image
