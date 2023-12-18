@@ -52,10 +52,6 @@ class CrossingGateProgram(Program):
         super().__init__(self.config, self.topic_dispatcher)
 
     def start(self):
-        # TODO 각자에 맞게 고치면 됨
-        # while True:
-        #     self.publisher.publish("hardware/sensors/loopcoil", "ji")
-        #     time.sleep(1)
         pass
 
     def handle_in(self, topic, data, publisher):

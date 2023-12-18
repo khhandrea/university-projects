@@ -16,10 +16,12 @@ class CrossingGate(CrossingGateInterface):
         print(f'변경 상태 : {self.status}')
 
     def open(self):
-        self._opened = '열림'
+        if self._status != "고장":
+            self._opened = '열림'
 
     def close(self):
-        self._opened = '닫힘'
+        if self._status != "고장":
+            self._opened = '닫힘'
 
     def get_pos(self):
         return self._pos
@@ -30,6 +32,3 @@ class CrossingGate(CrossingGateInterface):
     def get_opened(self):
         return self._opened
     
-    def signal(self):
-        # TODO: get signal from self.loop_coil
-        pass

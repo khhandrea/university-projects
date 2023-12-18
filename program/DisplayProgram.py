@@ -3,6 +3,7 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 import hardware
+import MQTTclient
 
 from program import Program
 import json, argparse
@@ -50,6 +51,9 @@ class DisplayProgram(Program):
 
         self.display = hardware.Display(pos=self.pos)
 
+        self.log_publisher = MQTTclient.LogPublisher()
+        self.demo_publisher = MQTTclient.DemoPublisher()
+
         super().__init__(self.config, self.topic_dispatcher)
 
     def get_time_stamp(self):
@@ -64,12 +68,8 @@ class DisplayProgram(Program):
 
     
     # TODO 각자에 맞게 추가하면 됨
-    def handle_display(self, topic, data, publisher):
-        print(data)
-        
+    def handle_display(self, topic, data, publisher):        
         data = json.loads(data)
-
-        print(data)
 
         cost: int = data["cost"]
         dis_cost: int = data["dis_cost"]
@@ -77,7 +77,9 @@ class DisplayProgram(Program):
         in_time: str = data["in_time"]
         out_time: str = data["out_time"]
 
-        self.display.display_print(cost=cost, dis_cost=dis_cost, car_num=car_num, in_time=in_time, out_time=out_time)
+        log = self.display.display_print(cost=cost, dis_cost=dis_cost, car_num=car_num, in_time=in_time, out_time=out_time)
+        self.log_publisher.log(log)
+        self.demo_publisher.demo_print(log)
 
     # topics에 ("monitoring", 0) 추가
     # topic_dispatcherd에 "monitoring" : self.handle_monitoring 추가
