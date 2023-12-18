@@ -271,6 +271,7 @@ class ParkingManagerProgram(Program):
         time.sleep(duration)
 
         # loop coil 2 가동
+        self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/1/to/recognition", 'False')
         self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/2/to/recognition", 'True')
         time.sleep(0.5)
         self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/2/to/recognition", 'False')
