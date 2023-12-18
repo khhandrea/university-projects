@@ -40,7 +40,7 @@ class demoProgram(Program):
         self.topic_dispatcher = topic_dispatcher
 
         self.MQTT_server_info = {
-            "등록"   : 60406,
+            "등록" : 60406,
             "상허문" : 60606,
             "일감문" : 60706,
             "건국문" : 60806,
@@ -90,7 +90,6 @@ class demoProgram(Program):
 
         enter_publisher.publish("demo/hardware/loop_coil_sensor/in/1/to/recognition", 'True')
 
-    # TODO set_car_image
     def car_exit_event(self):
         car_num = input(">>차량 번호: ")
         door_location = input(">>문 위치: ")
@@ -102,7 +101,7 @@ class demoProgram(Program):
 
         disabled_bool = input(">>장애인 여부(예, 아니오): ")
         assert disabled_bool in ["예", "아니오"], 'Ivalid input. disabled_bool must be "예" or "아니오".'
-        
+
         config = {
             "ip": "127.0.0.1", 
             "port": self.MQTT_server_info[door_location], 
@@ -127,11 +126,11 @@ class demoProgram(Program):
 
         id = input(">>신원 id: ")
         assert id.isdigit(), 'Id should be the shape of integer.'
-        id = float(id)
+        id = int(id)
 
         config = {
             "ip": "127.0.0.1", 
-            "port": "60406",
+            "port": self.MQTT_server_info["등록"], 
         }
 
         data = f"{car_num}/{car_cartegory}/{id}"
