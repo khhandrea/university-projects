@@ -4,6 +4,7 @@ class Subscriber:
 
     def __init__(self, config, queue):
         self.client = mqtt.Client(userdata=queue)
+        self.client.keepalive = 10
         self.config = config
 
         self.client.on_connect = self.on_connect

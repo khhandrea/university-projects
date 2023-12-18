@@ -268,13 +268,10 @@ class ParkingManagerProgram(Program):
         publisher.publish(f'hardware/server/crossing_gate/{direction}/to', 'open')
 
         # duration만큼 기다리기
-        time.sleep(duration)
+        time.sleep(float(duration))
 
         # loop coil 2 가동
-        self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/1/to/recognition", 'False')
-        self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/2/to/recognition", 'True')
-        time.sleep(0.5)
-        self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/2/to/recognition", 'False')
+        publisher.publish(f'hardware/server/crossing_gate/{direction}/to', 'close')
 
     def str_to_time(self, t):
         cur_time = datetime.strptime(t, "%Y%m%d_%H%M%S")

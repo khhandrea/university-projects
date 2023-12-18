@@ -30,18 +30,19 @@ def callback_example(topic, data, publisher):
 class CrossingGateRemoteControlProgram(Program):
     def __init__(self, config):
         self.config = config
+        self.pos = "remote"
 
         # TODO 각자에 맞게 고치면 됨
         # topic: handler 순으로 추가하면 된다.
         # 원하는 topic에 해당하는 반응을 구현하면 됨
         topic_dispatcher = {
-            "hardware/server/parkingDB/from": self.handle_parkingDB,
+            
         }
         self.topic_dispatcher = topic_dispatcher
 
         self.log_publisher = MQTTclient.LogPublisher()
         self.demo_publisher = MQTTclient.DemoPublisher()
-        self.parking_db = DBRepository(pos="remote", db_name="mqtt_server")
+        self.parking_db = DBRepository(pos=self.pos, db_name="parkingDB")
 
         super().__init__(self.config, self.topic_dispatcher)
 
@@ -54,6 +55,7 @@ class CrossingGateRemoteControlProgram(Program):
 
     def get_ip_port_from_name(self, name):
         query = {
+            "pos": self.pos,
             "type": "get", 
             "target": "mqtt_server", 
             "pk": {"name": f"{name}"}, 
@@ -61,11 +63,14 @@ class CrossingGateRemoteControlProgram(Program):
             }
         
         query = json.dumps(query)
+        print(query)
         data = self.parking_db.get(query)
+        print(data)
 
         if data != None:
-            _, ip, port = data
+            _, ip, port = data[1:-1].split(", ")
 
+            ip = ip.replace("'", "")
             port = int(port)
 
             return ip, port
@@ -100,9 +105,11 @@ class CrossingGateRemoteControlProgram(Program):
                     print("없는 차단기 입니다.")
                 else:
                     config = {
-                        "ip": f"{ip}", 
+                        "ip": ip, 
                         "port": port, 
                     }
+
+                    print(config)
 
                     remote_publisher = MQTTclient.Publisher(config=config)
 
@@ -117,7 +124,6 @@ if __name__ == '__main__':
             "ip": "127.0.0.1", 
             "port": 60106, 
             "topics": [ # (topic, qos) 순으로 넣으면 subcribe됨
-                ("hardware/server/parkingDB/from", 0), 
             ],
         }
 

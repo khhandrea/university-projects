@@ -5,11 +5,14 @@ class LogPublisher:
 
     def __init__(self):
         self.client = mqtt.Client()
+        self.client.keepalive = 10
 
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
 
         self.client.connect("127.0.0.1", 60906)
+
+        self.client.loop_start()
         
 
     def on_connect(self, client, userdata, flags, rc):
