@@ -80,7 +80,6 @@ class demoProgram(Program):
             "ip": "127.0.0.1", 
             "port": self.MQTT_server_info[door_location], 
         }
-        print("port:", self.MQTT_server_info[door_location])
 
         enter_publisher = MQTTclient.Publisher(config=config)
 
@@ -180,8 +179,6 @@ class demoProgram(Program):
 
             topic = f"demo/hardware/{hardware_name}/{topic_direction}/to/broken"
 
-        print(topic)
-        print(config)
         broken_publisher = MQTTclient.Publisher(config=config)
         broken_publisher.publish(topic, '고장')
 

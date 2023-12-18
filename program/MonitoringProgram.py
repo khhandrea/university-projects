@@ -89,6 +89,7 @@ class MonitoringProgram(Program):
         # if {} not in self.monitoring_state.values():
         monitoring_data = json.loads(data)
         screen_lock.acquire()
+        print()
         prnt(monitoring_data)
         screen_lock.release()
         # monitoring_queue.put(monitoring_data)

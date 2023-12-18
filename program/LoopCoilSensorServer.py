@@ -56,19 +56,19 @@ class LoopCoilSensorServer(Program):
                 cur_status = 1
                 log = f"[바닥센서_{self.pos}_1] (인식: True)"
                 self.log_publisher.log(log)
-                self.demo_publisher.demo_print(log)
+                # self.demo_publisher.demo_print(log)
     
             coil_2_detected = self.loop_coil_sensor_2.get_detected()
             # 차량이 통과할 때까지 확인 / 대기
             if cur_status == 1 and coil_2_detected:
                 now = datetime.now()
                 self.publisher.publish(f'hardware/server/loop_coil/{pos}/2/from', f'{now.strftime("%Y%m%d_%H%M%S")}/True') # 게이트에서 나감 신호
-                print(f"topic: hardware/server/loop_coil/{pos}/2/from")
-                print(f'data: {now.strftime("%Y%m%d_%H%M%S")}/True')
+                # print(f"topic: hardware/server/loop_coil/{pos}/2/from")
+                # print(f'data: {now.strftime("%Y%m%d_%H%M%S")}/True')
                 cur_status = 0
                 log = f"[바닥센서_{self.pos}_2] (인식: True)"
                 self.log_publisher.log(log)
-                self.demo_publisher.demo_print(log)
+                # self.demo_publisher.demo_print(log)
 
             time.sleep(0.5)
 

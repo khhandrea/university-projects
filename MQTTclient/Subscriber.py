@@ -21,16 +21,18 @@ class Subscriber:
         
 
     def on_connect(self, client, userdata, flags, rc):
-        if rc == 0:
-            print("connected OK")
-        else:
-            print("Bad connection Returned code=", rc)
+        # if rc == 0:
+        #     print("connected OK")
+        # else:
+        #     print("Bad connection Returned code=", rc)
+        pass
 
     def on_disconnect(self, client, userdata, flags, rc=0):
         print(str(rc))
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
-        print("subscribed: " + str(mid) + " " + str(granted_qos))
+        # print("subscribed: " + str(mid) + " " + str(granted_qos))
+        pass
 
     def on_message(self, client, userdata, msg):
         userdata.put(msg)

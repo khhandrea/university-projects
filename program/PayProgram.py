@@ -78,8 +78,6 @@ if __name__ == '__main__':
         port = 60406
     else:
         raise ValueError("Wrong position")
-    
-    print(port)
 
     config = {
             "ip": "127.0.0.1", 

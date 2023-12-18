@@ -63,9 +63,7 @@ class CrossingGateRemoteControlProgram(Program):
             }
         
         query = json.dumps(query)
-        print(query)
         data = self.parking_db.get(query)
-        print(data)
 
         if data != None:
             _, ip, port = data[1:-1].split(", ")
@@ -108,8 +106,6 @@ class CrossingGateRemoteControlProgram(Program):
                         "ip": ip, 
                         "port": port, 
                     }
-
-                    print(config)
 
                     remote_publisher = MQTTclient.Publisher(config=config)
 
