@@ -7,7 +7,7 @@ import MQTTclient
  
 from queue import Queue
 from program import Program
-from datetime import datetime
+from datetime import datetime, timedelta
 from program import DBRepository
 
 from program import make_log_data
@@ -146,26 +146,36 @@ class ParkingManagerProgram(Program):
             _, in_time = recognition_info[1:-1].split(", ")
             in_time = in_time[1:-1]
         # 요금 계산
-        time_min = (self.str_to_sec(self.out_time) - self.str_to_sec(in_time))//60
-        if time_min <= 15:
-            cost = 0
-            dis_cost = 0
-        elif time_min <= 30:
-            cost = 1500
-            dis_cost = 0
-        else:
-            # 최초 30분까지는 1,500원
-            # 이후 10분 당 500원
-            # 1일 최고 30,000원
-
-            cost = min(1500 + (time_min - 30)//10 * 500, 30000)
-            dis_cost = 0
-            # 장애인 차량 여부 확인 (입력)
+        start_date = datetime.strptime(in_time, "%Y%m%d_%H%M%S").date()
+        flag = start_date
+        end_date = datetime.strptime(self.out_time, "%Y%m%d_%H%M%S").date()
+        cost, dis_cost = 0, 0
+        while flag <= end_date:
+            if flag == start_date:
+                temp_in_time = self.str_to_time(in_time)
+            else:
+                temp_in_time = 0
+            if flag == end_date:
+                temp_out_time = self.str_to_time(self.out_time)
+            else:
+                temp_out_time = 86400
+            time_min = (temp_out_time - temp_in_time)//60
+            if time_min <= 15:
+                cost += 0
+            elif time_min <= 30:
+                cost += 1500
+            else:
+                # 최초 30분까지는 1,500원
+                # 이후 10분 당 500원
+                # 1일 최고 30,000원
+                cost += min(1500 + (time_min - 30)//10 * 500, 30000)
+                # 장애인 차량 여부 확인 (입력)
+            flag += timedelta(days=1)
             
-            disabled = queue_disabled.get()
-            if disabled:
-                dis_cost = cost//2
-                cost -= dis_cost
+        disabled = queue_disabled.get()
+        if disabled:
+            dis_cost = cost//2
+            cost -= dis_cost
 
         # 등록 여부 확인 (정기권 차량)
         query = {
@@ -267,7 +277,7 @@ class ParkingManagerProgram(Program):
         time.sleep(0.5)
         self.publisher.publish(f"demo/hardware/loop_coil_sensor/{direction}/2/to/recognition", 'False')
 
-    def str_to_sec(self, t):
+    def str_to_time(self, t):
         cur_time = datetime.strptime(t, "%Y%m%d_%H%M%S")
         m = cur_time.hour * 3600 + cur_time.minute * 60 + cur_time.second
         return m
