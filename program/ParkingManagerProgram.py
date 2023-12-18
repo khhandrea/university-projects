@@ -186,7 +186,8 @@ class ParkingManagerProgram(Program):
             is_pay_complete = queue_paymodule.get()
 
             if is_pay_complete:
-                    break
+                break
+        
           
         publisher.publish('hardware/server/crossing_gate/out/to', 'open')
         self.out_time, self.car_num = "", ""
@@ -234,7 +235,7 @@ class ParkingManagerProgram(Program):
     def handle_disabled(self, topic, data, publisher):
         print(f"topic: {topic}")
         print(f"data: {data}")
-        result = True if "True" in data else False
+        result = True if "예" in data else False
         queue_disabled.put(result)
 
     def handle_remote(self, topic, data, publisher):
@@ -287,7 +288,7 @@ if __name__ == '__main__':
                 ('demo/in/duration', 0),
                 ('demo/out/duration', 0),
                 ('demo/out/disabled', 0),
-                ('remote', 0)
+                ('remote', 0), 
             ],
         }
     
