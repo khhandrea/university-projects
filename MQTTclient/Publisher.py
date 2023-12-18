@@ -22,7 +22,7 @@ class Publisher:
         print(str(rc))
 
     def publish(self, topic, message):
-        self.client.publish(topic, message)
+        self.client.publish(topic, message.encode('utf8'))
 
     
 

@@ -21,11 +21,11 @@ class DemoPublisher:
         print(str(rc))
 
     def publish(self, topic, message):
-        self.client.publish(topic, message.encode("euc-kr"))
+        self.client.publish(topic, message.encode("utf8"))
 
     def demo_print(self, message):
         print(f"publish {message} to demo cli")
-        self.publish("demo/print", message.encode("euc-kr"))
+        self.publish("demo/print", message)
 
     
 
