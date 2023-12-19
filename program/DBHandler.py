@@ -1,5 +1,4 @@
 import sqlite3
-from typing import Tuple
 
 def get_first(target: dict):
     key = list(target.keys())[0]
@@ -18,21 +17,22 @@ class DBHandler:
         type = data['type']
         target = data['target']
 
-        result = 'None'
-
-        if type == 'get':
-            pk = data['pk']
-            result = self._get(target, pk)
-        elif type == 'insert':
-            item = data['item']
-            result = self._insert(target, item)
-        elif type == 'update':
-            pk = data['pk']
-            result = item = data['item']
-            self._update(target, pk, item)
-        elif type == 'delete':
-            pk = data['pk']
-            result = self._delete(target, pk)
+        try:
+            if type == 'get':
+                pk = data['pk']
+                result = self._get(target, pk)
+            elif type == 'insert':
+                item = data['item']
+                result = self._insert(target, item)
+            elif type == 'update':
+                pk = data['pk']
+                result = item = data['item']
+                self._update(target, pk, item)
+            elif type == 'delete':
+                pk = data['pk']
+                result = self._delete(target, pk)
+        except:
+            result = 'None'
         
         return result
     
