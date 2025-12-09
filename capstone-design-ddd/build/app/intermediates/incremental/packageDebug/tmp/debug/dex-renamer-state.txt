@@ -1,0 +1,4 @@
+#Mon Jun 05 05:09:36 KST 2023
+base.0=C\:\\Users\\arefi\\OneDrive\\Desktop\\new klab\\daily_diet_date\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
