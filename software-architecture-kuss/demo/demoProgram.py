@@ -1,0 +1,292 @@
+import sys, os
+ 
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+import MQTTclient
+
+from queue import Queue
+from program import Program
+import time, datetime, re
+
+
+
+"""
+
+고쳐야할 것:
+  - ProgramExample - start
+  - config
+  - topic_dispathcer
+
+
+def callback_example(topic, data, publisher):
+    print(f"topic: {topic}")
+    print(f"data: {data}")
+
+--> 이런 식으로 (topic, data, publisher)를 무조건 받아야함.
+
+"""
+
+
+class demoProgram(Program):
+    def __init__(self, config):
+        self.config = config
+
+        # TODO 각자에 맞게 고치면 됨
+        # topic: handler 순으로 추가하면 된다.
+        # 원하는 topic에 해당하는 반응을 구현하면 됨
+        topic_dispatcher = {
+            
+        }
+        self.topic_dispatcher = topic_dispatcher
+
+        self.MQTT_server_info = {
+            "등록" : 60406,
+            "상허문" : 60606,
+            "일감문" : 60706,
+            "건국문" : 60806,
+        }
+
+        self.MQTT_hardware_topic = {
+            "카메라" : "camera",
+            "차단기" : "crossing_gate",
+            "디스플레이" : "display",
+            "바닥센서" : "loop_coil_sensor",
+            "결제모듈" : "pay_module",
+        }
+
+
+        self.queue_msg = Queue()
+        self.demo_publisher = MQTTclient.DemoPublisher()
+
+        super().__init__(self.config, self.topic_dispatcher)
+
+    def get_time_stamp(self):
+        current_time = datetime.datetime.today() # 2021-08-15 20:58:43.302125
+        current_time =  current_time.strftime('%Y%m%d_%H%M%S') # 20210815_205827
+
+        return current_time
+
+    def help_event(self):
+        self.demo_publisher.demo_print("도움말 이벤트")
+        self.demo_publisher.demo_print(" 이벤트 입력 리스트")
+        self.demo_publisher.demo_print(" - 입차")
+        self.demo_publisher.demo_print(" - 출차")
+        self.demo_publisher.demo_print(" - 차량등록")
+        self.demo_publisher.demo_print(" - 고장남")
+        self.demo_publisher.demo_print(" - 고쳐짐\n")
+        self.demo_publisher.demo_print(" 문 리스트")
+        self.demo_publisher.demo_print(" - 건국문")
+        self.demo_publisher.demo_print(" - 일감문")
+        self.demo_publisher.demo_print(" - 상허문\n")
+        self.demo_publisher.demo_print(" HW 리스트")
+        self.demo_publisher.demo_print(" - 카메라")
+        self.demo_publisher.demo_print(" - 바닥센서_1")
+        self.demo_publisher.demo_print(" - 바닥센서_2")
+        self.demo_publisher.demo_print(" - 차단기")
+        self.demo_publisher.demo_print(" - 디스플레이")
+        self.demo_publisher.demo_print(" - 결제 모듈\n")
+
+
+    # TODO set_car_image
+    def car_enter_event(self):
+        self.demo_publisher.demo_print("입차 이벤트")
+        car_num = input(">>차량 번호: ")
+        door_location = input(">>문 위치: ")
+        assert door_location in self.MQTT_server_info, 'Invalid door location. Door location should be one of "등록", "상허문", "일감문" ,"건국문".'
+
+        duration = input(">>머무르는 시간: ")
+        assert duration.replace('.','',1).isdigit(), 'Duration should be shape of float.'
+        duration = float(duration)
+        
+
+        config = {
+            "ip": "127.0.0.1", 
+            "port": self.MQTT_server_info[door_location], 
+        }
+
+        enter_publisher = MQTTclient.Publisher(config=config)
+
+        # duration, disabled 전송용
+        enter_publisher.publish("demo/in/duration", str(duration))
+
+        enter_publisher.publish("demo/hardware/camera/in/to/recognition", car_num.strip())
+
+        enter_publisher.publish("demo/hardware/loop_coil_sensor/in/1/to/recognition", 'True')
+
+    def car_exit_event(self):
+        self.demo_publisher.demo_print("출차 이벤트")
+        car_num = input(">>차량 번호: ")
+        door_location = input(">>문 위치: ")
+        assert door_location in self.MQTT_server_info, 'Invalid door location. Door location should be one of "등록", "상허문", "일감문" ,"건국문".'
+
+        duration = input(">>머무르는 시간: ")
+        assert duration.replace('.','',1).isdigit(), 'Duration should be the shape of float.'
+        duration = float(duration)
+
+        disabled_bool = input(">>장애인 여부(예, 아니오): ")
+        assert disabled_bool in ["예", "아니오"], 'Ivalid input. disabled_bool must be "예" or "아니오".'
+
+        config = {
+            "ip": "127.0.0.1", 
+            "port": self.MQTT_server_info[door_location], 
+        }
+
+        enter_publisher = MQTTclient.Publisher(config=config)
+
+        # duration, disabled 전송용
+        enter_publisher.publish("demo/out/duration", str(duration))
+        enter_publisher.publish("demo/out/disabled", disabled_bool)
+        
+        enter_publisher.publish("demo/hardware/camera/out/to/recognition", car_num.strip())
+
+        enter_publisher.publish("demo/hardware/loop_coil_sensor/out/1/to/recognition", 'True')
+
+    def car_register_event(self):
+        self.demo_publisher.demo_print("차량등록 이벤트")
+        car_num = input(">>차량 번호: ")
+
+        # TODO Add assert
+        car_cartegory = input(">>차량 구분: ")
+    
+
+        id = input(">>신원 id: ")
+        assert id.isdigit(), 'Id should be the shape of integer.'
+        id = int(id)
+
+        config = {
+            "ip": "127.0.0.1", 
+            "port": self.MQTT_server_info["등록"], 
+        }
+
+        data = f"{car_num}/{car_cartegory}/{id}"
+
+        enter_publisher = MQTTclient.Publisher(config=config)
+        enter_publisher.publish("hardware/server/registerCarProgram/to", data) # TODO topic 환희랑 맞춰야함 
+           
+    def broken_event(self):
+        self.demo_publisher.demo_print("하드웨어 고장 이벤트")
+        pos = input(">>객체 이름: ")
+        assert re.fullmatch(r'(\w+_\w+)|(\w+_\w+_\w+)|(\w+_\w+_\w+_\d+)', pos), 'Position does not match the required pattern. Position should be "str_str", "str_str_str", or "str_str_str_int".'
+
+        if "등록" in pos:
+            hardware_name, location = pos.split("_")
+
+            hardware_name = self.MQTT_hardware_topic[hardware_name]
+            config = {
+                "ip": "127.0.0.1", 
+                "port": self.MQTT_server_info[location], 
+            }
+            topic_location = "register"
+
+            topic = f"demo/hardware/{hardware_name}/{topic_location}/to/broken"
+
+        elif "바닥센서" in pos:
+            hardware_name, location, direction, num = pos.split("_")
+
+            hardware_name = self.MQTT_hardware_topic[hardware_name]
+            config = {
+                "ip": "127.0.0.1", 
+                "port": self.MQTT_server_info[location], 
+            }
+            topic_direction = "in" if direction == "입차방향" else "out"
+
+            topic = f"demo/hardware/{hardware_name}/{topic_direction}/{num}/to/broken"
+
+        else:
+            hardware_name, location, direction = pos.split("_")
+
+            hardware_name = self.MQTT_hardware_topic[hardware_name]
+            config = {
+                "ip": "127.0.0.1", 
+                "port": self.MQTT_server_info[location], 
+            }
+            topic_direction = "in" if direction == "입차방향" else "out"
+
+            topic = f"demo/hardware/{hardware_name}/{topic_direction}/to/broken"
+
+        broken_publisher = MQTTclient.Publisher(config=config)
+        broken_publisher.publish(topic, '고장')
+
+
+    def repair_event(self):
+        self.demo_publisher.demo_print("하드웨어 수리 이벤트")
+        pos = input(">>객체 이름: ")
+        assert re.fullmatch(r'(\w+_\w+)|(\w+_\w+_\w+)|(\w+_\w+_\w+_\d+)', pos), 'Position does not match the required pattern. Position should be "str_str", "str_str_str", or "str_str_str_int".'
+
+        if "등록" in pos:
+            hardware_name, location = pos.split("_")
+
+            hardware_name = self.MQTT_hardware_topic[hardware_name]
+            config = {
+                "ip": "127.0.0.1", 
+                "port": self.MQTT_server_info[location], 
+            }
+            topic_location = "register"
+
+            topic = f"demo/hardware/{hardware_name}/{topic_location}/to/broken"
+
+        elif "바닥센서" in pos:
+            hardware_name, location, direction, num = pos.split("_")
+
+            hardware_name = self.MQTT_hardware_topic[hardware_name]
+            config = {
+                "ip": "127.0.0.1", 
+                "port": self.MQTT_server_info[location], 
+            }
+            topic_direction = "in" if direction == "입차방향" else "out"
+
+            topic = f"demo/hardware/{hardware_name}/{topic_direction}/{num}/to/broken"
+
+        else:
+            hardware_name, location, direction = pos.split("_")
+
+            hardware_name = self.MQTT_hardware_topic[hardware_name]
+            config = {
+                "ip": "127.0.0.1", 
+                "port": self.MQTT_server_info[location], 
+            }
+            topic_direction = "in" if direction == "입차방향" else "out"
+
+            topic = f"demo/hardware/{hardware_name}/{topic_direction}/to/broken"
+
+        repair_publisher = MQTTclient.Publisher(config=config)
+        repair_publisher.publish(topic, '정상')
+
+    # TODO 각자에 맞게 고치면 됨
+    def start(self):
+        while True:
+            event = input(">>이벤트 입력: ")
+
+            if event == "도움말":
+                self.help_event()
+
+            elif event == "입차":
+                self.car_enter_event()
+
+            elif event == "출차":
+                self.car_exit_event()
+
+            elif event == "차량등록":
+                self.car_register_event()
+
+            elif event == "고장남":
+                self.broken_event()
+
+            elif event == "고쳐짐":
+                self.repair_event()
+
+            print()
+
+if __name__ == '__main__':
+
+    # TODO 각자에 맞게 고치면 됨
+    config = {
+            "ip": "127.0.0.1", 
+            "port": 60506, 
+            "topics": [],
+        }
+
+    demo_program = demoProgram(config=config)
+    demo_program.start()
+    
+
