@@ -1,0 +1,12 @@
+linearQue { size, max_size, front, rear, data }
+
+create(max_size)    ::= create que of which size is 'max_size'
+init(dq)            ::= reset 'q'
+is_empty(dq)        ::= TRUE when 'dq' is empty
+is_full(dq)         ::= TRUE when 'dq' is full
+add_front(dq, e)    ::= ERROR when is_full, add 'e' in front of 'q'
+add_rear(dq, e)     ::= ERROR when is_full, add 'e' in the rear of 'q'
+delete_front(dq)    ::= ERROR when is_empty, delete and return the front element
+delete_rear(dq)     ::= ERROR when is_empty, delete and return the rear element
+get_front(dq)       ::= ERROR when is_empty, return the front element
+get_rear(dq)        ::= ERROR when is_empty, return the rear element

@@ -1,0 +1,10 @@
+root { parent, left, right, data}
+
+init_tree()                 ::= create node
+insert_node(r, d)           ::= add data node in proper position
+search(r, d)                ::= search data node
+delete_node(r, n)           ::= delete data node
+print_tree_inorder(r)       ::= print tree nodes from lefts to own to rights
+print_tree_preorder(r)      ::= print tree nodes from own to lefts to rights
+print_tree_postorder(r)     ::= print tree nodes from lefts to rights to own
+print_tree_levelorder(r)    ::= print tree nodes from upper layer
