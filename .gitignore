@@ -1,0 +1,31 @@
+# C
+*.o
+*.obj
+a.out
+
+# Windows
+*.exe
+
+# Libraries
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+
+# Outputs
+bin/
+build/
+out/
+debug/
+release/
+
+# MacOS
+.DS_Store
+*.dSYM/
+
+# VSCode
+.vscode/
+
+# Python
+__pycache__/
