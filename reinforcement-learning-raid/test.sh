@@ -1,0 +1,1 @@
+python main.py -mode test -path ./saved_agents/mobilenet_PGD_Linf/PPO-HFD-layer_idx4.pt -info HighFrequencyDropDefense-test 
