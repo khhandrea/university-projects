@@ -1,0 +1,1 @@
+python ../program/MonitoringProgram.py --position=상허문
