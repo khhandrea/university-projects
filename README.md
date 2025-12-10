@@ -15,4 +15,4 @@
 - `reinforcement-learning`: coursework for the Reinforcement Learning lecture
 - `sql-excel`: special lecture on SQL and Excel
 - `system-programming`: coursework for the System Programming lecture
-- `topchick`: Java study group repository
+- `java-study`: Java study group repository
